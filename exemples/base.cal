@@ -1,0 +1,25 @@
+//
+	Base du langage
+//
+
+piaf = 3
+
+pouf = 1 + 2 - 7 * 6 / 8 % 4 ^ 7 V 2
+
+poire = "verte"
+
+fruits = {'fraise', 'cassis', 'abricot'}
+
+pof = "a" + "b"
+
+zouuup = pof + "c"
+
+puik = "12"
+
+flop = puik:pos + 10
+
+@'fonction' {value:pos} [
+	return value + 1
+]
+
+fonction{'12'}

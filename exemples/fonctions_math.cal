@@ -1,0 +1,11 @@
+//
+	Exemple d'import et d'utilisation des élément importés
+//
+
+import{'math'}
+
+print{fact{5}}
+
+print{ackermann{3, 3}}
+
+print{syracuse{7}}

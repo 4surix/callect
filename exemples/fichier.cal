@@ -1,0 +1,27 @@
+//
+	Exemple de ce qu'on peut faire avec la gestion de fichier
+//
+
+try fichier = open{'cuik.txt', 'write'}
+except FileNotFound [
+    fichier = open{'cuik.txt', 'new'}
+]
+
+fichier.write{'skibidi wapapapa skibidi wapapapapa'}
+fichier.close{}
+
+fichier = open{'cuik.txt', 'read'}
+data = fichier.read{}
+fichier.close{}
+
+print{data}
+
+open{'cuik.txt', 'write'}
+.write{'skibidi wapapapapapapa skibidi papa skibidi boom boom aie'}
+.close{}
+
+open{'cuik.txt', 'read'}
+.readto{'lollybomb'}
+.close{}
+
+print{lollybomb}
