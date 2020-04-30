@@ -82,7 +82,7 @@ class RedirecPoint(Base):
             self.value[index+1] = value
 
 
-        value = '.'.join(v.value for v in self.value)
+        value = '.'.join(str(v.value) for v in self.value)
 
         self.var = self.value.pop(0)
         self.item = self.value.pop()
