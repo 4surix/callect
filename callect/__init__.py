@@ -100,5 +100,6 @@ class Info:
 
         for var in event.vars:
             if var not in self.events:
-                self.events[var] = []
-            self.events[var].append(event)
+                self.events[var] = [event]
+            else:
+                self.events[var].append(event)

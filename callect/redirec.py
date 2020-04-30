@@ -53,9 +53,13 @@ class RedirecPoint(Base):
         if setvar is not None:
             value[self.item] = setvar
 
+            events = variables.get_event(self.value)
 
-            for event in variables.get_event(str(self.var), []):
-                event.call__(variables)
+            if events:
+                for event in events:
+                    if event.conditions(variables):
+                        for element in event.bloc.value:
+                            element(variables)
 
         else:
             value = value[self.item]
@@ -78,6 +82,10 @@ class RedirecPoint(Base):
             self.value[index+1] = value
 
 
+        value = '.'.join(v.value for v in self.value)
+
         self.var = self.value.pop(0)
         self.item = self.value.pop()
         self.elements = self.value
+
+        self.value = value

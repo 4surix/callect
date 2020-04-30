@@ -12,8 +12,13 @@ class Var(Base):
         if setvar is not None:
             variables.set(self.value, setvar, local=local)
 
-            for event in variables.get_event(self.value, []):
-                event.call__(variables)
+            events = variables.get_event(self.value)
+
+            if events:
+                for event in events:
+                    if event.conditions(variables):
+                        for element in event.bloc.value:
+                            element(variables)
 
         else:
             value = variables.get(self.value, ligne=self.ligne__)
