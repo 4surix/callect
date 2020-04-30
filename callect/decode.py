@@ -580,7 +580,7 @@ def decode(data, path):
 
         ### Event
 
-        elif carac == '§':
+        elif carac == '$' or carac == '§':
 
             cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
 

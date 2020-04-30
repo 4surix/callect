@@ -31,12 +31,13 @@ def calcul_time(func):
     return value/len(temps)
 
 
-def run(data, path, *, except_python=False, time=False):
+def run(data, path, *, time=False):
 
     try:
         data = decode(data, path)
 
         try:
+
             if time:
                 print(calcul_time(lambda: data(Info([fonctions_intégrées], path=path).add({}))))
 

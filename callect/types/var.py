@@ -21,11 +21,9 @@ class Var(Base):
 
             if isinstance(value, Inst):
 
-                try:
-                    value__ = value['obj__']
-                except (KeyError, AttributeError):
-                    pass
-                else:
+                value__ = value.__dict__.get('obj__')
+
+                if value__:
                     value = value__(variables, [], {})
 
             elif value.__class__ == Objet and value.callable_without_call:
@@ -40,6 +38,4 @@ class Var(Base):
 
     def end__(self, cont):
 
-        self.value = ''.join([str(e) for e in self.value])
-
-        self.ligne__ = str(cont.ligne)
+        self.value = ''.join(str(e) for e in self.value)

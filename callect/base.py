@@ -19,7 +19,7 @@ class fonction_py_to_cl:
         return self
 
     def __getitem__(self, item):
-        return getattr(self, item)
+        return getattr(self, str(item))
 
     def call__(self, variables, args=[], kwargs={}):
         self.variables = variables

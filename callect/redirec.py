@@ -18,14 +18,15 @@ class RedirecItem(Base):
             value = value[element]
 
 
-        if setvar is not None:
-            value[self.item(variables)] = setvar
+        item = self.item(variables)
+        item.ligne__ = self.ligne__
 
-            for event in variables.get_event(str(self.var), []):
-                event.call__(variables)
+
+        if setvar is not None:
+            value[item] = setvar
 
         else:
-            value = value[self.item(variables)]
+            value = value[item]
             if value.__class__ == CallObjetWithParent and value.value.callable_without_call:
                 value = value(variables, [], {})
 
@@ -50,7 +51,8 @@ class RedirecPoint(Base):
 
 
         if setvar is not None:
-            value[mk_txt(self.item)] = setvar
+            value[self.item] = setvar
+
 
             for event in variables.get_event(str(self.var), []):
                 event.call__(variables)
