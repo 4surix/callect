@@ -201,6 +201,16 @@ class SocketClt(Inst):
         except socket.timeout:
             return False__
 
+    def settimeout(self, timeout=False__):
+        if timeout.__class__ not in [Pos, Nul]:
+            raise NotCompatible(self, timeout, timeout.ligne__)
+
+        if self.is_close:
+            return Neg(-1)
+
+        self.so.settimeout(int(timeout) if timeout else None)
+        return True__
+
     def close(self, hote, port):
         self.so.close()
         self.is_close = True__
@@ -260,9 +270,11 @@ def socketsrv():
 
             try:
                 client, (ip, port) = self.so.accept()
+                client.settimeout(self.so.gettimeout())
                 return SocketClt(client)
+
             except socket.timeout:
-                return self
+                return False__
 
         def settimeout(self, timeout=False__):
             if timeout.__class__ not in [Pos, Nul]:
@@ -272,7 +284,7 @@ def socketsrv():
                 return Neg(-1)
 
             self.so.settimeout(int(timeout) if timeout else None)
-            return self
+            return True__
 
         def close(self, hote, port):
             if self.is_close:
@@ -281,7 +293,7 @@ def socketsrv():
             self.so.close()
             self.is_close = True__
 
-            return False__
+            return Neg(-1)
 
     return SocketSrv()
 
