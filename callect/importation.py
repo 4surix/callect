@@ -4,38 +4,28 @@ from .errors import ModuleNotFound
 
 import os
 
-#Modules -------------------------------------------
 
-
-chemin_modules = "C:/Users/%s/AppData/Roaming/Callect/modules" % os.environ['USERNAME']
-#chemin_modules = os.path.dirname(os.path.dirname(__file__)) + "/modules"
-
-#Création du dossier "modules" si n'existe pas
-os.makedirs(chemin_modules, exist_ok=True)
-
-
-def get_modules():
-    return [m.split('.')[0] for m in os.listdir(chemin_modules)]
-
-def get_data_module(module_txt, chemin=None):
+def get_data_module(module_txt, path_file, path_exe):
 
     module = str(module_txt)
 
-    if chemin:
+    path_exe += '/modules'
+
+    if path_file:
 
         for partie in module.split('/'):
             if partie != '..':
                 break
             _, module = module.split('/', 1)
-            chemin = os.path.dirname(chemin)
+            path_file = os.path.dirname(path_file)
 
-        fichier = '%s/%s.cal' % (chemin, module)
+        fichier = '%s/%s.cal' % (path_file, module)
 
         if not os.path.exists(fichier):
-            fichier = '%s/%s.cal' % (chemin_modules, module)
+            fichier = '%s/%s.cal' % (path_exe, module)
 
     else:
-        fichier = '%s/%s.cal' % (chemin_modules, module)
+        fichier = '%s/%s.cal' % (path_exe, module)
 
     try:
         with open(fichier, encoding='utf-8') as m:
@@ -51,9 +41,19 @@ def import_(decode):
 
         def call__(variables, args, kwargs):
 
-            path = os.path.dirname(variables.path)
+            path_exe = variables.path_exe
+            path_file = variables.path_file
 
-            data, path = get_data_module(args[0], chemin=path)
+            if path_exe:
+                path_exe = os.path.dirname(path_exe)
+            else:
+                path_exe = "C:/Users/%s/AppData/Roaming/Callect" % os.environ['USERNAME']
+
+            if path_file:
+                path_file = os.path.dirname(path_file)
+
+
+            data, path = get_data_module(args[0], path_file, path_exe)
 
             bloc = decode(data, path)
 

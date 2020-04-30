@@ -31,18 +31,18 @@ def calcul_time(func):
     return value/len(temps)
 
 
-def run(data, path, *, time=False):
+def run(data, path_file, path_exe=None, *, time=False):
 
     try:
-        data = decode(data, path)
+        data = decode(data, path_file)
 
         try:
 
             if time:
-                print(calcul_time(lambda: data(Info([fonctions_intégrées], path=path).add({}))))
+                print(calcul_time(lambda: data(Info([fonctions_intégrées], {}, path_file, path_exe).add({}))))
 
             else:
-                data(Info([fonctions_intégrées], path=path).add({}))
+                data(Info([fonctions_intégrées], {}, path_file, path_exe).add({}))
 
         except ALLExcept as e:
             print('Exception run:\n\n%s' % e)
@@ -65,17 +65,18 @@ def run(data, path, *, time=False):
 
 class Info:
 
-    def __init__(self, variables=None, events=None, path=None):
+    def __init__(self, variables=None, events=None, path_file=None, path_exe=None):
 
         self.variables = variables if variables else [{}]
         self.events = events if events else {}
 
-        self.path = path
+        self.path_exe = path_exe
+        self.path_file = path_file
 
         self.get_event = self.events.get
 
     def add(self, variables):
-        return Info([variables] + self.variables, dict(self.events), self.path)
+        return Info([variables] + self.variables, dict(self.events), self.path_file, self.path_exe)
 
     def get(self, var, ligne=None):
 

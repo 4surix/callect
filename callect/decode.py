@@ -30,15 +30,15 @@ from .types.var import Var
 
 class Ligne:
 
-    def __init__(self, path):
+    def __init__(self, path_file):
         self.value = 1
-        self.file = path
+        self.path_file = path_file
 
     def __call__(self):
         self.value += 1
 
     def __str__(self):
-        return "[L~%s in file %s]" % (self.value, self.file)
+        return "[L~%s in file %s]" % (self.value, self.path_file)
 
 
 class Conteneur:
@@ -215,9 +215,9 @@ def end_objet(cont, objet):
     return cont, None
 
 
-def decode(data, path):
+def decode(data, path_file):
 
-    cont = Conteneur(Bloc(), None, Ligne(path))
+    cont = Conteneur(Bloc(), None, Ligne(path_file))
     cont.value.liée = False
 
     objet = None
