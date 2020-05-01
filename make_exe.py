@@ -28,25 +28,25 @@ if len(args) == 1:
     )
 
     data = ""
-    in_plusiers_lignes = False
+    is_multiline = False
 
     while True:
 
-        if in_plusiers_lignes:
+        if is_multiline:
             text = input('... ')
         else:
             text = input('>>> ')
 
         if text == '```':
-            if in_plusiers_lignes:
-                in_plusiers_lignes = False
+            if is_multiline:
+                is_multiline = False
             else:
-                in_plusiers_lignes = True
+                is_multiline = True
 
         else:
             data += (text + '\n')
 
-        if in_plusiers_lignes:
+        if is_multiline:
             continue
 
         result = callect.run(data, args[0])
