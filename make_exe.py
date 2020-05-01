@@ -53,10 +53,10 @@ if len(args) == 1:
             except KeyboardInterrupt:
                 # CTRL + C
                 print("KeyboardInterrupt")
-                exit()
+                sys.exit()
             except EOFError:
                 # CTRL + D
-                exit()
+                sys.exit()
 
         if text == '```':
             if is_multiline:
