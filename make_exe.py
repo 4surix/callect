@@ -1,12 +1,22 @@
+#!/usr/bin/env python3
+
 import sys
 import os
 import callect
 
 
+def term_title(t):
+    if os.name == "nt":
+        # Windows
+        os.system("title " + t)
+    else:
+        # Linux, Darwin (macOS, iOS, ...), *BSD
+        print('\33]0;' + t + '\a', end='', flush=True)
+
+
 args = sys.argv
 
-os.system("title Callect")
-
+term_title("Callect")
 
 if len(args) == 1:
     # Si l'user a juste ouvert l'executable à la main
@@ -51,7 +61,7 @@ else:
     path_exe = args[0]
     path_file = args[1]
 
-    os.system("title Callect - %s" % path_file)
+    term_title("Callect - %s" % path_file)
 
     with open(path_file, encoding='utf-8') as f:
         data = f.read()
