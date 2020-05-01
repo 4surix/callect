@@ -33,9 +33,30 @@ if len(args) == 1:
     while True:
 
         if is_multiline:
-            text = input('... ')
+            try:
+                text = input('... ')
+            except KeyboardInterrupt:
+                # CTRL + C
+                data = ""
+                text = ""
+                is_multiline = False
+                pass
+            except EOFError:
+                # CTRL + D
+                data = ""
+                text = ""
+                is_multiline = False
+                pass
         else:
-            text = input('>>> ')
+            try:
+                text = input('>>> ')
+            except KeyboardInterrupt:
+                # CTRL + C
+                print("KeyboardInterrupt")
+                exit()
+            except EOFError:
+                # CTRL + D
+                exit()
 
         if text == '```':
             if is_multiline:
