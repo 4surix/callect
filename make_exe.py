@@ -1,12 +1,22 @@
+#!/usr/bin/env python3
+
 import sys
 import os
 import callect
 
 
+def term_title(t):
+    if os.name == "nt":
+        # Windows
+        os.system("title " + t)
+    else:
+        # Linux, Darwin (macOS, iOS, ...), *BSD
+        print('\33]0;' + t + '\a', end='', flush=True)
+
+
 args = sys.argv
 
-os.system("title Callect")
-
+term_title("Callect")
 
 if len(args) == 1:
     # Si l'user a juste ouvert l'executable à la main
@@ -18,25 +28,46 @@ if len(args) == 1:
     )
 
     data = ""
-    in_plusiers_lignes = False
+    is_multiline = False
 
     while True:
 
-        if in_plusiers_lignes:
-            text = input('... ')
+        if is_multiline:
+            try:
+                text = input('... ')
+            except KeyboardInterrupt:
+                # CTRL + C
+                data = ""
+                text = ""
+                is_multiline = False
+                pass
+            except EOFError:
+                # CTRL + D
+                data = ""
+                text = ""
+                is_multiline = False
+                pass
         else:
-            text = input('>>> ')
+            try:
+                text = input('>>> ')
+            except KeyboardInterrupt:
+                # CTRL + C
+                print("KeyboardInterrupt")
+                sys.exit()
+            except EOFError:
+                # CTRL + D
+                sys.exit()
 
         if text == '```':
-            if in_plusiers_lignes:
-                in_plusiers_lignes = False
+            if is_multiline:
+                is_multiline = False
             else:
-                in_plusiers_lignes = True
+                is_multiline = True
 
         else:
             data += (text + '\n')
 
-        if in_plusiers_lignes:
+        if is_multiline:
             continue
 
         result = callect.run(data, args[0])
@@ -51,7 +82,7 @@ else:
     path_exe = args[0]
     path_file = args[1]
 
-    os.system("title Callect - %s" % path_file)
+    term_title("Callect - %s" % path_file)
 
     with open(path_file, encoding='utf-8') as f:
         data = f.read()
