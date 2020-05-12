@@ -331,7 +331,7 @@ def decode(data, path_file):
 
         elif carac == '.':
 
-            if isinstance(objet, (Pos, Neg)):
+            if isinstance(objet, (Pos, Neg, Nul)):
                 objet.push__('.')
                 continue
 
@@ -385,7 +385,12 @@ def decode(data, path_file):
             cont, objet = end_objet(cont, objet)
 
             if not isinstance(cont.value.last__(), (RedirecPoint, RedirecItem, Var, Nul, Pos, Neg, Txt, Call)):
-                cont.value.push__(Nul())
+
+                cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
+
+                nul = Nul(0)
+                nul.ligne__ = str(cont.ligne)
+                cont.value.push__(nul)
 
             objet, cont = cont.action(objet, Add, (Rac, Exp, Mul, Div, Mod, Sub, RedirecItem, RedirecPoint, Typ))
 
@@ -394,7 +399,12 @@ def decode(data, path_file):
             cont, objet = end_objet(cont, objet)
 
             if not isinstance(cont.value.last__(), (RedirecPoint, RedirecItem, Var, Nul, Pos, Neg, Txt, Call)):
-                cont.value.push__(Nul())
+
+                cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
+
+                nul = Nul(0)
+                nul.ligne__ = str(cont.ligne)
+                cont.value.push__(nul)
 
             objet, cont = cont.action(objet, Sub, (Rac, Exp, Mul, Div, Mod, Add, RedirecItem, RedirecPoint, Typ))
                 
@@ -621,12 +631,12 @@ def decode(data, path_file):
 
             cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
 
-            if carac == '0':
+            if carac == '0' and data[icarac+1] != '.':
 
                 objet = Nul()
                 objet.end__(cont)
 
-            elif carac in list('123456789'):
+            elif carac in list('0123456789'):
 
                 objet = Pos()
                 objet.push__(carac)
