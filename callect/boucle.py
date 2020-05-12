@@ -55,9 +55,6 @@ class Repeat(Base):
 
             value = self.value[0]
 
-            if value.__class__.__name__ not in ['Pos', 'Var', 'RedirecItem', 'RedirecPoint', 'Call']:
-                raise NotCompatible(self, value, self.ligne__)
-
             self.conteneur = value
 
         else:
