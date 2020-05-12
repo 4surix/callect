@@ -69,14 +69,15 @@ class Conteneur:
 
         return last
 
-    def action(self, objet, Act, acts, *, get_last=True, prio=False):
+    def action(self, objet, Act, acts=None, *, get_last=True, prio=False):
 
         cont = self
 
         cont, objet = end_objet(cont, objet)
 
-        while isinstance(cont.value, acts):
-            cont = cont.rem__()
+        if acts:
+            while isinstance(cont.value, acts):
+                cont = cont.rem__()
 
         if not isinstance(cont.value, Act) or prio:
             act = Act()
@@ -141,29 +142,29 @@ def end_objet(cont, objet):
     ### Condition
 
     if value == 'if':
-        objet, cont = cont.action(None, InsCond, (), get_last=False)
+        objet, cont = cont.action(None, InsCond, get_last=False)    
 
     elif value == 'elif':
-        objet, cont = cont.action(None, InsCond, ())
+        objet, cont = cont.action(None, InsCond)
 
     elif value == 'else':
-        objet, cont = cont.action(None, InsCond, ())
+        objet, cont = cont.action(None, InsCond)
         cont.value.push__(True__)
 
 
     ### Boucle
 
     elif value == 'for':
-        objet, cont = cont.action(None, For, (), get_last=False)
+        objet, cont = cont.action(None, For, get_last=False)    
 
     elif value == 'ifor':
-        objet, cont = cont.action(None, IFor, (), get_last=False)
+        objet, cont = cont.action(None, IFor, get_last=False)    
 
     elif value == 'while':
-        objet, cont = cont.action(None, While, (), get_last=False)
+        objet, cont = cont.action(None, While, get_last=False)    
 
     elif value == 'repeat':
-        objet, cont = cont.action(None, Repeat, (), get_last=False)
+        objet, cont = cont.action(None, Repeat, get_last=False)    
 
     elif value == 'break':
         cont.value.push__(Break())
@@ -172,11 +173,11 @@ def end_objet(cont, objet):
     ### Var
 
     elif value == 'local':
-        objet, cont = cont.action(None, Local, (), get_last=False)
+        objet, cont = cont.action(None, Local, get_last=False)    
         cont.value.liée = True
 
     elif value == 'return':
-        objet, cont = cont.action(None, Return, (), get_last=False)
+        objet, cont = cont.action(None, Return, get_last=False)    
         cont.value.liée = True
 
 
@@ -184,27 +185,27 @@ def end_objet(cont, objet):
 
     elif value == 'in':
         if not isinstance(cont.value, (For, IFor)):
-            objet, cont = cont.action(None, In, ())
+            objet, cont = cont.action(None, In)
         cont.value.push__(In)
 
     elif value == 'remin':
-        objet, cont = cont.action(None, RemIn, ())
+        objet, cont = cont.action(None, RemIn)
         cont.value.push__(In)
 
     elif value == 'popin':
-        objet, cont = cont.action(None, PopIn, ())
+        objet, cont = cont.action(None, PopIn)
         cont.value.push__(In)
 
 
     ### Essaies
 
     elif value == 'try':
-        objet, cont = cont.action(None, Try, (), get_last=False)
+        objet, cont = cont.action(None, Try, get_last=False)    
 
     elif value == 'except':
         if isinstance(cont.value, Try):
             cont = cont.rem__()
-        objet, cont = cont.action(None, Except, ())
+        objet, cont = cont.action(None, Except)
 
 
     ### Autre
@@ -357,7 +358,7 @@ def decode(data, path_file):
 
             cont, objet = end_objet(cont, objet)
 
-            objet, cont = cont.action(objet, Attachement, ())
+            objet, cont = cont.action(objet, Attachement)
 
 
         ### Intervalle
@@ -419,7 +420,7 @@ def decode(data, path_file):
 
         elif carac == '!':
 
-            objet, cont = cont.action(objet, Not, (), get_last=False)
+            objet, cont = cont.action(objet, Not, get_last=False)    
 
             cont.value.liée = True
 
@@ -500,7 +501,7 @@ def decode(data, path_file):
 
             cont.value.liée = False
 
-            objet, cont = cont.action(objet, Prio, (), get_last=False, prio=True)
+            objet, cont = cont.action(objet, Prio, get_last=False, prio=True)
 
         elif carac == ')':
 
@@ -546,7 +547,7 @@ def decode(data, path_file):
             else:
                 cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_calcul)
 
-            objet, cont = cont.action(objet, Table, (), get_last=False, prio=True)
+            objet, cont = cont.action(objet, Table, get_last=False, prio=True)
 
         elif carac == '}':
 
@@ -570,7 +571,7 @@ def decode(data, path_file):
 
             cont, objet = end_objet(cont, objet)
 
-            objet, cont = cont.action(objet, Objet, (), get_last=False)
+            objet, cont = cont.action(objet, Objet, get_last=False)    
 
             if isinstance(cont.last.value, Asi):
                 value = cont.last.value.value[0]
@@ -589,7 +590,7 @@ def decode(data, path_file):
             while not isinstance(cont.value, Bloc):
                 cont = cont.rem__()
 
-            objet, cont = cont.action(objet, Event, (), get_last=False)
+            objet, cont = cont.action(objet, Event, get_last=False)    
 
 
 
