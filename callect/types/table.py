@@ -202,6 +202,7 @@ class Table(Base):
         self.remall = fonction_py_to_cl(self.remall)
 
         self.pop = fonction_py_to_cl(self.pop)
+        self.insert = fonction_py_to_cl(self.insert)
 
         self.join = fonction_py_to_cl(self.join)
 
@@ -209,6 +210,34 @@ class Table(Base):
         self.value = fonction_py_to_cl(self.value)
         self.indexs = fonction_py_to_cl(self.indexs)
         self.values = fonction_py_to_cl(self.values)
+
+    def insert(self, item, value):
+
+        type_name = type(item).__name__
+
+        if isinstance(item, Pos):
+
+            item = item.value
+        
+            if item <= self.next_index_list:
+
+                self.list__.insert(item-1, value)
+                
+                self.next_index_list = i = self.next_index_list + 1
+
+                while True:
+                    i = Pos(i)
+                    value = self.dict__.get(i)
+
+                    if value is None:
+                        return
+
+                    del self.dict__[i]
+                    self.list__.append(value)
+
+                    self.next_index_list = i = self.next_index_list + 1
+
+        self.dict__[item] = value
 
     def add(self, obj):
 
