@@ -23,11 +23,17 @@ from .types.objet import Inst
 from .types.bool import True__, False__
 
 
+### Fonction built-in
+
+
+## Récupérer le type d'un objet
+
 @fonction_py_to_cl
 def type_(obj):
     return type(obj)
 
 
+## Afficher du texte
 
 if os.name == 'nt':
     # Windows
@@ -105,6 +111,9 @@ else:
 
         return False__
 
+
+## Input
+
 @fonction_py_to_cl
 def input_(text=''):
 
@@ -119,21 +128,29 @@ def input_(text=''):
 
     return mk_txt(msg)
 
+
+## Entier
+
 @fonction_py_to_cl
 def int_(obj):
     return mk_nbr(obj, convert=int)
 
+
+## Décimal
 
 @fonction_py_to_cl
 def float_(obj):
     return mk_nbr(obj, convert=float)
 
 
+## Temps UTC
+
 @fonction_py_to_cl
 def now():
     return mk_table(_list=[mk_nbr(nbr) for nbr in time.gmtime()[:6]])
 
 
+## Mettre en pause le programme
 
 @fonction_py_to_cl
 def stop(secondes):
@@ -142,12 +159,14 @@ def stop(secondes):
     return False__
 
 
+## Longeur d'un objet
+
 @fonction_py_to_cl
 def len_(obj):
     return Pos(len(obj))
 
 
-### Open file
+## Open file
 
 @fonction_py_to_cl
 def open_(chemin, mode='r', *, encoding='utf-8'):
@@ -213,8 +232,7 @@ def open_(chemin, mode='r', *, encoding='utf-8'):
     return File(chemin, mode, encoding)
 
 
-### Socket
-
+## Socket
 
 class SocketClt(Inst):
 
@@ -378,7 +396,7 @@ socket_ = mk_table(_dict={
 })
 
 
-### Random
+## Random
 
 @fonction_py_to_cl
 def random_(debut, fin):
@@ -389,6 +407,8 @@ def random_(debut, fin):
 
     return mk_nbr(random.randint(int(debut), int(fin)))
 
+
+### Création des variables
 
 fonctions_intégrées = {
     'import': import_(decode),

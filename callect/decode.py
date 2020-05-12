@@ -553,10 +553,13 @@ def decode(data, path_file):
                 cont = cont.rem__()
                 objet, cont = cont.action(objet, Call, (RedirecPoint,))
 
-            elif not isinstance(cont.value, (Objet, IsExist)) and isinstance(cont.value.last__(), (Var, RedirecPoint, RedirecItem, Call, Prio)):
-                # pouet{}
-                # pouf.piaf{}
-                # patate#134{}
+            elif not isinstance(cont.value, (Objet, IsExist)) and isinstance(cont.value.last__(), (
+                Var,           # pouet{}
+                RedirecPoint,  # pouf.piaf{}
+                RedirecItem,   # patate#134{}
+                Call,          # piaf{}{}
+                Prio           # (123 + 456){}
+            )):
                 objet, cont = cont.action(objet, Call, (RedirecPoint,))
 
             else:
