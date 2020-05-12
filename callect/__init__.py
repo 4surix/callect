@@ -1,5 +1,5 @@
 
-__version__ = "1.0.0-pre1"
+__version__ = "1.0.0-pre2"
 
 
 from .errors import NotDefined, ALLExcept
