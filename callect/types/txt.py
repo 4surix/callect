@@ -103,7 +103,12 @@ class Txt(Base):
 
         name_type = item.__class__.__name__
 
-        if name_type == 'Pos' or name_type == 'Neg':
+        if name_type == 'Pos':
+            txt = mk_txt(self.value[item.value-1])
+            txt.ligne__ = item.ligne__
+            return txt
+
+        elif name_type == 'Neg':
             txt = mk_txt(self.value[item.value])
             txt.ligne__ = item.ligne__
             return txt
@@ -113,7 +118,7 @@ class Txt(Base):
             txt.ligne__ = item.ligne__
             return txt
 
-        if name_type == 'slice':
+        elif name_type == 'slice':
             txt = mk_txt(self.value[item])
             txt.ligne__ = self.ligne__
             return txt

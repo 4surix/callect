@@ -82,6 +82,9 @@ class Table(Base):
         if item.__class__ == Pos and item.value < self.next_index_list:
             return self.list__[item.value-1]
 
+        if item.__class__ == Neg and item.value > -self.next_index_list:
+            return self.list__[item.value]
+
         if item.__class__.__name__ == 'Intervalle':
             return mk_table(_list=self.list__[slice(item.debut, item.fin, item.step)])
 

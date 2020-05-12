@@ -2,8 +2,6 @@ from ..base import Base, methode_py_to_cl, fonction_py_to_cl
 
 from ..errors import NotSupported, NotCompatible, NotItem, ConvertionImpossible
 
-from .txt import Txt
-
 
 def mk_nbr(obj, return_value=False, convert=None):
     nbr = str(obj)
@@ -243,10 +241,10 @@ class Pos(Base, Nbr):
             if getattr(obj, 'pos__', None):
                 return obj['pos__'](args[0], args[1], {})
 
-            elif isinstance(obj, (Neg, Pos, Nul)):
+            elif obj.__class__.__name__ in ('Neg', 'Pos', 'Nul'):
                 return Pos(+abs(obj.value))
 
-            elif isinstance(obj, Txt):
+            elif obj.__class__.__name__ == 'Txt':
                 return Pos(+abs(mk_nbr(obj, return_value=True)))
 
             else:
@@ -294,10 +292,10 @@ class Neg(Base, Nbr):
             if getattr(obj, 'neg__', None):
                 return obj['neg__'](args[0], args[1], {})
 
-            elif isinstance(obj, (Neg, Pos, Nul)):
+            elif obj.__class__.__name__ in ('Neg', 'Pos', 'Nul'):
                 return Neg(-abs(obj.value))
 
-            elif isinstance(obj, Txt):
+            elif obj.__class__.__name__ == 'Txt':
                 return Neg(-abs(mk_nbr(obj, return_value=True)))
 
             else:
