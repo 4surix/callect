@@ -47,8 +47,19 @@ class Table(Base):
     def __call__(self, variables):
 
         new_table = Table()
-        new_table.list__ = [e(variables) for e in self.list__]
-        new_table.dict__ = {k(variables):v(variables) for k, v in self.dict__.items()}
+
+        # Si on met une variable dans une table, cela va renvoyer sa valeur
+        #  ce qui fait que le nouveau objet table aura les mêmes objets que les anciennes tables créés
+        #  et les modifications sur ces objets seront effectuée dans dans ces objets Table
+        # Pour contrer cela, il faut appeler la valeur envoyée par la variable, ce qui va la copier
+        new_table.list__ = [e(variables)(variables) if e.__class__.__name__ == 'Var' else e(variables) for e in self.list__]
+        new_table.dict__ = {
+            k(variables)(variables) if k.__class__.__name__ == 'Var' else k(variables)
+            :
+            v(variables)(variables) if v.__class__.__name__ == 'Var' else v(variables) 
+            for k, v in self.dict__.items()
+        }
+
         new_table.next_index_list = len(new_table.list__) + 1
 
         new_table.ligne__ = self.ligne__
