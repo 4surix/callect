@@ -44,16 +44,16 @@ class Txt(Base):
 
         self.replace = fonction_py_to_cl(self.replace)
 
-    def upper(self, obj):
+    def upper(self):
 
         txt = mk_txt(self.value.upper())
-        txt.ligne__ = obj.ligne__
+        txt.ligne__ = self.ligne__
         return txt
 
-    def lower(self, obj):
+    def lower(self):
 
-        txt = mk_txt(self.value.upper())
-        txt.ligne__ = obj.ligne__
+        txt = mk_txt(self.value.lower())
+        txt.ligne__ = self.ligne__
         return txt
 
     def join(self, obj):
@@ -64,7 +64,7 @@ class Txt(Base):
 
     def split(self, obj):
 
-        table = mk_table(_list=[mk_txt(v) for v in self.value.split(str(obj))])
+        table = mk_table(_list=[mk_txt(v) for v in self.value.split(mk_txt(obj, return_str=True))])
         table.ligne__ = obj.ligne__
         return table
 

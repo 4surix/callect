@@ -99,9 +99,9 @@ class Table(Base):
 
     def __setitem__(self, item, value):
 
-        type_name = type(item).__name__
+        type_name = item.__class__.__name__
 
-        if isinstance(item, Pos):
+        if type_name == 'Pos':
 
             item = item.value
         
@@ -127,7 +127,7 @@ class Table(Base):
                 self.list__[item-1] = value
                 return
 
-        elif isinstance(item, Intervalle):
+        elif type_name == 'Intervalle':
             self.list__[slice(item.debut, item.fin, item.step)] = value
 
         self.dict__[item] = value
