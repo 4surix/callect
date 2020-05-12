@@ -355,8 +355,8 @@ class Table(Base):
 
             if isinstance(value, Asi):
 
-                keys = value.elements
-                value = value.value
+                keys = [v for v in value.elements if v != Asi]
+                value = value.objet
 
                 for key in keys:
                     if isinstance(key, Pos) and key.value <= len(self.list__)+1:
@@ -372,4 +372,4 @@ class Table(Base):
                 self.list__.append(value)
 
 
-        self.methodes()
+        self.methodes__()

@@ -25,7 +25,7 @@ class Typ(Base): # Type var
 
             return value
 
-    def end__(self, cont):
+    def end__(self, cont): 
         self.objet, self.type = self.value
 
         type_name = type(self.type).__name__
@@ -38,7 +38,7 @@ class Asi(Base): # Asignement
     
     def __call__(self, variables):
 
-        value = self.value(variables)
+        value = self.objet(variables)
 
         for element in self.elements:
             element(variables, setvar=value)
@@ -48,7 +48,7 @@ class Asi(Base): # Asignement
             yield value
 
     def end__(self, cont):
-        *self.elements, self.value = [v for v in self.value if v != Asi]
+        *self.elements, self.objet = [v for v in self.value if v != Asi]
 
 
 class Local(Base): # Local
