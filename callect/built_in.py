@@ -28,17 +28,82 @@ def type_(obj):
     return type(obj)
 
 
-@fonction_py_to_cl
-def print_(*args, sep=' ', end='\n'):
 
-    variables = print_.variables
+if os.name == 'nt':
+    # Windows
 
-    sys.stdout.write(
-        str(sep).join(mk_txt(arg, return_str=True) for arg in args) + str(end)
-    )
+    from ctypes import windll, Structure, c_short, c_char_p
 
-    return False__
+    STD_OUTPUT_HANDLE = -11
+     
+    class COORD(Structure):
+        _fields_ = [("X", c_short), ("Y", c_short)]
 
+    @fonction_py_to_cl
+    def print_(*args, x=Nul(0), y=Nul(0), stay=Nul(0), sep=' ', end='\n'):
+
+        text = str(sep).join(mk_txt(arg, return_str=True) for arg in args) + str(end)
+
+        if x and y:
+
+            if x.__class__ not in [Pos, Neg]:
+                raise NotCompatible(random_, x, x.ligne__)
+            if y.__class__ not in [Pos, Neg]:
+                raise NotCompatible(random_, y, y.ligne__)
+
+            h = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
+            coord = COORD(x.value - 1, y.value - 1)
+
+            windll.kernel32.SetConsoleCursorPosition(h, coord)
+
+            text = text.encode("windows-1252")
+            windll.kernel32.WriteConsoleA(h, c_char_p(text), len(text), None, None)
+
+            if not stay:
+                coord = COORD(0, 0)
+
+            windll.kernel32.SetConsoleCursorPosition(h, coord)
+
+        else:
+
+            sys.stdout.write(text)
+            sys.stdout.flush()
+
+
+        return False__
+
+else:
+    # Linux, Mac, ...
+
+    @fonction_py_to_cl
+    def print_(*args, x=Nul(0), y=Nul(0), stay=Nul(0), sep=' ', end='\n'):
+
+        text = str(sep).join(mk_txt(arg, return_str=True) for arg in args) + str(end)
+
+        if x and y:
+
+            if x.__class__ not in [Pos, Neg]:
+                raise NotCompatible(random_, x, x.ligne__)
+            if y.__class__ not in [Pos, Neg]:
+                raise NotCompatible(random_, y, y.ligne__)
+
+            coord = '\u001b[%s;%sH' % (y.value, x.value)
+
+            sys.stdout.write(coord + text)
+
+            if not stay:
+                coord = '\u001b[0;0H'
+
+            sys.stdout.write(coord)
+            sys.stdout.flush()
+
+        else:
+
+            sys.stdout.write(text)
+            sys.stdout.flush()
+
+
+        return False__
 
 @fonction_py_to_cl
 def input_(text=''):
@@ -352,3 +417,29 @@ fonctions_intégrées = {
     'txt': Txt,
     'tbl': Table
 }
+
+
+### Console avec ANSI
+
+try:
+    import colorama
+
+except:
+    colorama = None
+
+
+if colorama:
+
+    @fonction_py_to_cl
+    def print_ansi(*args, sep=' ', end='\n'):
+
+        text = str(sep).join(mk_txt(arg, return_str=True) for arg in args) + str(end)
+
+        colorama.init()
+
+        sys.stdout.write(text)
+        sys.stdout.flush()
+
+        colorama.deinit()
+
+    fonctions_intégrées['printANSI'] = print_ansi
