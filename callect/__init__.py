@@ -12,6 +12,8 @@ import traceback
 
 import time
 
+import sys
+
 
 def calcul_time(func):
     
@@ -33,6 +35,8 @@ def calcul_time(func):
 
 def run(data, path_file, path_exe=None, *, time=False):
 
+    msg_exception = None
+
     try:
         data = decode(data, path_file)
 
@@ -45,22 +49,28 @@ def run(data, path_file, path_exe=None, *, time=False):
                 data(Info([fonctions_intégrées], {}, path_file, path_exe).add({}))
 
         except ALLExcept as e:
-            print('Exception run:\n\n%s' % e)
-            input("\n\nPress Entrée to exit.")
+            msg_exception = "Exception run:\n\n%s\n\n\nPress Entrée to exit.\n" % e
 
         except Exception as e:
-            print('Exception Python:\n')
-            print(traceback.format_exc())
-            input("\n\nPress Entrée to exit.")
+            msg_exception = 'Exception run Python:\n\n' + traceback.format_exc() + "\n\n\nPress Entrée to exit.\n"
 
     except ALLExcept as e:
-        print('Exception decode:\n\n%s' % e)
-        input("\n\nPress Entrée to exit.")
+        msg_exception = "Exception decode:\n\n%s\n\n\nPress Entrée to exit.\n" % e
 
     except Exception as e:
-        print('Exception Python:\n')
-        print(traceback.format_exc())
-        input("\n\nPress Entrée to exit.")
+        msg_exception = 'Exception decode Python:\n\n' + traceback.format_exc() + "\n\n\nPress Entrée to exit.\n"
+
+
+    if msg_exception:
+
+        try: input(msg_exception)
+        except KeyboardInterrupt:
+            # CTRL + C
+            print("KeyboardInterrupt")
+            sys.exit()
+        except EOFError:
+            # CTRL + D
+            sys.exit()
 
 
 class Info:

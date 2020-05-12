@@ -42,9 +42,18 @@ def print_(*args, sep=' ', end='\n'):
 
 
 @fonction_py_to_cl
-def input_(text):
-    return mk_txt(input(str(text)))
+def input_(text=''):
 
+    try: msg = input(mk_txt(text, return_str=True))
+    except KeyboardInterrupt:
+        # CTRL + C
+        print("KeyboardInterrupt")
+        sys.exit()
+    except EOFError:
+        # CTRL + D
+        sys.exit()
+
+    return mk_txt(msg)
 
 @fonction_py_to_cl
 def int_(obj):
