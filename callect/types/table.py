@@ -73,7 +73,7 @@ class Table(Base):
             return self.list__[item.value-1]
 
         if item.__class__.__name__ == 'Intervalle':
-            return mk_table(_list=self.list__[slice(item.debut-1, item.fin-1, item.step)])
+            return mk_table(_list=self.list__[slice(item.debut, item.fin, item.step)])
 
         value = self.dict__.get(str(item))
         if value is not None:
@@ -114,8 +114,8 @@ class Table(Base):
                 self.list__[item-1] = value
                 return
 
-        #elif isinstance(item, Intervalle):
-        #    self.list__[slice(item.debut-1, item.fin-1, item.step)] = value
+        elif isinstance(item, Intervalle):
+            self.list__[slice(item.debut, item.fin, item.step)] = value
 
         self.dict__[item] = value
 

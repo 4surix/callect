@@ -71,8 +71,8 @@ class Txt(Base):
             txt.ligne__ = item.ligne__
             return txt
 
-        if name_type == 'Intervalle':
-            txt = mk_txt(self.value[slice(item.debut-1, item.fin-1, item.step)])
+        elif name_type == 'Intervalle':
+            txt = mk_txt(self.value[slice(item.debut, item.fin, item.step)])
             txt.ligne__ = item.ligne__
             return txt
 

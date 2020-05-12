@@ -37,12 +37,19 @@ class Intervalle(Base):
             raise NotCompatible(self, step, self.ligne__)
 
 
-        self.debut:int = debut.value
-        self.fin:int = fin.value + 1
-        self.step:int = step.value
+        self.debut__ = debut__ = int(debut.value)
+
+        self.debut = debut__ - 1 if debut__ > 0 else debut__ # 2;8;1 --> 1;8;1    -6;8;1 --> -6;8:1
+        self.fin = int(fin.value - 1 if fin.value < 0 else fin.value) # 5;7 --> 5;7     -1;-4;-1 --> -1;-5;-1
+        self.step = int(step.value)
 
 
-        self.range = range(self.debut, self.fin, self.step)
+        self.range = range(
+            self.debut__, 
+            self.fin + 1 if self.fin > 0 else self.fin, # 1;3;1 --> 1;4;1    1;-3;1 --> 1;-3;1
+            self.step
+        )
+
         return self
 
 
@@ -54,4 +61,9 @@ class Intervalle(Base):
 
     def __str__(self):
 
-        return ';'.join(self.value)
+        return '%s;%s;%s' % (self.debut__, self.fin, self.step)
+
+
+    def end__(self, cont):
+
+        self.value = [v for v in self.value if v != Intervalle]

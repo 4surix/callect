@@ -370,10 +370,12 @@ def decode(data, path_file):
 
             cont, objet = end_objet(cont, objet)
 
-            while isinstance(cont.value, ()):
+            while isinstance(cont.value, acts_calcul):
                 cont = cont.rem__()
-                
+
             cont = action(cont, Intervalle)
+
+            cont.value.push__(Intervalle)
 
             cont.value.liée = True
 
@@ -493,7 +495,7 @@ def decode(data, path_file):
 
         elif carac == ':':
 
-            objet, cont = cont.action(objet, Typ, acts_redirec)
+            objet, cont = cont.action(objet, Typ, (RedirecPoint,))
 
         elif carac == '=':
 
