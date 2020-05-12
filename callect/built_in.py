@@ -7,7 +7,6 @@ import socket
 import random
 
 import time
-import datetime
 
 from .decode import decode
 
@@ -67,7 +66,8 @@ def float_(obj):
 
 @fonction_py_to_cl
 def now():
-    return mk_table(_list=[mk_nbr(nbr) for nbr in datetime.datetime.utcnow().strftime("%Y/%m/%d/%H/%M/%S").split("/")])
+    return mk_table(_list=[mk_nbr(nbr) for nbr in time.gmtime()[:6]])
+
 
 
 @fonction_py_to_cl
@@ -317,9 +317,9 @@ socket_ = mk_table(_dict={
 
 @fonction_py_to_cl
 def random_(debut, fin):
-    if debut.__class__ not in [Pos, Neg]:
+    if debut.__class__ not in [Pos, Neg, Nul]:
         raise NotCompatible(random_, debut, debut.ligne__)
-    if fin.__class__ not in [Pos, Neg]:
+    if fin.__class__ not in [Pos, Neg, Nul]:
         raise NotCompatible(random_, fin, fin.ligne__)
 
     return mk_nbr(random.randint(int(debut), int(fin)))
