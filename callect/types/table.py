@@ -3,7 +3,6 @@ from ..base import Base, fonction_py_to_cl, methode_py_to_cl
 from ..errors import NotItem, NotIndex, NotValue, ConvertionImpossible
 
 from .nbr import Pos, Neg, Nul
-from .txt import Txt, mk_txt
 
 from ..assignement import Asi
 
@@ -36,7 +35,7 @@ def mk_table(obj=None, variables=None, *, _list=None, _dict=None):
 
         table.next_index_list = len(table.list__) + 1
 
-        table.methodes()
+        table.methodes__()
 
 
     return table
@@ -64,7 +63,7 @@ class Table(Base):
 
         new_table.ligne__ = self.ligne__
 
-        new_table.methodes()
+        new_table.methodes__()
 
         return new_table
 
@@ -195,16 +194,15 @@ class Table(Base):
 
     ### Methodes
 
-    def methodes(self):
+    def methodes__(self):
 
         self.add = fonction_py_to_cl(self.add)
         self.rem = fonction_py_to_cl(self.rem)
         self.remall = fonction_py_to_cl(self.remall)
 
-        self.pop = fonction_py_to_cl(self.pop)
         self.insert = fonction_py_to_cl(self.insert)
 
-        self.join = fonction_py_to_cl(self.join)
+        self.pop = fonction_py_to_cl(self.pop)
 
         self.index = fonction_py_to_cl(self.index)
         self.value = fonction_py_to_cl(self.value)
@@ -244,10 +242,6 @@ class Table(Base):
         self.list__.append(obj)
         self.next_index_list += 1
         return self
-
-    def join(self, obj):
-
-        return Txt(mk_txt(obj, return_str=True).join(mk_txt(v, return_str=True) for v in self))
 
     def pop(self, item=Pos(0)):
 

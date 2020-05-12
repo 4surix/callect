@@ -2,6 +2,8 @@ from ..base import Base, methode_py_to_cl, fonction_py_to_cl
 
 from ..errors import NotCompatible, NotItem
 
+from .table import mk_table
+
 
 def mk_txt(obj, variables=None, *, return_str=False, ligne__=''):
     
@@ -19,7 +21,7 @@ def mk_txt(obj, variables=None, *, return_str=False, ligne__=''):
 
     else:
         txt = Txt(str(obj))
-        txt._methodes()
+        txt.methodes__()
 
         try:
             txt.ligne__ = obj.ligne__
@@ -31,17 +33,52 @@ def mk_txt(obj, variables=None, *, return_str=False, ligne__=''):
 
 class Txt(Base):
 
-    def _methodes(self):
+    def methodes__(self):
 
-        self.upper = fonction_py_to_cl(lambda: mk_txt(self.value.upper()))
-        self.lower = fonction_py_to_cl(lambda: mk_txt(self.value.lower()))
+        self.upper = fonction_py_to_cl(self.upper)
+        self.lower = fonction_py_to_cl(self.lower)
 
-        self.split = fonction_py_to_cl(lambda sep: mk_txt(self.value.split(str(sep))))
+        self.join = fonction_py_to_cl(self.join)
+
+        self.split = fonction_py_to_cl(self.split)
+
+        self.replace = fonction_py_to_cl(self.replace)
+
+    def upper(self, obj):
+
+        txt = mk_txt(self.value.upper())
+        txt.ligne__ = obj.ligne__
+        return txt
+
+    def lower(self, obj):
+
+        txt = mk_txt(self.value.upper())
+        txt.ligne__ = obj.ligne__
+        return txt
+
+    def join(self, obj):
+
+        txt = mk_txt(self.value.join(mk_txt(v, return_str=True) for v in obj))
+        txt.ligne__ = obj.ligne__
+        return txt
+
+    def split(self, obj):
+
+        table = mk_table(_list=[mk_txt(v) for v in self.value.split(str(obj))])
+        table.ligne__ = obj.ligne__
+        return table
+
+    def replace(self, obj_1, obj_2):
+
+        txt = mk_txt(self.value.replace(mk_txt(obj_1, return_str=True), mk_txt(obj_2, return_str=True)))
+        txt.ligne__ = obj_1.ligne__
+        return txt
 
     def __call__(self, variables):
 
         txt = Txt(self.value)
         txt.ligne__ = self.ligne__
+        txt.methodes__()
         return txt
 
     def __eq__(self, obj):
@@ -131,6 +168,6 @@ class Txt(Base):
 
         self.value = ''.join(map(str, self.value))
 
-        self._methodes()
+        self.methodes__()
 
         self.ligne__ = str(cont.ligne)
