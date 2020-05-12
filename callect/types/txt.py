@@ -137,6 +137,10 @@ class Txt(Base):
         return hash(self.value)
 
 
+    def __len__(self):
+        return len(self.value)
+
+
     @methode_py_to_cl
     def in__(variables, self, obj):
         return obj.value in self.value

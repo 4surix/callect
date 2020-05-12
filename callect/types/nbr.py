@@ -227,7 +227,7 @@ class Pos(Base, Nbr):
     def __iter__(self):
 
         for value in range(1, self.value+1):
-            yield Pos(value)
+            yield self
 
     def __bool__(self):
         return True
@@ -278,7 +278,7 @@ class Neg(Base, Nbr):
     def __iter__(self):
 
         for value in range(-1, self.value-1, -1):
-            yield Neg(value)
+            yield self
 
     def __bool__(self):
         return True
@@ -328,6 +328,9 @@ class Nul(Base, Nbr):
 
     def __bool__(self):
         return False
+
+    def __iter__(self):
+        pass
 
     def call__(*args):
 
