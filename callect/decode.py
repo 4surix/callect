@@ -288,6 +288,9 @@ def decode(data, path_file):
                 elif carac == 't':
                     add('\t')
 
+                elif carac == 'e':
+                    add('')
+
                 elif carac == '"':
                     add('"')
 
