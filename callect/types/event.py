@@ -63,7 +63,7 @@ class Event(Base):
                 type_element = element.__class__
 
                 if type_element == Table:
-                    recolte(element.__dict__['value'])
+                    recolte(element.value__)
 
                 elif type_element == Var:
                     vars__.append(element.value)
@@ -80,7 +80,7 @@ class Event(Base):
         type_element = element.__class__
 
         if type_element == Table:
-            recolte(element.__dict__['value'])
+            recolte(element.value__)
 
         elif type_element == Var:
             vars__.append(element.value)

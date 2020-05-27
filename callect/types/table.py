@@ -345,6 +345,8 @@ class Table(Base):
 
     def end__(self, cont):
 
+        self.value__ = self.value
+
         self.list__ = []
         self.dict__ = {}
         self.next_index_list = 1
