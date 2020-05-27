@@ -44,19 +44,19 @@ class Intervalle(Base):
         self.step = int(step.value)
 
 
-        self.range = range(
+        self.__range = [value for value in range(
             self.debut__, 
-            self.fin + 1 if self.fin > 0 else self.fin, # 1;3;1 --> 1;4;1    1;-3;1 --> 1;-3;1
+            self.fin + 1 if self.fin > 0 else self.fin, # 1;3;1 --> 1:4:1    1;-3;1 --> 1:-3:1
             self.step
-        )
+        )]
 
         return self
 
 
     def __iter__(self):
-
-        for value in self.range:
-            yield mk_nbr(value)
+        
+        for i, v in zip(self.__range[::-1], self.__range):
+            yield mk_nbr(i), mk_nbr(v)
 
 
     def __str__(self):

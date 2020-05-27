@@ -54,8 +54,9 @@ class Inst:
 
 
     def __iter__(self):
-        for key in self.__dict__:
-            yield key
+        for key, value in self.__dict__.items():
+            if key[-2:] != '__':
+                yield key, value
 
 
 class Objet(Base):

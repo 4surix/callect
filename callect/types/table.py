@@ -24,10 +24,22 @@ def mk_table(obj=None, variables=None, *, _list=None, _dict=None):
 
         if obj is not None:
 
-            if obj.__class__.__name__ not in ('Txt', 'Table', 'Intervalle'):
+            if obj.__class__.__name__ not in ('Pos', 'Neg', 'Txt', 'Table', 'Intervalle'):
                 raise ConvertionImpossible(obj, Table, obj.ligne__)
 
-            table.list__.extend(obj)
+
+            nbr = 1
+            add = table.list__.append
+
+            for i, element in obj:
+                if nbr == i:
+                    add(element)
+                    nbr += 1
+
+                else:
+                    table.dict__[i] = element
+                    nbr = None
+
             table.ligne__ = obj.ligne__
 
         else:
@@ -147,11 +159,13 @@ class Table(Base):
 
     def __iter__(self):
 
+        nbr = 0
         for value in self.list__:
-            yield value
+            nbr += 1
+            yield mk_nbr(nbr), value
 
-        for value in self.dict__.values():
-            yield value
+        for index, value in self.dict__.items():
+            yield index, value
 
     def __len__(self):
 

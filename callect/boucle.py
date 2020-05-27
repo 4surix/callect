@@ -14,7 +14,7 @@ class For(Base):
     def __call__(self, variables):
 
         try:
-            for element in self.conteneur(variables):
+            for _, element in self.conteneur(variables):
                 self.var(variables, setvar=element)
                 self.bloc(variables)
 
@@ -42,7 +42,7 @@ class Repeat(Base):
             raise NotCompatible(self, value, self.ligne__)
 
         try:
-            for element in value:
+            for _ in value:
                 self.bloc(variables)
                 
         except StopIteration:
@@ -65,45 +65,8 @@ class IFor(Base):
 
     def __call__(self, variables):
 
-        args = {}
-
-        cont = self.conteneur(variables)
-
-
-        name_type_cont = cont.__class__.__name__
-
-
-        if name_type_cont == 'Table':
-            elements = []
-            add = elements.append
-
-            index = 0
-
-            for value in cont.list__:
-                index += 1
-                add((Pos(index), value))
-
-            for key, value in cont.dict__.items():
-                add((key, value))
-
-        elif name_type_cont == 'Txt':
-            elements = [(Pos(index), Txt(value)) for index, value in enumerate(cont.value)]
-
-        elif name_type_cont == 'Pos':
-            elements = [(neg, pos) for neg, pos in zip([Neg(value) for value in range(-1, cont.value-1, -1)], [Pos(value) for value in range(1, cont.value+1)])]
-
-        elif name_type_cont == 'Neg':
-            elements = [(pos, neg) for pos, neg in zip([Pos(value) for value in range(1, cont.value+1)], [Neg(value) for value in range(-1, cont.value-1, -1)])]
-
-        elif isinstance(cont, Inst):
-            elements = [(k, v) for k, v in cont.__dict__.items() if k[-2:] != '__']
-
-        else:
-            raise NotCompatible(self, cont, self.ligne__) 
-
-
         try:
-            for index, element in elements:
+            for index, element in self.conteneur(variables):
                 self.index(variables, setvar=index)
                 self.var(variables, setvar=element)
                 self.bloc(variables)

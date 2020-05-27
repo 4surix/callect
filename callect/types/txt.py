@@ -89,8 +89,11 @@ class Txt(Base):
 
 
     def __iter__(self):
+
+        nbr = 0
         for value in self.value:
-            yield Txt(value)
+            nbr += 1
+            yield mk_nbr(nbr), Txt(value)
 
     def __str__(self, *args):
         return '%s' % self.value

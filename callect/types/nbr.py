@@ -225,9 +225,13 @@ class Pos(Base, Nbr):
         return pos
 
     def __iter__(self):
-
-        for value in range(1, self.value+1):
-            yield self
+        
+        if self.value.__class__ == int:
+            for i, e in zip(
+                    [Neg(value) for value in range(-1, -self.value-1, -1)], 
+                    [Pos(value) for value in range(1, self.value+1)]
+                ):
+                yield i, e
 
     def __bool__(self):
         return True
@@ -277,8 +281,12 @@ class Neg(Base, Nbr):
 
     def __iter__(self):
 
-        for value in range(-1, self.value-1, -1):
-            yield self
+        if self.value.__class__ == int:
+            for i, e in zip(
+                    [Pos(value) for value in range(1, self.value*-1 + 1)], 
+                    [Neg(value) for value in range(-1, self.value-1, -1)]
+                ):
+                yield i, e
 
     def __bool__(self):
         return True
