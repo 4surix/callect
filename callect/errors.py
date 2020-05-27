@@ -9,16 +9,12 @@ class Try(Base):
 
         self.essaie = self.value[0]
 
-        self.value = []
-
 
 class Except(Base):
 
     def __call__(self, variables):
 
-        try:
-            self.essaie(variables)
-
+        try: self.essaie(variables)
         except Exception as erreur:
             name_erreur = erreur.__class__.__name__
 
@@ -26,6 +22,11 @@ class Except(Base):
                 if not except_.erreur or str(except_.erreur) == name_erreur:
                     except_.bloc(variables)
                     break
+
+        else:
+            return False
+
+        return True
 
     def push__(self, obj):
 
@@ -49,9 +50,12 @@ class Except(Base):
         elif len(self.value) == 4:
             self.erreur, as_, self.var_erreur, self.bloc = self.value
 
-        else:
+        elif len(self.value) == 1:
             self.erreur = self.var_erreur = None
             self.bloc = self.value[0]
+
+        else:
+            raise SyntaxIncorrect(self.ligne__)
 
 
 ### Erreurs
