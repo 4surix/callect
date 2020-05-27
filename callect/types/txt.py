@@ -3,6 +3,7 @@ from ..base import Base, methode_py_to_cl, fonction_py_to_cl
 from ..errors import NotCompatible, NotItem
 
 from .table import mk_table
+from .nbr import mk_nbr
 
 
 def mk_txt(obj, variables=None, *, return_str=False, ligne__=''):
@@ -81,6 +82,7 @@ class Txt(Base):
         txt.methodes__()
         return txt
 
+
     def __eq__(self, obj):
         return self.value == obj
 
@@ -132,7 +134,6 @@ class Txt(Base):
             raise NotItem(self, item, item.ligne__)
 
     def __setitem__(self, item, value):
-
         self.__dict__[item] = value
 
 
@@ -146,6 +147,8 @@ class Txt(Base):
 
     @methode_py_to_cl
     def in__(variables, self, obj):
+        if obj.__class__ != Txt:
+            raise NotCompatible(self, obj, self.ligne__)
         return obj.value in self.value
 
 

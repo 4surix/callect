@@ -10,16 +10,16 @@ class Bloc(Base):
 
     def end__(self, cont):
 
-        is_var = None
+        objet = None
 
         for value in self.value:
 
-            if value.__class__.__name__ in ['Var', 'Txt', 'Pos', 'Neg', 'Nul', 'Table', 'Intervalle', 'IsExist']:
-                if is_var is not None:
-                    raise Exception("%s Mettre '%s' à coter de '%s' est inutile." % (value.ligne__, type(is_var).__name__, type(value).__name__))
+            if value.__class__.__name__ in ['Txt', 'Pos', 'Neg', 'Nul', 'Table', 'Intervalle', 'IsExist']:
+                if objet is not None:
+                    raise Exception("%s Mettre un type '%s' à coter d'un type '%s' est inutile." % (
+                        value.ligne__, objet.__class__.__name__, value.__class__.__name__)
+                    )
                 else:
-                    is_var = value
+                    objet = value
             else:
-                is_var = None
-
-        self.ligne__ = str(cont.ligne)
+                objet = None

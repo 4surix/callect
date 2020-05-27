@@ -261,14 +261,13 @@ class Pos(Base, Nbr):
 
     def end__(self, cont):
 
-        nbr = ''.join([str(e) for e in self.value])
+        nbr = ''.join(str(e) for e in self.value)
 
         if '.' in nbr:
-            self.value = 0 + float(nbr)
-        else:
-            self.value = 0 + int(nbr)
+            self.value = float(nbr)
 
-        self.ligne__ = str(cont.ligne)
+        else:
+            self.value = int(nbr)
 
 
 class Neg(Base, Nbr):
@@ -316,14 +315,13 @@ class Neg(Base, Nbr):
 
     def end__(self, cont):
 
-        nbr = ''.join([str(e) for e in self.value])
+        nbr = ''.join(str(e) for e in self.value)
 
         if '.' in nbr:
             self.value = 0 - float(nbr)
+
         else:
             self.value = 0 - int(nbr)
-
-        self.ligne__ = str(cont.ligne)
 
 
 class Nul(Base, Nbr):
