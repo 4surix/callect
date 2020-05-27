@@ -2,7 +2,7 @@ from ..base import Base, fonction_py_to_cl, methode_py_to_cl
 
 from ..errors import NotItem, NotIndex, NotValue, ConvertionImpossible
 
-from .nbr import Pos, Neg, Nul
+from .nbr import Pos, Neg, Nul, mk_nbr
 
 from ..assignement import Asi
 
@@ -171,6 +171,13 @@ class Table(Base):
 
         return self.next_index_list - 1 + len(self.dict__)
 
+    def __eq__(self, obj):
+
+        if obj.__class__ != Table:
+            return False
+
+        return obj.list__ == self.list__ and obj.dict__ == self.dict__
+
 
     @methode_py_to_cl
     def in__(variables, self, obj):
@@ -330,7 +337,7 @@ class Table(Base):
 
     def indexs(self):
 
-        return mk_table(_list=[v for v in range(1, self.next_index_list)] + [k for k in self.dict__])
+        return mk_table(_list=[mk_nbr(v) for v in range(1, self.next_index_list)] + [k for k in self.dict__])
 
     def values(self):
 
