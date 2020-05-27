@@ -46,15 +46,21 @@ if os.name == 'nt':
         _fields_ = [("X", c_short), ("Y", c_short)]
 
     @fonction_py_to_cl
-    def print_(*args, x=Nul(0), y=Nul(0), stay=Nul(0), sep=' ', end='\n'):
+    def print_(*args, x=Nul(0), y=Nul(0), reset=Nul(0), sep=None, end=None):
+
+        if end is None:
+            end = print_.end__
+
+        if sep is None:
+            sep = print_.sep__
 
         text = str(sep).join(mk_txt(arg, return_str=True) for arg in args) + str(end)
 
         if x and y:
 
-            if x.__class__ not in [Pos, Neg]:
+            if x.__class__ != Pos:
                 raise NotCompatible(random_, x, x.ligne__)
-            if y.__class__ not in [Pos, Neg]:
+            if y.__class__ != Pos:
                 raise NotCompatible(random_, y, y.ligne__)
 
             h = windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
@@ -65,10 +71,8 @@ if os.name == 'nt':
             text = text.encode("windows-1252")
             windll.kernel32.WriteConsoleA(h, c_char_p(text), len(text), None, None)
 
-            if not stay:
-                coord = COORD(0, 0)
-
-            windll.kernel32.SetConsoleCursorPosition(h, coord)
+            if reset:
+                windll.kernel32.SetConsoleCursorPosition(h, COORD(0, 0))
 
         else:
 
@@ -82,25 +86,30 @@ else:
     # Linux, Mac, ...
 
     @fonction_py_to_cl
-    def print_(*args, x=Nul(0), y=Nul(0), stay=Nul(0), sep=' ', end='\n'):
+    def print_(*args, x=Nul(0), y=Nul(0), reset=Nul(0), sep=None, end=None):
+
+        if end is None:
+            end = print_.end__
+
+        if sep is None:
+            sep = print_.sep__
 
         text = str(sep).join(mk_txt(arg, return_str=True) for arg in args) + str(end)
 
         if x and y:
 
-            if x.__class__ not in [Pos, Neg]:
+            if x.__class__ != Pos:
                 raise NotCompatible(random_, x, x.ligne__)
-            if y.__class__ not in [Pos, Neg]:
+            if y.__class__ != Pos:
                 raise NotCompatible(random_, y, y.ligne__)
 
             coord = '\u001b[%s;%sH' % (y.value, x.value)
 
             sys.stdout.write(coord + text)
 
-            if not stay:
-                coord = '\u001b[0;0H'
+            if reset:
+                sys.stdout.write('\u001b[0;0H')
 
-            sys.stdout.write(coord)
             sys.stdout.flush()
 
         else:
@@ -110,6 +119,10 @@ else:
 
 
         return False__
+
+
+print_.end__ = ''
+print_.sep__ = ', '
 
 
 ## Input
@@ -451,7 +464,13 @@ except:
 if colorama:
 
     @fonction_py_to_cl
-    def print_ansi(*args, sep=' ', end='\n'):
+    def print_ansi(*args, sep=None, end=None):
+
+        if end is None:
+            end = print_ansi.end__
+
+        if sep is None:
+            sep = print_ansi.sep__
 
         text = str(sep).join(mk_txt(arg, return_str=True) for arg in args) + str(end)
 
@@ -461,5 +480,8 @@ if colorama:
         sys.stdout.flush()
 
         colorama.deinit()
+
+    print_ansi.end__ = ''
+    print_ansi.sep__ = ', '
 
     fonctions_intégrées['printANSI'] = print_ansi

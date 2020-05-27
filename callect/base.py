@@ -11,9 +11,9 @@ def methode_py_to_cl(func):
 
 
 class fonction_py_to_cl:
-    
+
     def __init__(self, func):
-        self.func = func
+        self.func__ = func
 
     def __call__(self, variables):
         return self
@@ -21,9 +21,12 @@ class fonction_py_to_cl:
     def __getitem__(self, item):
         return getattr(self, str(item))
 
+    def __setitem__(self, item, value):
+        return setattr(self, str(item), value)
+
     def call__(self, variables, args=[], kwargs={}):
         self.variables = variables
-        return self.func(*args, **({str(k):v for k, v in kwargs.items()} if kwargs else {}))
+        return self.func__(*args, **({str(k):v for k, v in kwargs.items()} if kwargs else {}))
 
 
 
