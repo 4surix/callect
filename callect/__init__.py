@@ -1,18 +1,19 @@
 
-__version__ = "1.0.0-pre2"
-
-
-from .errors import NotDefined, ALLExcept
-
-from .decode import decode
-
-from .built_in import fonctions_intégrées
+__version__ = "1.0.0-pre3"
 
 import traceback
 
 import time
 
 import sys
+
+from . import events
+
+from .errors import NotDefined, ALLExcept
+
+from .decode import decode
+
+from .built_in import fonctions_intégrées
 
 
 def calcul_time(func):
@@ -43,10 +44,29 @@ def run(data, path_file, path_exe=None, *, time=False):
         try:
 
             if time:
-                print(calcul_time(lambda: data(Info([fonctions_intégrées], {}, path_file, path_exe).add({}))))
+
+                def run():
+                    variables = Info([fonctions_intégrées], {}, [], [], path_file, path_exe).add({})
+
+                    threads = events.run(variables)
+
+                    data(variables)
+
+                    for thread in threads:
+                        thread.running = False
+
+                print(calcul_time(run))
 
             else:
-                data(Info([fonctions_intégrées], {}, path_file, path_exe).add({}))
+                variables = Info([fonctions_intégrées], {}, [], [], path_file, path_exe).add({})
+
+                threads = events.run(variables)
+
+                data(variables)
+
+                for thread in threads:
+                    # On termine le thread
+                    thread.running = False
 
         except ALLExcept as e:
             msg_exception = "Exception run:\n\n%s\n\n\nPress Entrée to exit.\n" % e
@@ -75,18 +95,35 @@ def run(data, path_file, path_exe=None, *, time=False):
 
 class Info:
 
-    def __init__(self, variables=None, events=None, path_file=None, path_exe=None):
+    def __init__(self, 
+        variables=None, 
+        events_vars=None,
+        events_date=None,
+        events_keys=None,
+        path_file=None, 
+        path_exe=None
+    ):
 
         self.variables = variables if variables else [{}]
-        self.events = events if events else {}
+
+        self.events_vars = events_vars if events_vars else {}
+        self.events_date = events_date if events_date else []
+        self.events_keys = events_keys if events_keys else []
 
         self.path_exe = path_exe
         self.path_file = path_file
 
-        self.get_event = self.events.get
+        self.get_event = self.events_vars.get
 
     def add(self, variables):
-        return Info([variables] + self.variables, dict(self.events), self.path_file, self.path_exe)
+        return Info(
+            [variables] + self.variables, 
+            dict(self.events_vars),
+            self.events_date,
+            self.events_keys,
+            self.path_file, 
+            self.path_exe
+        )
 
     def get(self, var, ligne=None):
 
@@ -109,8 +146,20 @@ class Info:
 
     def set_event(self, event):
 
-        for var in event.vars:
-            if var not in self.events:
-                self.events[var] = [event]
-            else:
-                self.events[var].append(event)
+        event.variables = self
+
+        if event.type == 'vars':
+
+            for var in event.vars:
+                if var not in self.events_vars:
+                    self.events_vars[var] = [event]
+                else:
+                    self.events_vars[var].append(event)
+
+        elif event.type == 'date':
+
+            self.events_date.append(event)
+
+        elif event.type == 'keys':
+
+            self.events_keys.append(event)

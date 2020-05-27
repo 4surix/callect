@@ -1,8 +1,10 @@
 from ..base import Base, Prio
 
-from ..conditions import Ega, Sup, Inf, SupOrEga, InfOrEga, Not, And, Or, XAnd, XOr
+from ..conditions import Ega, Sup, Inf, SupOrEga, InfOrEga, Not, And, Or, XAnd, XOr, In
 
 from ..redirec import RedirecPoint, RedirecItem
+
+from ..errors import SyntaxIncorrect
 
 from .var import Var
 from .intervalle import Intervalle
@@ -17,15 +19,41 @@ class Event(Base):
 
     def end__(self, cont):
 
-        self.conditions, self.bloc = self.value
+        if len(self.value) == 3:
+            """
+            $ vars (banane == 'verte') [
+                print{'Pas mûr !'}
+            ]
+            """
+            self.type, self.conditions, self.bloc = self.value
+
+            if self.type.value not in ['vars', 'date', 'keys']:
+                raise SyntaxIncorrect(self.ligne__)
+
+            self.type = self.type.value
+
+        # ===
+        # Disparait après la v1.0.0pre3
+        elif len(self.value) == 2:
+            """
+            $ (banane == 'verte') [
+                print{'Pas mûr !'}
+            ]
+            """
+            self.conditions, self.bloc = self.value
+
+            self.type = 'vars'
+        # ===
+
+        else:
+            raise SyntaxIncorrect(self.ligne__)
 
 
-        # Recolte de toutes les variables
+        ### Recolte de toutes les variables
 
         self.vars = vars__ = []
 
-
-        types = (Ega, Sup, Inf, SupOrEga, InfOrEga, Not, And, Or, XAnd, XOr, Intervalle, Prio)
+        types = (Ega, Sup, Inf, SupOrEga, InfOrEga, Not, And, Or, XAnd, XOr, In, Intervalle, Prio)
 
 
         def recolte(elements):
