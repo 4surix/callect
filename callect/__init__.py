@@ -1,13 +1,11 @@
 
-__version__ = "1.0.0-pre2"
+__version__ = "1.0.0-pre3"
 
 import traceback
 
 import time
 
 import sys
-
-from . import base
 
 from . import events
 
