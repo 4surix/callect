@@ -29,16 +29,15 @@ class Call(Base):
         obj = self.objet(variables)
 
         try:
-            call = obj['call__']
+            try: call__ = obj['call__']
+            except TypeError:
+                call__ = obj.call__
 
         except (KeyError, AttributeError):
             raise NotSupported(obj, 'call__')
 
-        except TypeError:
-            call = obj.call__
-
-
-        return call(variables, args, kwargs)
+        else:
+            return call__(variables, args, kwargs)
 
     def end__(self, cont):
 
@@ -74,16 +73,15 @@ class Attachement(Base):
         obj = self.objet(variables)
 
         try:
-            call = obj['call__']
+            try: call__ = obj['call__']
+            except TypeError:
+                call__ = obj.call__
 
         except (KeyError, AttributeError):
             raise NotSupported(obj, 'call__')
 
-        except TypeError:
-            call = obj.call__
-
-
-        return call(variables, args, kwargs)
+        else:
+            return call__(variables, args, kwargs)
 
     def end__(self, cont):
 

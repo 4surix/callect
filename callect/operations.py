@@ -17,8 +17,7 @@ class Add(Base): # Addition
 
             e2 = e2(variables)
 
-            try:
-                add__ = e1['add__']
+            try: add__ = e1['add__']
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'add__')
 
@@ -41,8 +40,7 @@ class Sub(Base): # Soustraction
 
             e2 = e2(variables)
 
-            try:
-                sub__ = e1['sub__']
+            try: sub__ = e1['sub__']
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'sub__')
 
@@ -65,8 +63,7 @@ class Div(Base): # Division
 
             e2 = e2(variables)
 
-            try:
-                e1 = e1['div__'](variables, [e2])
+            try: e1 = e1['div__'](variables, [e2])
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'div__') 
 
@@ -87,8 +84,7 @@ class Mod(Base): # Modulo
 
             e2 = e2(variables)
 
-            try:
-                e1 = e1['mod__'](variables, [e2])
+            try: e1 = e1['mod__'](variables, [e2])
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'mod__') 
 
@@ -109,8 +105,7 @@ class Mul(Base): # Multiplication
 
             e2 = e2(variables)
 
-            try:
-                e1 = e1['mul__'](variables, [e2])
+            try: e1 = e1['mul__'](variables, [e2])
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'mul__') 
 
@@ -131,8 +126,7 @@ class Exp(Base): # Exposant
 
             e2 = e2(variables)
 
-            try:
-                e1 = e1['exp__'](variables, [e2])
+            try: e1 = e1['exp__'](variables, [e2])
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'exp__') 
 
@@ -153,8 +147,7 @@ class Rac(Base): # Racine
 
             e2 = e2(variables)
 
-            try:
-                e1 = e1['rac__'](variables, [e2])
+            try: e1 = e1['rac__'](variables, [e2])
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'rac__')
 

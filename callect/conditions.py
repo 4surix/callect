@@ -26,19 +26,19 @@ class Ega(Base): # Egal
 
             e2 = e2(variables)
 
-            try:
-                if not e1['ega__'](variables, [e2]):
-                    return False__
-
+            try: ega__ = e1['ega__']
             except (KeyError, AttributeError):
                 raise NotSupported(e1, 'ega__')
+
+            if not ega__(variables, [e2]):
+                return False__
 
             e1 = e2
 
         return True__
 
     def end__(self, cont):
-        self.ligne__ = str(cont.ligne)
+
         self.value = [v for v in self.value if v != Ega]
 
 
@@ -56,12 +56,12 @@ class EgaObj(Base): # Egal
 
             e2 = e2(variables)
 
-            try:
-                if not e1['ega_obj__'](variables, [e2]):
-                    return False__
-
+            try: ega_obj__ = e1['ega_obj__']
             except (KeyError, AttributeError):
                 raise NotSupported(e1, 'ega_obj__')
+
+            if not ega_obj__(variables, [e2]):
+                return False__
 
             e1 = e2
 
@@ -82,19 +82,19 @@ class Sup(Base): # Supérieur
 
             e2 = e2(variables)
 
-            try:
-                if not e1['sup__'](variables, [e2]):
-                    return False__
-
+            try: sup__ = e1['sup__']
             except (KeyError, AttributeError):
                 raise NotSupported(e1, 'sup__')
+
+            if not sup__(variables, [e2]):
+                return False__
 
             e1 = e2
 
         return True__
 
     def end__(self, cont):
-        self.ligne__ = str(cont.ligne)
+
         self.value = [v for v in self.value if v != Sup]
 
 
@@ -112,19 +112,19 @@ class Inf(Base): # Inférieur
 
             e2 = e2(variables)
 
-            try:
-                if not e1['inf__'](variables, [e2]):
-                    return False__
-
+            try: inf__ = e1['inf__']
             except (KeyError, AttributeError):
                 raise NotSupported(e1, 'inf__')
+
+            if not inf__(variables, [e2]):
+                return False__
 
             e1 = e2
 
         return True__
 
     def end__(self, cont):
-        self.ligne__ = str(cont.ligne)
+
         self.value = [v for v in self.value if v != Inf]
 
 
@@ -142,19 +142,19 @@ class SupOrEga(Base): # Supérieur ou égal
 
             e2 = e2(variables)
 
-            try:
-                if not e1['sup_ega__'](variables, [e2]):
-                    return False__
-
+            try: sup_ega__ = e1['sup_ega__']
             except (KeyError, AttributeError):
                 raise NotSupported(e1, 'sup_ega__')
+
+            if not sup_ega__(variables, [e2]):
+                return False__
 
             e1 = e2
 
         return True__
 
     def end__(self, cont):
-        self.ligne__ = str(cont.ligne)
+
         self.value = [v for v in self.value if v != SupOrEga]
 
 
@@ -172,19 +172,19 @@ class InfOrEga(Base): # Inférieur ou égal
 
             e2 = e2(variables)
 
-            try:
-                if not e1['inf_ega__'](variables, [e2]):
-                    return False__
-
+            try: inf_ega__ = e1['inf_ega__']
             except (KeyError, AttributeError):
                 raise NotSupported(e1, 'inf_ega__')
+
+            if not inf_ega__(variables, [e2]):
+                return False__
 
             e1 = e2
 
         return True__
 
     def end__(self, cont):
-        self.ligne__ = str(cont.ligne)
+
         self.value = [v for v in self.value if v != InfOrEga]
 
 
@@ -202,19 +202,19 @@ class In(Base): # Contient
 
             e2 = e2(variables)
 
-            try:
-                if not e2['in__'](variables, [e1]):
-                    return False__
-
+            try: in__ = e2['in__']
             except (KeyError, AttributeError):
                 raise NotSupported(e2, 'in__')
+
+            if not in__(variables, [e1]):
+                return False__
 
             e1 = e2
 
         return True__
 
     def end__(self, cont):
-        self.ligne__ = str(cont.ligne)
+
         self.value = [v for v in self.value if v != In]
 
 
@@ -232,19 +232,19 @@ class RemIn(Base): # Contient
 
             e2 = e2(variables)
 
-            try:
-                if not e2['remin__'](variables, [e1]):
-                    return False__
-
+            try: remin__ = e2['remin__']
             except (KeyError, AttributeError):
                 raise NotSupported(e2, 'remin__')
+
+            if not inf__(variables, [e1]):
+                return False__
 
             e1 = e2
 
         return True__
 
     def end__(self, cont):
-        self.ligne__ = str(cont.ligne)
+
         self.value = [v for v in self.value if v != In]
 
 
@@ -263,19 +263,19 @@ class PopIn(Base): # Contient
 
             e2 = e2(variables)
 
-            try:
-                if not e2['popin__'](variables, [e1]):
-                    return False__
-
+            try: popin__ = e2['popin__']
             except (KeyError, AttributeError):
                 raise NotSupported(e2, 'popin__')
+
+            if not popin__(variables, [e1]):
+                return False__
 
             e1 = e2
 
         return True__
 
     def end__(self, cont):
-        self.ligne__ = str(cont.ligne)
+
         self.value = [v for v in self.value if v != In]
 
 
