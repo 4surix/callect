@@ -142,7 +142,8 @@ def end_objet(cont, objet):
     ### Condition
 
     if value == 'if':
-        objet, cont = cont.action(None, InsCond, get_last=False)    
+        cont.value.push__(None)
+        objet, cont = cont.action(None, InsCond)    
 
     elif value == 'elif':
         objet, cont = cont.action(None, InsCond)
