@@ -4,43 +4,33 @@ from .nbr import Pos, Neg, Nul, mk_nbr
 
 from ..errors import NotCompatible
 
+from ..errors import SyntaxIncorrect
+
 
 class Intervalle(Base):
 
     def __call__(self, variables):
 
-        debut = self.value[0]
-        fin = self.value[1]
+        debut = self.__debut(variables)
 
-        if len(self.value) > 2:
-            step = self.value[2]
-        else:
-            step = Pos(1)
-            step.ligne__ = self.ligne__
-
-
-        types_valide = (Pos, Neg, Nul)
-
-        debut = debut(variables)
-
-        if not debut.__class__ in types_valide: 
+        if not debut.__class__ in self.types_valide: 
             raise NotCompatible(self, debut, self.ligne__)
 
-        fin = fin(variables)
+        fin = self.__fin(variables)
 
-        if not fin.__class__ in types_valide:
+        if not fin.__class__ in self.types_valide:
             raise NotCompatible(self, fin, self.ligne__)
 
-        step = step(variables)
+        step = self.__step(variables)
 
-        if not step.__class__ in types_valide:
+        if not step.__class__ in self.types_valide:
             raise NotCompatible(self, step, self.ligne__)
 
 
         self.debut__ = debut__ = int(debut.value)
 
-        self.debut = debut__ - 1 if debut__ > 0 else debut__ # 2;8;1 --> 1;8;1    -6;8;1 --> -6;8:1
-        self.fin = int(fin.value - 1 if fin.value < 0 else fin.value) # 5;7 --> 5;7     -1;-4;-1 --> -1;-5;-1
+        self.debut = debut__ - 1 if debut__ > 0 else debut__ # 2;8;1 --> 1:8:1    -6;8;1 --> -6:8:1
+        self.fin = int(fin.value - 1 if fin.value < 0 else fin.value) # 5;7 --> 5:7     -1;-4;-1 --> -1:-5:-1
         self.step = int(step.value)
 
 
@@ -60,10 +50,21 @@ class Intervalle(Base):
 
 
     def __str__(self):
-
         return '%s;%s;%s' % (self.debut__, self.fin, self.step)
 
 
     def end__(self, cont):
 
         self.value = [v for v in self.value if v != Intervalle]
+
+        self.types_valide = (Pos, Neg, Nul)
+
+        if len(self.value) == 3:
+            self.__debut, self.__fin, self.__step = self.value
+
+        elif len(self.value) == 2:
+            self.__debut, self.__fin = self.value
+            self.__step = Pos(1)
+
+        else:
+            raise SyntaxIncorrect(self.ligne__)
