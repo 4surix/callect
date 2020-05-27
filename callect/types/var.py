@@ -4,6 +4,8 @@ from .txt import Txt
 
 from .objet import Inst, Objet
 
+from ..errors import NotItem
+
 
 class Var(Base):
 
@@ -23,12 +25,12 @@ class Var(Base):
         else:
             value = variables.get(self.value, ligne=self.ligne__)
 
-
             if isinstance(value, Inst):
 
-                value__ = value.__dict__.get('obj__')
-
-                if value__:
+                try: value__ = value['obj__']
+                except NotItem:
+                    pass
+                else:
                     value = value__(variables, [], {})
 
             elif value.__class__ == Objet and value.callable_without_call:
