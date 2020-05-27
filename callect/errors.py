@@ -195,3 +195,5 @@ ALLExcept = (
     ValueIncorrect,
     SyntaxIncorrect
 )
+
+Base.NotItem = NotItem

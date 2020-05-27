@@ -1,4 +1,7 @@
 
+NotItem = None
+
+
 def methode_py_to_cl(func):
 
     def conv(self, variables, args=[], kwargs={}):
@@ -41,14 +44,22 @@ class Base:
         self.ligne__ = '[L~None]'
 
     def __repr__(self):
-
         #return '%s(%s)' % (self.__class__.__name__, self.value)
         return str(self.value)
     
     def __str__(self):
-
         #return '%s(%s)' % (self.__class__.__name__, self.value)
         return str(self.value)
+
+    def __getitem__(self, item):
+
+        try:
+            return getattr(self, str(item))
+        except:
+            raise NotItem(self, item, item.ligne__)
+
+    def __setitem__(self, item, value):
+        self.__dict__[item] = value
 
     def __call__(self, *args, **kwargs):
         return self
@@ -77,6 +88,10 @@ class Base:
 
     def end__(self, cont):
         pass
+
+    @methode_py_to_cl
+    def ega_obj__(variables, self, obj):
+        return self is obj
 
 
 class Return(Base, Exception):

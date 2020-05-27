@@ -3,7 +3,7 @@ import os
 
 from .base import Return, Commentaire, Prio
 
-from .conditions import Not, Inf, Sup, InfOrEga, SupOrEga, Ega, In, RemIn, PopIn, And, Or, XAnd, XOr
+from .conditions import Not, Inf, Sup, InfOrEga, SupOrEga, Ega, EgaObj, In, RemIn, PopIn, And, Or, XAnd, XOr
 
 from .operations import Rac, Exp, Mul, Div, Mod, Sub, Add
 
@@ -465,6 +465,13 @@ def decode(data, path_file):
             objet, cont = cont.action(objet, Sup, acts_redirec + acts_calcul + (IsExist, Not))
 
             cont.value.push__(Sup)
+
+        elif data[icarac:icarac+3] == '===':
+            index_min = icarac + 3
+
+            objet, cont = cont.action(objet, EgaObj, acts_redirec + acts_calcul + (IsExist, Not))
+
+            cont.value.push__(EgaObj)
 
         elif carac2 == '==':
             index_min = icarac + 2
