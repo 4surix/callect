@@ -62,8 +62,14 @@ class Table(Base):
         # Si on met une variable dans une table, cela va renvoyer sa valeur
         #  ce qui fait que le nouveau objet table aura les mêmes objets que les anciennes tables créés
         #  et les modifications sur ces objets seront effectuée dans dans ces objets Table
+        #
         # Pour contrer cela, il faut appeler la valeur envoyée par la variable, ce qui va la copier
-        new_table.list__ = [e(variables)(variables) if e.__class__.__name__ == 'Var' else e(variables) for e in self.list__]
+        #  mais faire attention que ce n'est pas un objet Python sinon il appel __init__ et fait une instance
+        #
+        new_table.list__ = [
+            e(variables)(variables) if e.__class__.__name__ == 'Var' else e(variables) 
+            for e in self.list__
+        ]
         new_table.dict__ = {
             k(variables)(variables) if k.__class__.__name__ == 'Var' else k(variables)
             :

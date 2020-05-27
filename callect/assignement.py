@@ -25,12 +25,16 @@ class Typ(Base): # Type var
 
             return value
 
+    def __str__(self):
+        return '%s:%s' % self.objet, self.type
+
     def end__(self, cont): 
         self.objet, self.type = self.value
 
-        type_name = type(self.type).__name__
+        if self.objet.__class__.__name__ != 'Var':
+            raise NotCompatible(self.type, self, self.ligne__)
 
-        if type_name != 'Var':
+        if self.type.__class__.__name__ not in ['Var', 'RedirecPoint']:
             raise NotCompatible(self.type, self, self.ligne__)
 
 
