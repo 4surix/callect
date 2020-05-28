@@ -31,7 +31,7 @@ class Typ(Base): # Type var
     def end__(self, cont): 
         self.objet, self.type = self.value
 
-        if self.objet.__class__.__name__ not in ('Var', 'Txt', 'Pos', 'Neg', 'Nul', 'Prio'):
+        if self.objet.__class__.__name__ not in ('Var', 'Txt', 'Pos', 'Neg', 'Nul', 'Prio', 'RedirecPoint'):
             raise NotCompatible(self.type, self, self.ligne__)
 
         if self.type.__class__.__name__ not in ('Var', 'RedirecPoint'):
