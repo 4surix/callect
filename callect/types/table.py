@@ -219,7 +219,11 @@ class Table(Base):
 
     @methode_py_to_cl
     def ega__(variables, self, obj):
-        return str(self) == str(obj)
+
+        if obj.__class__ != Table:
+            return False
+
+        return obj.list__ == self.list__ and obj.dict__ == self.dict__
 
 
     ### Methodes
@@ -235,7 +239,7 @@ class Table(Base):
         self.pop = fonction_py_to_cl(self.pop)
 
         self.index = fonction_py_to_cl(self.index)
-        self.value = fonction_py_to_cl(self.value)
+        self.value = fonction_py_to_cl(self.func__value)
         self.indexs = fonction_py_to_cl(self.indexs)
         self.values = fonction_py_to_cl(self.values)
 
@@ -243,7 +247,7 @@ class Table(Base):
 
         type_name = type(item).__name__
 
-        if isinstance(item, Pos):
+        if item.__class__ == Pos:
 
             item = item.value
         
@@ -258,7 +262,7 @@ class Table(Base):
                     value = self.dict__.get(i)
 
                     if value is None:
-                        return
+                        return self
 
                     del self.dict__[i]
                     self.list__.append(value)
@@ -267,15 +271,20 @@ class Table(Base):
 
         self.dict__[item] = value
 
+        return self
+
     def add(self, obj):
 
-        self.list__.append(obj)
-        self.next_index_list += 1
+        self[Pos(self.next_index_list)] = obj
         return self
 
     def pop(self, item=Pos(0)):
 
-        if item.__class__ == Pos and item.value < self.next_index_list:
+        if (
+            self.list__ # Si la liste est vide cela ne sert à rien de chercher dedans
+            and item.__class__ == Pos 
+            and item.value < self.next_index_list
+        ):
             value = self.list__.pop(item.value-1)
             self.next_index_list -= 1
             return value
@@ -294,21 +303,17 @@ class Table(Base):
 
         except:
 
-            try:
-                for index, value in self.dict__.items():
-                    if value == obj:
-                        del self.dict__[index]
-                        break
+            for index, value in self.dict__.items():
+                if value == obj:
+                    del self.dict__[index]
+                    return self
 
-            except:
-                raise NotValue(self, obj, obj.ligne__)
-
-        return self
+        raise NotValue(self, obj, obj.ligne__)
 
     def remall(self, value):
 
         self.list__ = [v for v in self.list__ if v != value]
-        self.dict__ = {k:v for k, v in self.dict__.items() if v != value}
+        self.dict__ = {k: v for k, v in self.dict__.items() if v != value}
 
         self.next_index_list = len(self.list__) + 1
 
@@ -317,7 +322,7 @@ class Table(Base):
     def index(self, obj):
 
         try:
-            return Pos(self.list__.index(obj)+1)
+            return Pos(self.list__.index(obj) + 1)
 
         except:
             for index, value in self.dict__.items():
@@ -326,7 +331,7 @@ class Table(Base):
 
         raise NotIndex(self, obj, obj.ligne__)
 
-    def value(self, obj):
+    def func__value(self, obj):
 
         try:
             return self.list__[obj]
@@ -388,10 +393,18 @@ class Table(Base):
                 value = value.objet
 
                 for key in keys:
-                    if isinstance(key, Pos) and key.value <= len(self.list__)+1:
-                        self.list__[key.value-1] = value
-                    else:
-                        self.dict__[key] = value
+
+                    if key.__class__ == Pos:
+
+                        if key.value <= len(self.list__):
+                            self.list__[key.value-1] = value
+                            continue
+
+                        elif key.value == len(self.list__) + 1:
+                            self.list__.append(value)
+                            continue
+                    
+                    self.dict__[key] = value
 
             elif type(value).__name__ == 'Objet' and value.__name__:
 

@@ -1,10 +1,13 @@
 from ..base import Base
 
-from .txt import Txt
+from .txt import mk_txt
 
 from .objet import Inst, Objet
 
 from ..errors import NotItem
+
+
+name_obj__ = mk_txt('obj__')
 
 
 class Var(Base):
@@ -26,14 +29,26 @@ class Var(Base):
             value = variables.get(self.value, ligne=self.ligne__)
 
             if isinstance(value, Inst):
+                """
+                @'pouet' {
+                    'obj__' @[return 'pouf']
+                } []
+                pouet == 'pouf'
+                """
 
-                try: value__ = value['obj__']
+                try: value__ = value[name_obj__]
                 except NotItem:
                     pass
                 else:
                     value = value__(variables, [], {})
 
             elif value.__class__ == Objet and value.callable_without_call:
+                """
+                @'pouet' [
+                    return 'pouf'
+                ]
+                pouet == 'pouf'
+                """
 
                 value = value(variables, [], {})
 

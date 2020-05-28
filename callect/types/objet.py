@@ -34,6 +34,9 @@ class Inst:
     def __str__(self):
         return '<Objet %s>' % self.__class__.__name__
 
+    def __repr__(self):
+        return '<Objet %s>' % self.__class__.__name__
+
     def __call__(self, *args):
         return self
 
@@ -79,6 +82,12 @@ class Objet(Base):
             return getattr(self, str(item))
         except:
             raise NotItem(self, item, item.ligne__)
+
+    def __str__(self):
+        return '<Objet %s>' % self.__name__
+
+    def __repr__(self):
+        return '<Objet %s>' % self.__name__
     
     def call__(self, variables, args, kwargs={}, parent=None):
 
@@ -136,7 +145,7 @@ class Objet(Base):
 
     def end__(self, cont):
 
-        self.__name__ = None
+        self.__name__ = ''
 
         self.self = None
         self.parent = None

@@ -236,7 +236,7 @@ class RemIn(Base): # Contient
             except (KeyError, AttributeError):
                 raise NotSupported(e2, 'remin__')
 
-            if not inf__(variables, [e1]):
+            if not remin__(variables, [e1]):
                 return False__
 
             e1 = e2

@@ -59,7 +59,7 @@ class Txt(Base):
 
     def join(self, obj):
 
-        txt = mk_txt(self.value.join(mk_txt(v, return_str=True) for v in obj))
+        txt = mk_txt(self.value.join(mk_txt(v, return_str=True) for index, v in obj))
         txt.ligne__ = obj.ligne__
         return txt
 
@@ -172,11 +172,11 @@ class Txt(Base):
 
     def call__(*args):
 
-        if len(args) == 2:
-            return args[0]
+        if len(args) == 3:
+            return mk_txt(args[1][0], args[0])
 
         else:
-            return mk_txt(args[1][0], args[0])
+            return args[0]
 
 
     def end__(self, cont):

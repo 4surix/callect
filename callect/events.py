@@ -85,15 +85,14 @@ class Time(Thread):
 
         while 1:
 
-            date = mk_table(_list=[mk_nbr(nbr) for nbr in time.gmtime()[:6]])
-
-
             if not self.running:
                 # L'orsque le thread est arrété
                 return
 
-
             if events:
+
+                date = mk_table(_list=[mk_nbr(nbr) for nbr in time.gmtime()[:6]])
+
                 for event in events:
                     variables = event.variables
                     variables.variables[0]['date__'] = date
@@ -127,12 +126,6 @@ class Key(Thread):
             if events:
 
                 key = getKey()
-
-
-                if not self.running:
-                    # L'orsque le thread est arrété
-                    return
-
 
                 # J'ai mit les mêmes noms des touches que Tkinter
 

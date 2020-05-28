@@ -29,7 +29,7 @@ class fonction_py_to_cl:
 
     def call__(self, variables, args=[], kwargs={}):
         self.variables = variables
-        return self.func__(*args, **({str(k):v for k, v in kwargs.items()} if kwargs else {}))
+        return self.func__(*args, **{str(k): v for k, v in kwargs.items()})
 
 
 

@@ -121,8 +121,8 @@ else:
         return False__
 
 
-print_.end__ = ''
-print_.sep__ = ', '
+print_.end__ = '\n'
+print_.sep__ = ' '
 
 
 ## Input
@@ -481,7 +481,7 @@ if colorama:
 
         colorama.deinit()
 
-    print_ansi.end__ = ''
-    print_ansi.sep__ = ', '
+    print_ansi.end__ = '\n'
+    print_ansi.sep__ = ' '
 
     fonctions_intégrées['printANSI'] = print_ansi
