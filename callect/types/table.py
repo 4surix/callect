@@ -106,7 +106,7 @@ class Table(Base):
         if item.__class__.__name__ == 'Intervalle':
             return mk_table(_list=self.list__[slice(item.debut, item.fin, item.step)])
 
-        value = self.dict__.get(str(item))
+        value = self.dict__.get(item)
         if value is not None:
             return value
 
