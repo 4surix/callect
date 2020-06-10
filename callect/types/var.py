@@ -12,18 +12,19 @@ name_obj__ = mk_txt('obj__')
 
 class Var(Base):
 
-    def __call__(self, variables, setvar=None, local=False):
+    def __call__(self, variables, setvar=None, local=False, hidden=False):
 
         if setvar is not None:
             variables.set(self.value, setvar, local=local)
 
-            events = variables.get_event(self.value)
+            if not hidden:
+                events = variables.get_event(self.value)
 
-            if events:
-                for event in events:
-                    if event.conditions(variables):
-                        for element in event.bloc.value:
-                            element(variables)
+                if events:
+                    for event in events:
+                        if event.conditions(variables):
+                            for element in event.bloc.value:
+                                element(variables)
 
         else:
             value = variables.get(self.value, ligne=self.ligne__)

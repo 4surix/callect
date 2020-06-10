@@ -90,3 +90,18 @@ class Event(Base):
 
         elif type_element in types:
             recolte(element.value)
+
+
+class Hidden(Base):
+
+    def __call__(self, variables, setvar=None, local=False):
+
+        return self.objet(variables, setvar=setvar, local=local, hidden=True)
+
+    def end__(self, cont):
+        self.objet = self.value[0]
+
+        type_name = self.objet.__class__.__name__
+
+        if type_name not in ['Var', 'Typ', 'RedirecPoint']:
+            raise NotCompatible(self.objet, self, self.ligne__)

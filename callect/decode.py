@@ -18,7 +18,7 @@ from .errors import Try, Except, NotDefined
 from .types.bloc import Bloc
 from .types.bool import True__, False__
 from .types.call import Call, Attachement
-from .types.event import Event
+from .types.event import Event, Hidden
 from .types.inscond import InsCond
 from .types.intervalle import Intervalle
 from .types.nbr import Pos, Neg, Nul
@@ -173,6 +173,10 @@ def end_objet(cont, objet):
 
     ### Var
 
+    elif value == 'hide':
+        objet, cont = cont.action(None, Hidden, get_last=False)    
+        cont.value.liée = True
+
     elif value == 'local':
         objet, cont = cont.action(None, Local, get_last=False)    
         cont.value.liée = True
@@ -225,7 +229,7 @@ def decode(data, path_file):
     objet = None
 
 
-    acts_var = (Asi, Local, Return, IsExist)
+    acts_var = (Asi, Hidden, Local, Return, IsExist)
 
     acts_redirec = (RedirecItem, RedirecPoint, Intervalle, Typ, Attachement)
 
@@ -450,53 +454,53 @@ def decode(data, path_file):
         elif carac2 == '>=':
             index_min = icarac + 2
 
-            objet, cont = cont.action(objet, SupOrEga, acts_redirec + acts_calcul + (IsExist, Not))
+            objet, cont = cont.action(objet, SupOrEga, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
             cont.value.push__(SupOrEga)
 
         elif carac == '<':
 
-            objet, cont = cont.action(objet, Inf, acts_redirec + acts_calcul + (IsExist, Not))
+            objet, cont = cont.action(objet, Inf, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
             cont.value.push__(Inf)
 
         elif carac == '>':
 
-            objet, cont = cont.action(objet, Sup, acts_redirec + acts_calcul + (IsExist, Not))
+            objet, cont = cont.action(objet, Sup, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
             cont.value.push__(Sup)
 
         elif data[icarac:icarac+3] == '===':
             index_min = icarac + 3
 
-            objet, cont = cont.action(objet, EgaObj, acts_redirec + acts_calcul + (IsExist, Not))
+            objet, cont = cont.action(objet, EgaObj, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
             cont.value.push__(EgaObj)
 
         elif carac2 == '==':
             index_min = icarac + 2
 
-            objet, cont = cont.action(objet, Ega, acts_redirec + acts_calcul + (IsExist, Not))
+            objet, cont = cont.action(objet, Ega, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
             cont.value.push__(Ega)
 
         elif carac == '&':
 
-            objet, cont = cont.action(objet, And, acts_redirec + acts_calcul + acts_condition + (IsExist,))
+            objet, cont = cont.action(objet, And, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
 
         elif carac == '|':
 
-            objet, cont = cont.action(objet, Or, acts_redirec + acts_calcul + acts_condition + (IsExist,))
+            objet, cont = cont.action(objet, Or, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
 
         elif carac2 == '&&':
             index_min = icarac + 2
 
-            objet, cont = cont.action(objet, XAnd, acts_redirec + acts_calcul + acts_condition + (IsExist,))
+            objet, cont = cont.action(objet, XAnd, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
 
         elif carac2 == '||':
             index_min = icarac + 2
 
-            objet, cont = cont.action(objet, XOr, acts_redirec + acts_calcul + acts_condition + (IsExist,))
+            objet, cont = cont.action(objet, XOr, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
 
 
         ### Variable
@@ -507,7 +511,7 @@ def decode(data, path_file):
 
         elif carac == '=':
 
-            objet, cont = cont.action(objet, Asi, (Local, Return, Typ) + acts_redirec + acts_calcul)
+            objet, cont = cont.action(objet, Asi, (Hidden, Local, Return, Typ) + acts_redirec)
 
             cont.value.push__(Asi)
 

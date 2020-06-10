@@ -5,7 +5,7 @@ from .errors import AllNonexistent, NotCompatible
 
 class Typ(Base): # Type var
 
-    def __call__(self, variables, setvar=None, local=False):
+    def __call__(self, variables, setvar=None, local=False, hidden=False):
 
         obj = self.type(variables)
 
@@ -14,7 +14,7 @@ class Typ(Base): # Type var
             if obj.__name__ != setvar.__class__.__name__:
                 setvar = obj.call__(variables, [setvar], {})
 
-            self.objet(variables, setvar=setvar, local=local)
+            self.objet(variables, setvar=setvar, local=local, hidden=hidden)
 
         else:
 
@@ -64,9 +64,9 @@ class Local(Base): # Local
     def end__(self, cont):
         self.objet = self.value[0]
 
-        type_name = type(self.objet).__name__
+        type_name = self.objet.__class__.__name__
 
-        if type_name not in ['Var', 'Typ']:
+        if type_name not in ['Var', 'Typ', 'Hidden']:
             raise NotCompatible(self.objet, self, self.ligne__)
 
 

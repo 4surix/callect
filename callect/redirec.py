@@ -42,7 +42,7 @@ class RedirecItem(Base):
 
 class RedirecPoint(Base):
 
-    def __call__(self, variables, setvar=None, local=False):
+    def __call__(self, variables, setvar=None, local=False, hidden=False):
 
         value = self.var(variables)
 
@@ -53,13 +53,14 @@ class RedirecPoint(Base):
         if setvar is not None:
             value[self.item] = setvar
 
-            events = variables.get_event(self.value)
+            if not hidden:
+                events = variables.get_event(self.value)
 
-            if events:
-                for event in events:
-                    if event.conditions(variables):
-                        for element in event.bloc.value:
-                            element(variables)
+                if events:
+                    for event in events:
+                        if event.conditions(variables):
+                            for element in event.bloc.value:
+                                element(variables)
 
         else:
             value = value[self.item]
