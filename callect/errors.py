@@ -180,6 +180,16 @@ class SyntaxIncorrect(Exception):
 
         return self.value
 
+class LigneTooBig(Exception):
+
+    def __init__(self, ligne=''):
+
+        self.value = "%s LigneTooBig: len ligne > 79." % (ligne)
+
+    def __str__(self):
+
+        return self.value
+
 
 ALLExcept = (
     NotSupported,
@@ -193,7 +203,8 @@ ALLExcept = (
     ModuleNotFound,
     FileNotFound,
     ValueIncorrect,
-    SyntaxIncorrect
+    SyntaxIncorrect,
+    LigneTooBig
 )
 
 Base.NotItem = NotItem

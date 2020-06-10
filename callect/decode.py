@@ -13,7 +13,7 @@ from .boucle import For, IFor, While, Repeat, Break
 
 from .redirec import RedirecItem, RedirecPoint
 
-from .errors import Try, Except, NotDefined
+from .errors import Try, Except, LigneTooBig
 
 from .types.bloc import Bloc
 from .types.bool import True__, False__
