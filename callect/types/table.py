@@ -1,10 +1,10 @@
-from ..base import Base, fonction_py_to_cl, methode_py_to_cl
 
+from ..base import Base, fonction_py_to_cl, methode_py_to_cl
 from ..errors import NotItem, NotIndex, NotValue, ConvertionImpossible
+from ..assignement import Asi
 
 from .nbr import Pos, Neg, Nul, mk_nbr
-
-from ..assignement import Asi
+from .bool import True__, False__
 
 
 def mk_table(obj=None, variables=None, *, _list=None, _dict=None):
@@ -183,6 +183,13 @@ class Table(Base):
             return False
 
         return obj.list__ == self.list__ and obj.dict__ == self.dict__
+
+
+    def __bool__(self):
+        return True
+
+    def bool__(self, variables):
+        return True__
 
 
     @methode_py_to_cl

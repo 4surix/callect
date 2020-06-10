@@ -1,9 +1,10 @@
-from ..base import Base, methode_py_to_cl, fonction_py_to_cl
 
+from ..base import Base, methode_py_to_cl, fonction_py_to_cl
 from ..errors import NotCompatible, NotItem
 
 from .table import mk_table
 from .nbr import mk_nbr
+from .bool import True__, False__
 
 
 def mk_txt(obj, variables=None, *, return_str=False, ligne__=''):
@@ -143,6 +144,13 @@ class Txt(Base):
 
     def __len__(self):
         return len(self.value)
+
+
+    def __bool__(self):
+        return True
+
+    def bool__(self, variables):
+        return True__
 
 
     @methode_py_to_cl

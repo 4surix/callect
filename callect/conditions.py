@@ -9,7 +9,13 @@ class Not(Base): # Not
     
     def __call__(self, variables):
 
-        return [True__, False__][bool(self.value[0](variables))]
+        objet = self.value[0](variables)
+
+        try: bool__ = objet['bool__']
+        except (KeyError, AttributeError):
+            raise NotSupported(objet, 'bool__')
+
+        return (True__, False__)[bool__(variables)]
 
 
 class Ega(Base): # Egal

@@ -5,6 +5,7 @@ from ..errors import NotItem
 from .txt import Txt, mk_txt
 from .table import Table, mk_table
 from .bloc import Bloc
+from .bool import True__, False__
 
 
 class CallObjetWithParent:
@@ -39,6 +40,13 @@ class Inst:
 
     def __call__(self, *args):
         return self
+
+
+    def __bool__(self):
+        return True
+
+    def bool__(self, variables):
+        return True__
 
 
     def __getitem__(self, item):

@@ -1,5 +1,5 @@
-from ..base import Base, methode_py_to_cl, fonction_py_to_cl
 
+from ..base import Base, methode_py_to_cl, fonction_py_to_cl
 from ..errors import NotSupported, NotCompatible, NotItem, ConvertionImpossible
 
 
@@ -236,6 +236,9 @@ class Pos(Base, Nbr):
     def __bool__(self):
         return True
 
+    def bool__(self, variables):
+        return True__
+
     def call__(*args):
 
         if len(args) == 3:
@@ -290,6 +293,9 @@ class Neg(Base, Nbr):
     def __bool__(self):
         return True
 
+    def bool__(self, variables):
+        return True__
+
     def call__(*args):
 
         if len(args) == 3:
@@ -335,6 +341,9 @@ class Nul(Base, Nbr):
     def __bool__(self):
         return False
 
+    def bool__(self, variables):
+        return False__
+
     def __iter__(self):
         pass
 
@@ -357,3 +366,9 @@ class Nul(Base, Nbr):
         self.value = 0
 
         self.ligne__ = str(cont.ligne)
+
+
+### Booléens
+
+True__ = Pos(1)
+False__ = Nul(0)
