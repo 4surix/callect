@@ -11,8 +11,7 @@ class InsCond(Base):
 
         for condition, bloc in self.insconds:
             if condition(variables):
-                bloc(variables)
-                return True__
+                return bloc(variables)
 
         return False__
 

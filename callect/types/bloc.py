@@ -1,12 +1,17 @@
 from ..base import Base
+from .bool import False__, True__
 
 
 class Bloc(Base):
     
     def __call__(self, variables):
 
+        value = False__
+
         for element in self.value:
-            element(variables)
+            value = element(variables)
+
+        return value
 
     def end__(self, cont):
 
