@@ -1,19 +1,20 @@
 
 __version__ = "1.0.0-pre3"
 
+
 import traceback
-
 import time
-
 import sys
 
+
 from . import events
-
+from . import types
 from .errors import NotDefined, ALLExcept
-
 from .decode import decode
-
 from .built_in import fonctions_intégrées
+
+
+fonctions_intégrées['version__'] = types.txt.mk_txt(__version__)
 
 
 def calcul_time(func):
