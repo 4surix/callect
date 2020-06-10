@@ -2,24 +2,92 @@
 	Base du langage
 //
 
-piaf = 3
+pouet = 10
 
-pouf = 1 + 2 - 7 * 6 / 8 % 4 ^ 7 V 2
+pouf = pouet + 1
+pouf = pouet - 1
+pouf = pouet * 1
+pouf = pouet / 1
+pouf = pouet % 1
+pouf = pouet ^ 1
+pouf = pouet V 1
 
-poire = "verte"
+
+piaf = pouet + 2 - 7 * 6 / 8 % 4 ^ 7 V 2
+
+piaf = pouet 
+       + 2 
+       - 7 
+       * 6 
+       / 8 
+       % 4 
+       ^ 7 
+       V 2
+
+
+cuik = "wouf"
+       + "miaou"
+       + "coinc"
+
+if cuik == "woufmiaoucoinc" [
+	print{"oui"}
+]
+
 
 fruits = {'fraise', 'cassis', 'abricot'}
 
-pof = "a" + "b"
-
-zouuup = pof + "c"
-
-puik = "12"
-
-flop = puik:pos + 10
-
-@'fonction' {value:pos} [
-	return value + 1
+for fruit in fruits [
+	print{fruit}
 ]
 
-fonction{'12'}
+
+hiboux = {
+	'canard' = {
+		'cuicui' = {
+			'fiou' = 345
+		}
+	}
+}
+
+
+zip = hiboux # 'canard' # 'cuicui' # 'fiou'
+
+zip = hiboux
+	  # 'canard'
+	  # 'cuicui'
+	  # 'fiou'
+
+zip == 345
+
+
+zip = hiboux.canard.cuicui.fiou
+
+zip = hiboux
+	  .canard
+	  .cuicui
+	  .fiou
+
+zip == 345
+
+
+zoup = {
+	'poire' = 'verte',
+	'pomme' = 'cerise' = 'fraise' = 'rouge',
+	123 = 'arbre'
+}
+
+if zoup # 'pomme' == zoup.cerise == 'rouge' [
+	print{zoup # 123}
+]
+
+
+@'patatie' {floup:pos} [
+	return floup + 1
+]
+
+patatie{'1'} == 2
+
+
+kazou = @{bloup}[return bloup:txt]
+
+kazou{1} == "1"
