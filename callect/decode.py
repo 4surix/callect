@@ -463,7 +463,7 @@ def decode(data, path_file):
         elif carac2 == '<=':
             index_min = icarac + 2
 
-            objet, cont = cont.action(objet, InfOrEga, acts_redirec + acts_calcul + (IsExist, Not))
+            objet, cont = cont.action(objet, InfOrEga, acts_redirec + acts_calcul + (Hidden, IsExist, Not))
 
             cont.value.push__(InfOrEga)
 
