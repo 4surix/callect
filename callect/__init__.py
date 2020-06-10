@@ -1,5 +1,5 @@
 
-__version__ = "1.0.0-pre3"
+__version__ = "1.0.0-pre4"
 
 
 import traceback
