@@ -76,10 +76,7 @@ if len(args) == 1:
                 sys.exit()
 
         if text == '```':
-            if is_multiline:
-                is_multiline = False
-            else:
-                is_multiline = True
+            is_multiline = not is_multiline
 
         else:
             data += (text + '\n')
@@ -104,7 +101,9 @@ else:
     with open(path_file, encoding='utf-8') as f:
         data = f.read()
 
-    path_file = '/'.join(path_file.split('\\'))
+    path_file = path_file.replace('\\', '/')
+    path_exe = path_exe.replace('\\', '/')
+
     result = callect.run(data, path_file, path_exe)
 
     if result:
