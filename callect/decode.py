@@ -271,13 +271,27 @@ def decode(data, path_file):
 
 
         if carac == '\n':
+            """
+            pomme
+            poire
+            """
             cont.ligne()
             carac = ' '
 
         if carac == '\t':
+            """
+            pomme   poire
+            """
             continue
 
+
         ### Commentaire
+
+        """
+        //
+            Bla bla bla
+        //
+        """
 
         if isinstance(objet, Commentaire):
             if carac2 == '//':
@@ -288,13 +302,18 @@ def decode(data, path_file):
             index_min = icarac + 2
             objet = Commentaire()
 
+
         ### Echappement
 
         elif carac ==  '\\':
+
             if echappement:
+                # pouet = "abcd\\efgh"
                 cont.value.push__('\\')
                 echappement = False
+
             else:
+                # pouet = "abcd\efgh"
                 echappement = True
 
         elif echappement:
@@ -303,27 +322,34 @@ def decode(data, path_file):
                 add = objet.push__
 
                 if carac == 'n':
+                    # piaf = "hiboux\ncailloux"
                     add('\n')
 
                 elif carac == 't':
+                    # piaf = "hiboux\tcailloux"
                     add('\t')
 
                 elif carac == 'e':
+                    # piaf = "hiboux\ecailloux"
                     add('')
 
                 elif carac == '"':
+                    # piaf = "hiboux\"cailloux"
                     add('"')
 
                 elif carac == "'":
+                    # piaf = 'hiboux\'cailloux'
                     add("'")
 
             else:
                 add = cont.value.push__
 
                 if carac == 'n':
+                    # piaf = "hiboux" + \n
                     add(Txt('\n'))
 
                 elif carac == 't':
+                    # piaf = "hiboux" + \t
                     add(Txt('\t'))
 
             echappement = False
@@ -332,13 +358,20 @@ def decode(data, path_file):
         ### Texte
 
         elif isinstance(objet, Txt):
-            if ((carac == '"' and objet._symb == '"')
-            or (carac == "'" and objet._symb == "'")):
+
+            if (   # Balise fermente
+                   (carac == '"' and objet._symb == '"') # ""
+                or (carac == "'" and objet._symb == "'") # ''
+            ):
                 cont, objet = end_objet(cont, objet)
+
             else:
                 objet.push__(carac)
 
         elif carac == '"' or carac == "'":
+            # pouf = ""
+            # pouf = ''
+
             cont, objet = end_objet(cont, objet)
 
             cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
@@ -350,6 +383,7 @@ def decode(data, path_file):
         ### Redirection
 
         elif carac == '.':
+            # pouet = arbre.branche.feuille
 
             if isinstance(objet, (Pos, Neg, Nul)):
                 objet.push__('.')
@@ -362,6 +396,7 @@ def decode(data, path_file):
             cont.value.liée = True
 
         elif carac == '#':
+            # pouet = arbre#'branche'#'feuille'
 
             cont, objet = end_objet(cont, objet)
 
@@ -376,6 +411,7 @@ def decode(data, path_file):
         ### Attachement
 
         elif carac == '~':
+            # pouet~piaf
 
             cont = cont.mise_a_niveau(acts_redirec)
 
@@ -387,6 +423,7 @@ def decode(data, path_file):
         ### Intervalle
 
         elif carac == ';':
+            # cuik = 1;10;2
 
             cont, objet = end_objet(cont, objet)
 
@@ -403,6 +440,7 @@ def decode(data, path_file):
         ### Calcul
                 
         elif carac == '+':
+            # pouet = 1 + 1
 
             cont, objet = end_objet(cont, objet)
 
@@ -417,6 +455,7 @@ def decode(data, path_file):
             objet, cont = cont.action(objet, Add, (Rac, Exp, Mul, Div, Mod, Sub, RedirecItem, RedirecPoint, Typ))
 
         elif carac == '-':
+            # pouet = 1 - 1
 
             cont, objet = end_objet(cont, objet)
 
@@ -431,18 +470,22 @@ def decode(data, path_file):
             objet, cont = cont.action(objet, Sub, (Rac, Exp, Mul, Div, Mod, Add, RedirecItem, RedirecPoint, Typ))
                 
         elif carac == '/':
+            # pouet = 1 / 1
 
             objet, cont = cont.action(objet, Div, (Rac, Exp, Mod, Mul, RedirecItem, RedirecPoint, Typ))
                 
         elif carac == '%':
+            # pouet = 1 % 1
 
             objet, cont = cont.action(objet, Mod, (Rac, Exp, Mul, Div, RedirecItem, RedirecPoint, Typ))
 
         elif carac == '*':
+            # pouet = 1 * 1
 
             objet, cont = cont.action(objet, Mul, (Rac, Exp, Mod, Div, RedirecItem, RedirecPoint, Typ))
 
         elif carac == '^':
+            # pouet = 1 ^ 1
 
             objet, cont = cont.action(objet, Exp, (Rac, RedirecItem, RedirecPoint, Typ))
 
@@ -455,12 +498,16 @@ def decode(data, path_file):
         ### Condition
 
         elif carac == '!':
+            # !1 == 0
+            # !!1 == 1
 
             objet, cont = cont.action(objet, Not, get_last=False, prio=True)    
 
             cont.value.liée = True
 
         elif carac2 == '<=':
+            # 5 <= 6
+
             index_min = icarac + 2
 
             objet, cont = cont.action(objet, InfOrEga, acts_redirec + acts_calcul + (Hidden, IsExist, Not))
@@ -468,6 +515,8 @@ def decode(data, path_file):
             cont.value.push__(InfOrEga)
 
         elif carac2 == '>=':
+            # 5 >= 6
+
             index_min = icarac + 2
 
             objet, cont = cont.action(objet, SupOrEga, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
@@ -475,18 +524,22 @@ def decode(data, path_file):
             cont.value.push__(SupOrEga)
 
         elif carac == '<':
+            # 5 < 6
 
             objet, cont = cont.action(objet, Inf, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
             cont.value.push__(Inf)
 
         elif carac == '>':
+            # 5 > 6
 
             objet, cont = cont.action(objet, Sup, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
             cont.value.push__(Sup)
 
         elif data[icarac:icarac+3] == '===':
+            # 5 === 6
+
             index_min = icarac + 3
 
             objet, cont = cont.action(objet, EgaObj, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
@@ -494,6 +547,8 @@ def decode(data, path_file):
             cont.value.push__(EgaObj)
 
         elif carac2 == '==':
+            # 5 == 6
+
             index_min = icarac + 2
 
             objet, cont = cont.action(objet, Ega, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
@@ -501,19 +556,25 @@ def decode(data, path_file):
             cont.value.push__(Ega)
 
         elif carac == '&':
+            # 5 > 6 & 5 == 5
 
             objet, cont = cont.action(objet, And, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
 
         elif carac == '|':
+            # 5 > 6 | 5 == 5
 
             objet, cont = cont.action(objet, Or, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
 
         elif carac2 == '&&':
+            # 5 > 6 && 5 == 5
+
             index_min = icarac + 2
 
             objet, cont = cont.action(objet, XAnd, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
 
         elif carac2 == '||':
+            # 5 > 6 || 5 == 5
+
             index_min = icarac + 2
 
             objet, cont = cont.action(objet, XOr, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
@@ -522,25 +583,29 @@ def decode(data, path_file):
         ### Variable
 
         elif carac == ':':
+            # pouet:pos = 1:neg
 
             objet, cont = cont.action(objet, Typ, (RedirecPoint,))
 
         elif carac == '=':
+            # pouet = 1
 
             objet, cont = cont.action(objet, Asi, (Hidden, Local, Return, Typ) + acts_redirec)
 
             cont.value.push__(Asi)
 
         elif carac == '?':
+            # pouet = pouf ? pomme ? 0
 
             objet, cont = cont.action(objet, IsExist, acts_redirec)
 
             cont.value.push__(IsExist)
 
 
-        ### Autre
+        ### Priorité
 
         elif carac == '(':
+            # (1 + 1) * 5
 
             cont.value.liée = False
 
@@ -555,6 +620,9 @@ def decode(data, path_file):
 
             cont = cont.rem__()
 
+
+        ### Bloc de code
+
         elif carac == '[':
 
             objet, cont = cont.action(objet, Bloc, acts_condition_niv_sup + acts_calcul + acts_condition + acts_redirec, get_last=False, prio=True)
@@ -568,9 +636,20 @@ def decode(data, path_file):
 
             cont = cont.rem__()
 
-            # @pouet [a+b] ; § a == 2 [p = 1] ; if a < b [7/8]
-            if isinstance(cont.value, (Objet, Event, InsCond, For, IFor, While, Repeat, Except)):
+            if isinstance(cont.value, (
+                    Objet,    # @'pouet' [1 + 2]
+                    Event,    # event date minute == 60 []
+                    InsCond,  # if a < b [] elif a > b [] else []
+                    For,      # for a in b []
+                    IFor,     # ifor a, b in c []
+                    While,    # while a == b []
+                    Repeat,   # repeat 20 []
+                    Except    # try a = b except []
+                )):
                 cont = cont.rem__()
+
+
+        ### Table
 
         elif carac == '{':
 
@@ -581,13 +660,15 @@ def decode(data, path_file):
                 cont = cont.rem__()
                 objet, cont = cont.action(objet, Call, (RedirecPoint,))
 
-            elif not isinstance(cont.value, (Objet, IsExist)) and isinstance(cont.value.last__(), (
-                Var,           # pouet{}
-                RedirecPoint,  # pouf.piaf{}
-                RedirecItem,   # patate#134{}
-                Call,          # piaf{}{}
-                Prio           # (123 + 456){}
-            )):
+            elif (
+                not isinstance(cont.value, (Objet, IsExist)) # pouet = paf ? {}
+                and isinstance(cont.value.last__(), (
+                    Var,           # pouet{}
+                    RedirecPoint,  # pouf.piaf{}
+                    RedirecItem,   # patate#134{}
+                    Call,          # piaf{}{}
+                    Prio           # (123 + 456){}
+            ))):
                 objet, cont = cont.action(objet, Call, (RedirecPoint,))
 
             else:
@@ -612,6 +693,7 @@ def decode(data, path_file):
         ### Foncion
 
         elif carac == '@':
+            # @'pouet' {a, b}[return a + b]
 
             cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
 
@@ -628,6 +710,7 @@ def decode(data, path_file):
         ### Event
 
         elif carac == '$' or carac == '§':
+            # $vars pomme []
 
             cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
 
@@ -643,6 +726,7 @@ def decode(data, path_file):
         ### Séparation
 
         elif carac == ',':
+            # pomme, poire, pouf
             pass
 
 
@@ -665,16 +749,19 @@ def decode(data, path_file):
             cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
 
             if carac == '0' and data[icarac+1] != '.':
+                # 0
 
                 objet = Nul()
                 objet.end__(cont)
 
             elif carac in list('0123456789'):
+                # 0.0, 0.1, 2, 3, 345, 8.9
 
                 objet = Pos()
                 objet.push__(carac)
             
             else:
+                # pomme, poire, pouet
 
                 objet = Var()
                 objet.push__(carac)
