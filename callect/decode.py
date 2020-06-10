@@ -406,7 +406,7 @@ def decode(data, path_file):
 
             cont, objet = end_objet(cont, objet)
 
-            if not isinstance(cont.value.last__(), (RedirecPoint, RedirecItem, Var, Nul, Pos, Neg, Txt, Call)):
+            if not isinstance(cont.value.last__(), (RedirecPoint, RedirecItem, Var, Nul, Pos, Neg, Txt, Call, Prio)):
 
                 cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
 
@@ -420,7 +420,7 @@ def decode(data, path_file):
 
             cont, objet = end_objet(cont, objet)
 
-            if not isinstance(cont.value.last__(), (RedirecPoint, RedirecItem, Var, Nul, Pos, Neg, Txt, Call)):
+            if not isinstance(cont.value.last__(), (RedirecPoint, RedirecItem, Var, Nul, Pos, Neg, Txt, Call, Prio)):
 
                 cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
 
@@ -455,7 +455,7 @@ def decode(data, path_file):
 
         elif carac == '!':
 
-            objet, cont = cont.action(objet, Not, get_last=False)    
+            objet, cont = cont.action(objet, Not, get_last=False, prio=True)    
 
             cont.value.liée = True
 
