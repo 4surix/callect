@@ -133,7 +133,9 @@ class Event(Base):
                 type_element = element.__class__
 
                 if type_element == Table:
-                    recolte(element.value__)
+                    recolte(element.list__)
+                    recolte(element.dict__.keys())
+                    recolte(element.dict__.values())
 
                 elif type_element == Var:
                     vars__.append(element.value)
@@ -150,7 +152,9 @@ class Event(Base):
         type_element = element.__class__
 
         if type_element == Table:
-            recolte(element.value__)
+            recolte(element.list__)
+            recolte(element.dict__.keys())
+            recolte(element.dict__.values())
 
         elif type_element == Var:
             vars__.append(element.value)
