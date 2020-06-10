@@ -64,7 +64,7 @@ import time
 
 from threading import Thread
 
-
+from . import base
 from .types.txt import mk_txt
 from .types.nbr import mk_nbr
 from .types.table import mk_table
@@ -83,6 +83,10 @@ class Time(Thread):
 
         events = self.variables.events_date
 
+        variables = {}
+
+        infos = self.variables.add(variables)
+
         while 1:
 
             if not self.running:
@@ -91,13 +95,19 @@ class Time(Thread):
 
             if events:
 
-                date = mk_table(_list=[mk_nbr(nbr) for nbr in time.gmtime()[:6]])
+                A, M, J, h, m, s = time.gmtime()[:6]
+
+                #    Anglais        -     Français         -      Español         -  Valeurs
+                variables['year']   = variables['an']      = variables['año']     = mk_nbr(A)
+                variables['month']  = variables['mois']    = variables['mes']     = mk_nbr(M)
+                variables['day']    = variables['jour']    = variables['dia']     = mk_nbr(J)
+                variables['hour']   = variables['heure']   = variables['hora']    = mk_nbr(h)
+                variables['minute']                        = variables['minuto']  = mk_nbr(m)
+                variables['second'] = variables['seconde'] = variables['segundo'] = mk_nbr(s)
 
                 for event in events:
-                    variables = event.variables
-                    variables.variables[0]['date__'] = date
-                    if event.conditions(variables):
-                        event.bloc(variables)
+                    if event.conditions(infos):
+                        event.bloc(infos)
 
 
             time.sleep(1)
@@ -216,13 +226,18 @@ class Key(Thread):
                         key = 'F10'
 
 
-                key = mk_txt(key)
+                key_txt = mk_txt(key)
 
                 for event in events:
-                    variables = event.variables
-                    variables.variables[0]['key__'] = key
-                    if event.conditions(variables):
-                        event.bloc(variables)
+
+                    if event.key_is_var:
+                        self.variables.variables[0][event.key] = key_txt
+
+                    elif event.key != key:
+                        continue
+
+                    if not event.conditions or event.conditions(self.variables):
+                        event.bloc(self.variables)
 
 
 def run(variables):

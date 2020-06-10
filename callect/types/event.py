@@ -4,11 +4,12 @@ from ..conditions import Ega, Sup, Inf, SupOrEga, InfOrEga, Not, And, Or, XAnd, 
 
 from ..redirec import RedirecPoint, RedirecItem
 
-from ..errors import SyntaxIncorrect
+from ..errors import SyntaxIncorrect, NotCompatible
 
 from .var import Var
 from .intervalle import Intervalle
 from .table import Table
+from .txt import Txt
 
 
 class Event(Base):
@@ -19,31 +20,100 @@ class Event(Base):
 
     def end__(self, cont):
 
-        if len(self.value) == 3:
+        if len(self.value) == 4:
             """
-            $ vars (banane == 'verte') [
-                print{'Pas mûr !'}
+            event keypress 'Space' 
+            (pause_activée == 1) [
+                DIRECTION = 'X'
+            ]
+            """
+            self.type, self.key, self.conditions, self.bloc = self.value
+
+
+            value = self.type.value
+
+            if value == 'keypress':
+                value = 'keys'
+
+            if value == 'keys':
+
+                if self.key.__class__ == Var:
+                    self.key_is_var = True
+
+                elif self.key.__class__ == Txt:
+                    self.key_is_var = False
+
+                else:
+                    raise SyntaxIncorrect(self.ligne__)
+
+                self.key = self.key.value
+
+            else:
+                raise SyntaxIncorrect(self.ligne__)
+
+            self.type = value
+
+
+            if self.conditions.__class__ == Prio:
+                self.conditions = self.conditions.value[0]
+
+
+        elif len(self.value) == 3:
+            """
+            event changevars 
+            (pomme == 1) [
+                print{'a'}
+            ]
+
+            event date
+            (date__ # 6 == 0) [
+                print{'Nouvelle minute !'}
+            ]
+
+            event keypress 'Space' [
+                DIRECTION = 'X'
             ]
             """
             self.type, self.conditions, self.bloc = self.value
 
-            if self.type.value not in ['vars', 'date', 'keys']:
+
+            value = self.type.value
+
+            if value == 'keypress':
+                value = 'keys'
+
+            elif value == 'changevars':
+                value = 'vars'
+
+            self.type = value
+
+
+            if value in ['vars', 'date']:
+                pass
+
+            elif value == 'keys':
+                self.key = self.conditions
+
+                if self.key.__class__ == Var:
+                    self.key_is_var = True
+
+                elif self.key.__class__ == Txt:
+                    self.key_is_var = False
+
+                else:
+                    raise SyntaxIncorrect(self.ligne__)
+
+                self.key = self.key.value
+
+                self.conditions = None
+
+            else:
                 raise SyntaxIncorrect(self.ligne__)
 
-            self.type = self.type.value
 
-        # ===
-        # Disparait après la v1.0.0pre3
-        elif len(self.value) == 2:
-            """
-            $ (banane == 'verte') [
-                print{'Pas mûr !'}
-            ]
-            """
-            self.conditions, self.bloc = self.value
+            if self.conditions.__class__ == Prio:
+                self.conditions = self.conditions.value[0]
 
-            self.type = 'vars'
-        # ===
 
         else:
             raise SyntaxIncorrect(self.ligne__)

@@ -213,6 +213,21 @@ def end_objet(cont, objet):
         objet, cont = cont.action(None, Except)
 
 
+    ### Event
+
+    elif value == 'event':
+
+        cont = cont.mise_a_niveau((
+            RedirecItem, RedirecPoint, Intervalle, Typ, Attachement, Asi, Hidden, Local, Return, IsExist,
+            Not, Inf, Sup, InfOrEga, SupOrEga, Ega, In, RemIn, PopIn, Rac, Exp, Mul, Div, Mod, Sub, Add
+        ))
+        
+        while not isinstance(cont.value, Bloc):
+            cont = cont.rem__()
+
+        objet, cont = cont.action(None, Event, get_last=False)  
+
+
     ### Autre
 
     else:
