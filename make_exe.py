@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 
-import sys
 import os
+import sys
+import json
 import callect
+import requests
+
+
+url_releases = "https://api.github.com/repos/4surix/callect/releases"
 
 
 def term_title(t):
@@ -22,8 +27,20 @@ if len(args) == 1:
     # Si l'user a juste ouvert l'executable à la main
     # args[0] = Emplacement de l'executable
 
+
+    derniere_version = ''
+
+    response = requests.get(url_releases)
+
+    if response.status_code == 200:
+        infos = response.json()
+
+        if infos[0]['tag_name'] != 'v' + callect.__version__:
+            derniere_version = f"\nDernière version publique: {infos[0]['tag_name']}"
+
+
     print(
-         f"Callect Langage - Version {callect.__version__}"
+         f"Callect Langage - Version {callect.__version__}{derniere_version}"
         + "\n\nEcrivez ``` pour ouvrir et fermer un bloc de texte."
     )
 
