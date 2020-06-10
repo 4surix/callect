@@ -54,6 +54,12 @@ class Asi(Base): # Asignement
     def end__(self, cont):
         *self.elements, self.objet = [v for v in self.value if v != Asi]
 
+        # Très important, permet de faire dans le bon ordre.
+        # a = b = c = 1
+        # D'abbord c puis b puis a.
+        # Cela évite des beugs comme l'assigment d'item dans des tables.
+        self.elements = self.elements[::-1]
+
 
 class Local(Base): # Local
 
