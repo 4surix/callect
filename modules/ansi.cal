@@ -1,0 +1,99 @@
+reset_all = "\e[0m"
+
+TEXT = {
+
+'bold'   = "\e[1m"
+'faint'  = "\e[2m"
+
+// Ne fonctionne pas sur Windows //
+'italic' = "\e[3m"
+'under'  = "\e[4m"
+// ----------------------------- //
+
+'normal' = "\e[22m"
+
+}
+
+//FOREGROUND//
+
+FG = {
+
+'black'    = "\e[30m"
+'red'      = "\e[31m"
+'green'    = "\e[32m"
+'yellow'   = "\e[33m"
+'blue'     = "\e[34m"
+'magenta'  = "\e[35m"
+'cyan'     = "\e[36m"
+'silver'   = "\e[37m"
+
+'reset'    = "\e[39m"
+
+'gray'     = "\e[90m"
+'pink'     = "\e[91m"
+'lime'     = "\e[92m"
+'banana'   = "\e[93m"
+'marlin'   = "\e[94m"
+'violet'   = "\e[95m"
+'teal'     = "\e[96m"
+'white'    = "\e[97m"
+
+}
+
+//BACKGROUND//
+
+BG = {
+
+'black'   = "\e[40m"
+'red'     = "\e[41m"
+'green'   = "\e[42m"
+'yellow'  = "\e[43m"
+'blue'    = "\e[44m"
+'magenta' = "\e[45m"
+'cyan'    = "\e[46m"
+'silver'  = "\e[47m"
+
+'reset'   = "\e[49m"
+
+'gray'    = "\e[100m"
+'pink'    = "\e[101m"
+'lime'    = "\e[102m"
+'banana'  = "\e[103m"
+'marlin'  = "\e[104m"
+'violet'  = "\e[105m"
+'teal'    = "\e[106m"
+'white'   = "\e[107m"
+
+}
+
+// cursor positioning //
+
+CURSOR = {
+
+'move'     = @{x, y}[return "\e[" + y:txt + ";" + x:txt + "H"]
+// 'position' = "\e[y;xf" //
+'up'       = @{n}[return "\e[" + n:txt + "A"]
+'down'     = @{n}[return "\e[" + n:txt + "B"]
+'forward'  = @{n}[return "\e[" + n:txt + "C"]
+'backward' = @{n}[return "\e[" + n:txt + "D"]
+
+}
+
+CLEAR = {
+
+//
+	mode == 0, effacez du curseur jusqu'à la fin de l'écran
+	mode == 1, effacez du curseur au début de l'écran
+	mode == 2, effacez tout l'écran (et déplace le curseur en haut à gauche)
+	mode == 3, effacez tout l'écran et supprimez toutes les lignes enregistrées dans le tampon de défilement
+//
+'screen' = @{mode}[return "\e[" + mode:txt + "J"]
+
+//
+	mode == 0, effacez le curseur jusqu'à la fin de la ligne. 
+	mode == 1, effacez du curseur au début de la ligne.
+	mode == 2, effacez toute la ligne. La position du curseur ne change pas.
+//
+'line'   = @{mode}[return "\e[" + mode:txt + "K"]
+
+}

@@ -1,0 +1,47 @@
+//
+    Factoriel
+//
+@'fact' {value:pos} [
+    resultat = 1
+    multiple = 1
+
+    repeat value [
+        resultat = resultat * multiple
+        multiple{}
+    ]
+
+    return resultat:pos
+]
+
+//
+    Fonction d'Ackermann
+//
+@'ackermann' {m, n} [
+    if m == 0 [
+        return n + 1
+    ]
+    elif n == 0 [
+        return ackermann{m - 1, 1}
+    ]
+    else [
+        return ackermann{m - 1, ackermann{m, n - 1}}
+    ]
+]
+
+//
+    Fonction de Syracuse
+//
+@'syracuse' {value:pos} [
+    suite = {value}
+
+    while !(value == 1) [
+        if value % 2 == 0 [
+            value = value / 2
+        ] else [
+            value = 3 * value + 1
+        ]
+        suite.add{value}
+    ]
+
+    return suite:tbl
+]
