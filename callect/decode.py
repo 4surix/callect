@@ -446,10 +446,11 @@ def decode(data, path_file):
 
             objet, cont = cont.action(objet, Exp, (Rac, RedirecItem, RedirecPoint, Typ))
 
-        elif carac == 'V':
+        elif data[icarac:icarac+3] == ' V ':
+
+            index_min = icarac + 3
 
             objet, cont = cont.action(objet, Rac, (Exp, RedirecItem, RedirecPoint, Typ))
-
 
         ### Condition
 
