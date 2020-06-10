@@ -1,8 +1,12 @@
-from .types.table import mk_table
-
-from .errors import ModuleNotFound
 
 import os
+import platform
+
+name_system = platform.system()
+
+
+from .types.table import mk_table
+from .errors import ModuleNotFound
 
 
 def get_data_module(module_txt, path_file, path_exe):
@@ -44,10 +48,21 @@ def import_(decode):
             path_exe = variables.path_exe
             path_file = variables.path_file
 
+
             if path_exe:
                 path_exe = os.path.dirname(path_exe)
+
             else:
-                path_exe = "C:/Users/%s/AppData/Roaming/Callect" % os.environ['USERNAME']
+
+                if name_system == 'Linux':
+                    path_exe = '.'
+
+                elif name_system == 'Windows':
+                    path_exe = "C:/Users/%s/AppData/Roaming/Callect" % os.environ['USERNAME']
+
+                elif name_system == 'Darwin':
+                    path_exe = '.'
+
 
             if path_file:
                 path_file = os.path.dirname(path_file)
