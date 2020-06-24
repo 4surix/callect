@@ -1,11 +1,11 @@
 
-import{'ansi'}
+ANSI = import{'ansi'}
 
 
 print.end__ = printANSI.end__ = ''
 print.sep__ = printANSI.sep__ = ''
 
-x = y = x_pomme = y_pomme = PRESS_ENTRY = 0
+X = Y = X_POMME = Y_POMME = PRESS_ENTRY = 0
 
 
 // MAP //
@@ -37,18 +37,18 @@ BORD_droite = len{MAP.split{'\n'} # BORD_haut} - 1
 
 @'SUPR_FIN_QUEUX' [
 	coordonnées = SERPENT.pop{1}
-	x__ = coordonnées # 1
-	y__ = coordonnées # 2
-	print{' ', 'x'=x__, 'y'=y__, 'reset'=1}
+	x = coordonnées # 1
+	y = coordonnées # 2
+	print{' ', 'x'=x, 'y'=y, 'reset'=1}
 
-	if x__ == x_pomme & y__ == y_pomme [
-	    print{'6', 'x'=x_pomme, 'y'=y_pomme, 'reset'=1}
+	if x == X_POMME & y == Y_POMME [
+	    print{'6', 'x'=X_POMME, 'y'=Y_POMME, 'reset'=1}
 	]
 ]
 
 @'AFF_DEBUT_QUEUX' [
-	SERPENT.add{{x, y}}
-	print{'o', 'x'=x, 'y'=y, 'reset'=1}
+	SERPENT.add{{X, Y}}
+	print{'o', 'x'=X, 'y'=Y, 'reset'=1}
 ]
 
 
@@ -59,17 +59,17 @@ MAX_Y_POMME = BORD_bas - 1
 MIN_X_POMME = BORD_gauche + 1
 MAX_X_POMME = BORD_droite / 2
 
-event changevars (x == x_pomme & y == y_pomme) [
-	// L'orsque la tête du serpent se trouve sur la pomme 
+event changevars (X == X_POMME & Y == Y_POMME) [
+	// L'orsque la tête du serpent se trouve sur la pomme
 	//
 
 	SERPENT.insert{1, SERPENT#1}
 
 
-	while y_pomme == y [hide y_pomme = random{MIN_Y_POMME, MAX_Y_POMME}]
-	while x_pomme == x [hide x_pomme = random{MIN_X_POMME, MAX_X_POMME}*2]
+	while Y_POMME == Y [hide Y_POMME = random{MIN_Y_POMME, MAX_Y_POMME}]
+	while X_POMME == X [hide X_POMME = random{MIN_X_POMME, MAX_X_POMME} * 2]
 
-	print{'6', 'x'=x_pomme, 'y'=y_pomme, 'reset'=1}
+	print{'6', 'x'=X_POMME, 'y'=Y_POMME, 'reset'=1}
 
 
 	score:txt = SCORE{}
@@ -83,10 +83,10 @@ event changevars (x == x_pomme & y == y_pomme) [
 
 // DIRECTION //
 
-event keypress 'Up'    [direction = 'N']
-event keypress 'Down'  [direction = 'S']
-event keypress 'Left'  [direction = 'O']
-event keypress 'Right' [direction = 'E']
+event keypress 'Up'    [DIRECTION = 'N']
+event keypress 'Down'  [DIRECTION = 'S']
+event keypress 'Left'  [DIRECTION = 'O']
+event keypress 'Right' [DIRECTION = 'E']
 
 
 // PARTIE //
@@ -100,26 +100,26 @@ while 1 [
 
 	while !PRESS_ENTRY [stop{1}]
 
-	PRESS_ENTRY = 0, printANSI{CLEAR.screen{2}}
+	PRESS_ENTRY = 0, printANSI{ANSI.CLEAR.screen{2}}
 
 
 	// Remise des valeurs à zéro //
 
 	print{MAP}
 
-	direction = 'S'
+	DIRECTION = 'S'
 
 	SCORE:pos = 0
 
-	x = BORD_gauche + 1
-	y = BORD_haut + 1
+	X = BORD_gauche + 1
+	Y = BORD_haut + 1
 
-	y_pomme = random{MIN_Y_POMME, MAX_Y_POMME}
-	x_pomme = random{MIN_X_POMME, MAX_X_POMME}*2
+	Y_POMME = random{MIN_Y_POMME, MAX_Y_POMME}
+	X_POMME = random{MIN_X_POMME, MAX_X_POMME} * 2
 
-	print{'6', 'x'=x_pomme, 'y'=y_pomme}
+	print{'6', 'x'=X_POMME, 'y'=Y_POMME}
 
-	SERPENT = {{x, y}}
+	SERPENT = {{X, Y}}
 
 
 	// Lancement partie //
@@ -128,22 +128,22 @@ while 1 [
 
 	while !PERDU [
 
-		if direction == 'N' [
-			y = y - 1, if y == BORD_haut [PERDU = 1]
+		if DIRECTION == 'N' [
+			Y =  Y - 1, if Y == BORD_haut [PERDU = 1]
 		]
-		elif direction == 'S' [
-			y = y + 1, if y == BORD_bas [PERDU = 1]
+		elif DIRECTION == 'S' [
+			Y = Y + 1, if Y == BORD_bas [PERDU = 1]
 		]
-		elif direction == 'O' [
-			x = x - 2, if x <= BORD_gauche [PERDU = 1]
+		elif DIRECTION == 'O' [
+			X = X - 2, if X <= BORD_gauche [PERDU = 1]
 		]
-		elif direction == 'E' [
-			x = x + 2, if x >= BORD_droite [PERDU = 1]
+		elif DIRECTION == 'E' [
+			X = X + 2, if X >= BORD_droite [PERDU = 1]
 		]
 
 		SUPR_FIN_QUEUX
 
-		if {x, y} in SERPENT [
+		if {X, Y} in SERPENT [
 		    PERDU = 1
 		]
 
@@ -152,5 +152,10 @@ while 1 [
 		stop{0.3}
 	]
 
-	printANSI{CURSOR.move{1, 2} + FG.red + 'Vous avez perdu !' + FG.reset}
+	printANSI{
+	    ANSI.CURSOR.move{1, 2}
+	    + ANSI.FG.red
+	    + 'Vous avez perdu !'
+	    + ANSI.FG.reset
+	}
 ]

@@ -1,0 +1,267 @@
+
+ANSI = import{'ansi'}
+
+print.end__ = printANSI.end__ = ''
+
+NBR_MINES = 5
+
+NBR_PARTIES:pos = 0
+
+HAUTEUR = 5
+LONGUEUR = 10
+
+BORD_HAUT = 7
+BORD_BAS = BORD_HAUT + HAUTEUR + 1
+BORD_GAUCHE = 1
+BORD_DROITE = BORD_GAUCHE + LONGUEUR + 1
+
+@'MAZ' {} [
+    printANSI{
+        ANSI.CLEAR.screen{2} // Tout effacer //
+        + ANSI.CURSOR.move{1, 1}
+        + ANSI.FG.yellow
+        + '-- [DEMINEUR] --'
+        + ANSI.FG.reset
+        + ANSI.CURSOR.move{1, 3}
+        + ANSI.FG.blue
+        + 'PARTIE n°' + txt{NBR_PARTIES{}}
+        + ANSI.FG.reset
+        + ANSI.CURSOR.move{1, 5}
+        + '0/' + NBR_MINES:txt + ' drapeaux'
+    }
+
+    global X = BORD_GAUCHE + 1
+    global Y = BORD_HAUT + 1
+
+    global DRAPEAUX = {}
+    global MINE_DECOUVERT = {}
+
+    GEN_GRILLE{}
+    PLACE_MINES{}
+
+    print{'', 'x'=X, 'y'=Y}
+]
+
+@'PERDU' {} [
+    printANSI{
+        ANSI.CURSOR.move{1, 3}
+        + ANSI.CLEAR.line{2}
+        + ANSI.FG.red
+        + 'PERDU !'
+        + ANSI.FG.reset
+    }
+    stop{3}
+    MAZ{}
+]
+
+@'GAGNER' {} [
+    printANSI{
+        ANSI.CURSOR.move{1, 3}
+        + ANSI.CLEAR.line{2}
+        + ANSI.FG.green
+        + 'GAGNER !'
+        + ANSI.FG.reset
+    }
+    stop{3}
+    MAZ{}
+]
+
+//
+    Grille
+//
+
+GRILLE = {}
+
+@'GEN_GRILLE' {} [
+    for x in 1;LONGUEUR [
+        GRILLE # x = AXE_Y = {}
+        repeat HAUTEUR [
+            AXE_Y.add{0}
+        ]
+    ]
+    for y in BORD_HAUT;BORD_BAS [
+        print{'|', 'x'=BORD_GAUCHE, 'y'=y}
+    ]
+    for y in BORD_HAUT;BORD_BAS [
+        print{'|', 'x'=BORD_DROITE, 'y'=y}
+    ]
+    for x in BORD_GAUCHE;BORD_DROITE [
+        print{'-', 'x'=x, 'y'=BORD_HAUT}
+    ]
+    for x in BORD_GAUCHE;BORD_DROITE [
+        print{'-', 'x'=x, 'y'=BORD_BAS}
+    ]
+    print{'o', 'x'=BORD_GAUCHE, 'y'=BORD_HAUT}
+    print{'o', 'x'=BORD_DROITE, 'y'=BORD_BAS}
+    print{'o', 'x'=BORD_GAUCHE, 'y'=BORD_BAS}
+    print{'o', 'x'=BORD_DROITE, 'y'=BORD_HAUT}
+]
+
+//
+    Mines
+//
+
+@'PLACE_MINES' {} [
+    repeat NBR_MINES [
+        x = random{1, LONGUEUR}, y = random{1, HAUTEUR}
+        while GRILLE # x # y [
+            x = random{1, LONGUEUR}, y = random{1, HAUTEUR}
+        ]
+        GRILLE # x # y = 'MINE'
+    ]
+]
+
+//
+    Position
+//
+
+X = Y = 0
+
+event keypress 'Up' [
+    if !(Y == BORD_HAUT + 1) [
+        global Y = Y - 1
+        print{'', 'x'=X, 'y'=Y}
+    ]
+]
+event keypress 'Down' [
+    if !(Y == BORD_BAS - 1) [
+        global Y = Y + 1
+        print{'', 'x'=X, 'y'=Y}
+    ]
+]
+event keypress 'Left' [
+    if !(X == BORD_GAUCHE + 1) [
+        global X = X - 1
+        print{'', 'x'=X, 'y'=Y}
+    ]
+]
+event keypress 'Right' [
+    if !(X == BORD_DROITE - 1) [
+        global X = X + 1
+        print{'', 'x'=X, 'y'=Y}
+    ]
+]
+
+//
+    Commandes
+//
+
+@'place_nbr_mines' {x, y} [
+
+    GRILLE # x # y = 'DECOUVERT'
+
+    // Enlève le drapeau si existe
+    //
+    coordonnees = {x, y}
+
+    if coordonnees in DRAPEAUX [
+        DRAPEAUX.rem{coordonnees}
+        print{' ', 'x' = X, 'y' = Y}
+
+        if GRILLE # x # y == 'MINE' & coordonnees in MINE_DECOUVERT [
+            MINE_DECOUVERT.rem{coordonnees}
+        ]
+    ]
+
+    // Définition de la zone de recherche
+    //
+    x_min = x - 1        y_min = y - 1
+    x_max = x_min + 2    y_max = y_min + 2
+
+    if x_min < 1 [x_min = 1]
+    if y_min < 1 [y_min = 1]
+
+    if x_max > LONGUEUR [x_max = LONGUEUR]
+    if y_max > HAUTEUR  [y_max = HAUTEUR]
+
+    // Récupére les mines autours de la case
+    //
+    x__ = y__ = 0
+    nombre_mine:pos = 0
+
+    for x__ in x_min ; x_max [
+        for y__ in y_min ; y_max [
+            if GRILLE # x__ # y__ == 'MINE' [
+                nombre_mine{}
+            ]
+        ]
+    ]
+
+    // Si il n'y a aucune mine autour
+         dévoile les autres cases autours.
+    //
+    if nombre_mine == 0 [
+        for x__ in x_min ; x_max [
+            for y__ in y_min ; y_max [
+                if !(GRILLE # x__ # y__ == 'DECOUVERT') [
+                    print{
+                       place_nbr_mines{x__, y__},
+                       'x' = x__ + BORD_GAUCHE,
+                       'y' = y__ + BORD_HAUT
+                   }
+               ]
+            ]
+        ]
+        return '.'
+    ]
+
+    return nombre_mine
+]
+
+event keypress 'Return' [
+
+    x = X - BORD_GAUCHE
+    y = Y - BORD_HAUT
+
+    if GRILLE # x # y == 'MINE' [
+        // Si c'était une mine
+        //
+        PERDU{}
+    ] else [
+        // Indique le nombre de mine autour de la case
+        //
+        print{place_nbr_mines{x, y}, 'x' = X, 'y' = Y}
+        print{'', 'x' = X, 'y' = Y}
+    ]
+]
+
+
+DRAPEAUX = {}
+MINE_DECOUVERT = {}
+
+event keypress ' ' [
+
+    x = X - BORD_GAUCHE
+    y = Y - BORD_HAUT
+    coordonnees = {x, y}
+
+    if coordonnees in DRAPEAUX [
+        DRAPEAUX.rem{coordonnees}
+        print{' ', 'x' = X, 'y' = Y}
+
+        if GRILLE # x # y == 'MINE' & coordonnees in MINE_DECOUVERT [
+            MINE_DECOUVERT.rem{coordonnees}
+        ]
+    ] else [
+        DRAPEAUX.add{coordonnees}
+        print{'!', 'x' = X, 'y' = Y}
+
+        if GRILLE # x # y == 'MINE' & !(coordonnees in MINE_DECOUVERT) [
+            MINE_DECOUVERT.add{coordonnees}
+        ]
+    ]
+
+    print{txt{len{DRAPEAUX}} + '/' + NBR_MINES:txt + ' drapeaux', 'x'=1, 'y'=5}
+    print{'', 'x'=X, 'y'=Y}
+
+    if len{MINE_DECOUVERT} == NBR_MINES [
+        GAGNER{}
+    ]
+]
+
+MAZ{}
+
+// Arrêt de 30 minutes
+   Pour éviter que le programme se fini et coupe les events
+//
+stop{30 * 60}

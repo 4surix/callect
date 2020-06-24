@@ -2,10 +2,10 @@
 	Exemple d'import et d'utilisation des élément importés
 //
 
-import{'math'}
+math = import{'math'}
 
-print{fact{5}}
+print{math.fact{5}}
 
-print{ackermann{3, 3}}
+print{math.ackermann{3, 3}}
 
-print{syracuse{7}}
+print{math.syracuse{7}}
