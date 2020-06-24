@@ -702,14 +702,17 @@ def decode(data, path_file):
             objet, cont = cont.action(objet, Objet, get_last=False)    
 
             if isinstance(cont.last.value, Asi):
-                value = cont.last.value.value[0]
+
+                value = cont.last.value.value[-1]
+
                 if isinstance(value, Var):
-                    cont.value.push__(Txt(str(value)))
+                    cont.value.push__(Txt(value.value))
 
+                elif isinstance(value, RedirecPoint):
+                    cont.value.push__(Txt(value.value.split('.')[-1]))
 
-
-
-
+                elif isinstance(value, RedirecItem):
+                    cont.value.push__(value.value[-1])
 
 
         ### Séparation
