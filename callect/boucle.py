@@ -1,10 +1,9 @@
-from .base import Base
+
+from .base import Base, SigneAction
 
 from .types.nbr import Pos, Neg
 from .types.objet import Inst
 from .types.txt import Txt
-
-from .conditions import In
 
 from .errors import NotCompatible, SyntaxIncorrect
 
@@ -23,7 +22,7 @@ class For(Base):
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != In]
+        self.value = [v for v in self.value if v != SigneAction]
 
         if len(self.value) == 3:
             self.var, self.conteneur, self.bloc = self.value
@@ -76,7 +75,7 @@ class IFor(Base):
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != In]
+        self.value = [v for v in self.value if v != SigneAction]
 
         if len(self.value) == 4:
             self.index, self.var, self.conteneur, self.bloc = self.value

@@ -1,5 +1,5 @@
-from ..base import Base
 
+from ..base import Base, SigneAction
 from .nbr import Pos, Neg, Nul, mk_nbr
 
 from ..errors import NotCompatible
@@ -55,7 +55,7 @@ class Intervalle(Base):
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != Intervalle]
+        self.value = [v for v in self.value if v != SigneAction]
 
         self.types_valide = (Pos, Neg, Nul)
 

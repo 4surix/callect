@@ -1,4 +1,4 @@
-from .base import Base
+from .base import Base, SigneAction
 
 from .errors import NotSupported
 
@@ -45,7 +45,7 @@ class Ega(Base): # Egal
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != Ega]
+        self.value = [v for v in self.value if v != SigneAction]
 
 
 class EgaObj(Base): # Egal
@@ -72,6 +72,10 @@ class EgaObj(Base): # Egal
             e1 = e2
 
         return True__
+
+    def end__(self, cont):
+
+        self.value = [v for v in self.value if v != SigneAction]
 
 
 class Sup(Base): # Supérieur
@@ -101,7 +105,7 @@ class Sup(Base): # Supérieur
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != Sup]
+        self.value = [v for v in self.value if v != SigneAction]
 
 
 class Inf(Base): # Inférieur
@@ -131,7 +135,7 @@ class Inf(Base): # Inférieur
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != Inf]
+        self.value = [v for v in self.value if v != SigneAction]
 
 
 class SupOrEga(Base): # Supérieur ou égal
@@ -161,7 +165,7 @@ class SupOrEga(Base): # Supérieur ou égal
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SupOrEga]
+        self.value = [v for v in self.value if v != SigneAction]
 
 
 class InfOrEga(Base): # Inférieur ou égal
@@ -191,7 +195,7 @@ class InfOrEga(Base): # Inférieur ou égal
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != InfOrEga]
+        self.value = [v for v in self.value if v != SigneAction]
 
 
 class In(Base): # Contient
@@ -221,7 +225,7 @@ class In(Base): # Contient
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != In]
+        self.value = [v for v in self.value if v != SigneAction]
 
 
 class RemIn(Base): # Contient
@@ -251,7 +255,7 @@ class RemIn(Base): # Contient
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != In]
+        self.value = [v for v in self.value if v != SigneAction]
 
 
 
@@ -282,7 +286,7 @@ class PopIn(Base): # Contient
 
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != In]
+        self.value = [v for v in self.value if v != SigneAction]
 
 
 class And(Base): # ET

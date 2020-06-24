@@ -1,5 +1,5 @@
-from .base import Base
 
+from .base import Base, SigneAction
 from .errors import AllNonexistent, NotCompatible
 
 
@@ -52,7 +52,7 @@ class Asi(Base): # Asignement
             yield value
 
     def end__(self, cont):
-        *self.elements, self.objet = [v for v in self.value if v != Asi]
+        *self.elements, self.objet = [v for v in self.value if v != SigneAction]
 
         # Très important, permet de faire dans le bon ordre.
         # a = b = c = 1
@@ -91,7 +91,7 @@ class IsExist(Base): # Verification existe
     def end__(self, cont):
         self.ligne__ = str(cont.ligne)
 
-        self.value = [v for v in self.value if v != IsExist]
+        self.value = [v for v in self.value if v != SigneAction]
 
         types_valables = ['Var', 'RedirecItem', 'RedirecPoint', 'Txt', 'Pos', 'Neg', 'Nul', 'Table', 'Objet', 'Intervalle']
 

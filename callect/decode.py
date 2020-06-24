@@ -1,7 +1,7 @@
 import os
 
 
-from .base import Return, Commentaire, Prio
+from .base import Return, Commentaire, Prio, SigneAction
 
 from .conditions import Not, Inf, Sup, InfOrEga, SupOrEga, Ega, EgaObj, In, RemIn, PopIn, And, Or, XAnd, XOr
 
@@ -191,15 +191,15 @@ def end_objet(cont, objet):
     elif value == 'in':
         if not isinstance(cont.value, (For, IFor)):
             objet, cont = cont.action(None, In)
-        cont.value.push__(In)
+        cont.value.push__(SigneAction)
 
     elif value == 'remin':
         objet, cont = cont.action(None, RemIn)
-        cont.value.push__(In)
+        cont.value.push__(SigneAction)
 
     elif value == 'popin':
         objet, cont = cont.action(None, PopIn)
-        cont.value.push__(In)
+        cont.value.push__(SigneAction)
 
 
     ### Essaies
@@ -432,7 +432,7 @@ def decode(data, path_file):
 
             cont = action(cont, Intervalle)
 
-            cont.value.push__(Intervalle)
+            cont.value.push__(SigneAction)
 
             cont.value.liée = True
 
@@ -512,7 +512,7 @@ def decode(data, path_file):
 
             objet, cont = cont.action(objet, InfOrEga, acts_redirec + acts_calcul + (Hidden, IsExist, Not))
 
-            cont.value.push__(InfOrEga)
+            cont.value.push__(SigneAction)
 
         elif carac2 == '>=':
             # 5 >= 6
@@ -521,21 +521,21 @@ def decode(data, path_file):
 
             objet, cont = cont.action(objet, SupOrEga, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
-            cont.value.push__(SupOrEga)
+            cont.value.push__(SigneAction)
 
         elif carac == '<':
             # 5 < 6
 
             objet, cont = cont.action(objet, Inf, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
-            cont.value.push__(Inf)
+            cont.value.push__(SigneAction)
 
         elif carac == '>':
             # 5 > 6
 
             objet, cont = cont.action(objet, Sup, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
-            cont.value.push__(Sup)
+            cont.value.push__(SigneAction)
 
         elif data[icarac:icarac+3] == '===':
             # 5 === 6
@@ -544,7 +544,7 @@ def decode(data, path_file):
 
             objet, cont = cont.action(objet, EgaObj, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
-            cont.value.push__(EgaObj)
+            cont.value.push__(SigneAction)
 
         elif carac2 == '==':
             # 5 == 6
@@ -553,7 +553,7 @@ def decode(data, path_file):
 
             objet, cont = cont.action(objet, Ega, acts_redirec + acts_calcul + (IsExist, Not, Hidden))
 
-            cont.value.push__(Ega)
+            cont.value.push__(SigneAction)
 
         elif carac == '&':
             # 5 > 6 & 5 == 5
@@ -592,14 +592,14 @@ def decode(data, path_file):
 
             objet, cont = cont.action(objet, Asi, (Hidden, Local, Return, Typ) + acts_redirec)
 
-            cont.value.push__(Asi)
+            cont.value.push__(SigneAction)
 
         elif carac == '?':
             # pouet = pouf ? pomme ? 0
 
             objet, cont = cont.action(objet, IsExist, acts_redirec)
 
-            cont.value.push__(IsExist)
+            cont.value.push__(SigneAction)
 
 
         ### Priorité

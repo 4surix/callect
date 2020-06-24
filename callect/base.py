@@ -114,3 +114,7 @@ class Prio(Base):
     def __call__(self, variables):
 
         return self.value[0](variables)
+
+
+class SigneAction:
+    value = value__ = None

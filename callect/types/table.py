@@ -1,6 +1,6 @@
 
-from ..base import Base, fonction_py_to_cl, methode_py_to_cl
 from ..errors import NotItem, NotIndex, NotValue, ConvertionImpossible
+from ..base import Base, SigneAction, fonction_py_to_cl, methode_py_to_cl
 from ..assignement import Asi
 
 from .nbr import Pos, Neg, Nul, mk_nbr
@@ -396,7 +396,7 @@ class Table(Base):
 
             if isinstance(value, Asi):
 
-                keys = [v for v in value.elements if v != Asi]
+                keys = [v for v in value.elements if v != SigneAction]
                 value = value.objet
 
                 for key in keys:
