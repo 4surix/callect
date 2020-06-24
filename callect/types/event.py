@@ -168,9 +168,9 @@ class Event(Base):
 
 class Hidden(Base):
 
-    def __call__(self, variables, setvar=None, local=False):
+    def __call__(self, variables, setvar=None, is_global=False):
 
-        return self.objet(variables, setvar=setvar, local=local, hidden=True)
+        return self.objet(variables, setvar=setvar, is_global=is_global, hidden=True)
 
     def end__(self, cont):
         self.objet = self.value[0]

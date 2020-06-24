@@ -12,10 +12,10 @@ name_obj__ = mk_txt('obj__')
 
 class Var(Base):
 
-    def __call__(self, variables, setvar=None, local=False, hidden=False):
+    def __call__(self, variables, setvar=None, is_global=False, hidden=False):
 
         if setvar is not None:
-            variables.set(self.value, setvar, local=local)
+            variables.set(self.value, setvar, is_global=is_global)
 
             if not hidden:
                 events = variables.get_event(self.value)
@@ -27,7 +27,7 @@ class Var(Base):
                                 element(variables)
 
         else:
-            value = variables.get(self.value, ligne=self.ligne__)
+            value = variables.get(self.value, is_global=is_global, ligne=self.ligne__)
 
             if isinstance(value, Inst):
                 """

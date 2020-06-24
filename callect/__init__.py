@@ -126,19 +126,25 @@ class Info:
             self.path_exe
         )
 
-    def get(self, var, ligne=None):
+    def get(self, var, ligne=None, is_global=False):
 
-        for variables in self.variables:
+        if is_global:
+            variables = self.variables[1:]
+
+        else:
+            variables = self.variables
+
+        for variables in variables:
             value = variables.get(var)
             if value is not None:
                 return value
 
         raise NotDefined(var, ligne if ligne else '')
 
-    def set(self, var, value, local=False):
+    def set(self, var, value, is_global=False):
 
-        if not local:
-            for variables in self.variables:
+        if is_global:
+            for variables in self.variables[1:]:
                 if var in variables:
                     variables[var] = value
                     return

@@ -5,7 +5,7 @@ from .errors import AllNonexistent, NotCompatible
 
 class Typ(Base): # Type var
 
-    def __call__(self, variables, setvar=None, local=False, hidden=False):
+    def __call__(self, variables, setvar=None, is_global=False, hidden=False):
 
         obj = self.type(variables)
 
@@ -14,7 +14,7 @@ class Typ(Base): # Type var
             if obj.__name__ != setvar.__class__.__name__:
                 setvar = obj.call__(variables, [setvar], {})
 
-            self.objet(variables, setvar=setvar, local=local, hidden=hidden)
+            self.objet(variables, setvar=setvar, is_global=is_global, hidden=hidden)
 
         else:
 
@@ -61,11 +61,11 @@ class Asi(Base): # Asignement
         self.elements = self.elements[::-1]
 
 
-class Local(Base): # Local
+class Global(Base):
 
     def __call__(self, variables, setvar=None):
 
-        self.objet(variables, setvar=setvar, local=True)
+        return self.objet(variables, setvar=setvar, is_global=True)
 
     def end__(self, cont):
         self.objet = self.value[0]

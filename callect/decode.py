@@ -7,7 +7,7 @@ from .conditions import Not, Inf, Sup, InfOrEga, SupOrEga, Ega, EgaObj, In, RemI
 
 from .operations import Rac, Exp, Mul, Div, Mod, Sub, Add
 
-from .assignement import Asi, Typ, Local, IsExist
+from .assignement import Asi, Typ, Global, IsExist
 
 from .boucle import For, IFor, While, Repeat, Break
 
@@ -177,8 +177,8 @@ def end_objet(cont, objet):
         objet, cont = cont.action(None, Hidden, get_last=False)    
         cont.value.liée = True
 
-    elif value == 'local':
-        objet, cont = cont.action(None, Local, get_last=False)    
+    elif value == 'global':
+        objet, cont = cont.action(None, Global, get_last=False)    
         cont.value.liée = True
 
     elif value == 'return':
@@ -218,7 +218,7 @@ def end_objet(cont, objet):
     elif value == 'event':
 
         cont = cont.mise_a_niveau((
-            RedirecItem, RedirecPoint, Intervalle, Typ, Attachement, Asi, Hidden, Local, Return, IsExist,
+            RedirecItem, RedirecPoint, Intervalle, Typ, Attachement, Asi, Hidden, Global, Return, IsExist,
             Not, Inf, Sup, InfOrEga, SupOrEga, Ega, In, RemIn, PopIn, Rac, Exp, Mul, Div, Mod, Sub, Add
         ))
         
@@ -244,7 +244,7 @@ def decode(data, path_file):
     objet = None
 
 
-    acts_var = (Asi, Hidden, Local, Return, IsExist)
+    acts_var = (Asi, Hidden, Global, Return, IsExist)
 
     acts_redirec = (RedirecItem, RedirecPoint, Intervalle, Typ, Attachement)
 
@@ -590,7 +590,7 @@ def decode(data, path_file):
         elif carac == '=':
             # pouet = 1
 
-            objet, cont = cont.action(objet, Asi, (Hidden, Local, Return, Typ) + acts_redirec)
+            objet, cont = cont.action(objet, Asi, (Hidden, Global, Return, Typ) + acts_redirec)
 
             cont.value.push__(SigneAction)
 
