@@ -6,7 +6,7 @@ name_system = platform.system()
 
 
 from .types.table import mk_table
-from .errors import ModuleNotFound
+from .errors import ModuleNotFound, NotItem
 
 
 def get_data_module(module_txt, path_file, path_exe):
@@ -39,18 +39,65 @@ def get_data_module(module_txt, path_file, path_exe):
     except FileNotFoundError:
         raise ModuleNotFound(module, module_txt.ligne__)
 
+
+class Module:
+
+    def __init__(self, variables, chemin):
+        self.call__ = lambda *args: self
+
+        self.chemin = chemin
+        self.variables = variables
+
+    def __str__(self):
+        return '<Module %s>' % self.chemin
+
+    def __repr__(self):
+        return '<Module %s>' % self.chemin
+
+    def __call__(self, *args):
+        return self
+
+
+    def __bool__(self):
+        return True
+
+    def bool__(self, variables):
+        return True__
+
+
+    def __getitem__(self, item):
+        try:
+            value = self.variables.get(item)
+        except:
+            raise NotItem(self, item, item.ligne__)
+
+        if value.__class__.__name__ == 'Objet':
+            if not value.variables_modules:
+                value.variables_modules = self.variables
+
+        return value
+
+    def __setitem__(self, item, value):
+        self.variables.set(mk_txt(item), value)
+
+
+    def __iter__(self):
+        for key, value in self.__dict__.items():
+            yield key, value
+
+
 def import_(decode):
 
     class Import:
 
         def call__(variables, args, kwargs):
 
-            path_exe = variables.path_exe
-            path_file = variables.path_file
+            path_exe__ = variables.path_exe
+            path_file__ = variables.path_file
 
 
-            if path_exe:
-                path_exe = os.path.dirname(path_exe)
+            if path_exe__:
+                path_exe = os.path.dirname(path_exe__)
 
             else:
 
@@ -64,20 +111,28 @@ def import_(decode):
                     path_exe = '.'
 
 
-            if path_file:
-                path_file = os.path.dirname(path_file)
+            if path_file__:
+                path_file = os.path.dirname(path_file__)
+
+            else:
+                path_file = '.'
 
 
-            data, path = get_data_module(args[0], path_file, path_exe)
+            data, path_file = get_data_module(args[0], path_file, path_exe)
 
-            bloc = decode(data, path)
+            bloc = decode(data, path_file)
 
-            vars__ = {}
+            variables = variables.__class__(
+                [variables.variables[-1]],
+                {}, 
+                variables.events_date, 
+                variables.events_keys, 
+                path_file,
+                path_exe__
+            ).add({})
 
-            bloc(variables.add(vars__))
+            bloc(variables)
 
-            variables.variables[0].update(vars__)
-
-            return mk_table(_dict=vars__)
+            return Module(variables, path_file)
 
     return Import
