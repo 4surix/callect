@@ -427,7 +427,7 @@ def decode(data, path_file):
 
             cont, objet = end_objet(cont, objet)
 
-            while isinstance(cont.value, acts_calcul):
+            while isinstance(cont.value, acts_calcul + (RedirecPoint, Typ, Attachement)):
                 cont = cont.rem__()
 
             cont = action(cont, Intervalle)
