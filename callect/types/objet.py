@@ -1,6 +1,6 @@
-from ..base import Base, Return
 
-from ..errors import NotItem
+from ..base import Base, Return
+from ..errors import NotItem, SyntaxIncorrect
 
 from .txt import Txt, mk_txt
 from .table import Table, mk_table
@@ -55,7 +55,11 @@ class Inst:
         except:
             raise NotItem(self, item, item.ligne__)
 
-        if isinstance(value, Objet):
+        if value.__class__ == Objet:
+
+            if not value.variables_modules:
+                value.variables_modules = self.variables_modules
+
             return CallObjetWithParent(value, self)
 
         return value
@@ -101,31 +105,50 @@ class Objet(Base):
 
         inst = None
 
+        arguments = {}
+
         if self.self:
             inst = self.__inst()
-            arguments = inst.__dict__
+            inst.ligne__ = self.ligne__
+
+            inst.variables_modules = self.variables_modules
+
             arguments[self.self] = inst
 
             if parent and self.parent:
                 arguments[self.parent] = parent
 
-        else:
-            arguments = {}
 
-
-        for key, value in self.kwargs:
-            arguments[key(variables)] = value(variables)
-
-        for key, value in kwargs.items():
-            arguments[key] = value
-
+        if self.variables_modules:
+            variables = variables.add(
+                self.variables_modules.variables[0], 
+                self.variables_modules.events_vars
+            )
 
         variables = variables.add(arguments)
 
 
-        for key, value in zip(self.args, args):
-            key(variables, setvar=value, local=True)
+        ### Args
 
+        for key, value in zip(self.args, args):
+            key(variables, setvar=value)
+
+
+        ### Kwargs
+
+        for key, value in {
+                **{k: v(variables) for k, v in self.kwargs}, 
+                **kwargs
+            }.items():
+
+            if key.__class__ == Txt:
+                arguments[key] = value
+
+            else:
+                key(variables, setvar=value)
+
+
+        ### Bloc
 
         try:
             for element in self.bloc.value:
@@ -133,35 +156,20 @@ class Objet(Base):
         except Return as r:
             return r.value(variables)
 
-
-        if inst is None:
-
-            inst = self.__inst()
-
-            dict__ = inst.__dict__
-
-            for key, value in arguments.items():
-                dict__[key] = value
-
-            if parent and self.parent:
-                inst[self.parent] = parent
-
-
-        inst.ligne__ = self.ligne__
-
-        return inst
+        return False__
 
     def end__(self, cont):
 
         self.__name__ = ''
 
-        self.self = None
-        self.parent = None
+        self.self = self.parent = None
 
         self.args = []
         self.kwargs = {}.items()
 
         self.bloc = None
+
+        self.variables_modules = None
 
         self.callable_without_call = True
 

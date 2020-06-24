@@ -23,7 +23,7 @@ class Call(Base):
         for key, value in self.kwargs:
             value = value(variables)
             value.ligne__ = self.ligne__
-            kwargs[key(variables)] = value
+            kwargs[key] = value
 
 
         obj = self.objet(variables)
