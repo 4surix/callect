@@ -162,6 +162,12 @@ def float_(obj):
 def now():
     return mk_table(_list=[mk_nbr(nbr) for nbr in time.gmtime()[:6]])
 
+@fonction_py_to_cl
+def time__():
+    return mk_nbr(time.time())
+
+now.time = time__
+
 
 ## Mettre en pause le programme
 
@@ -256,6 +262,8 @@ class SocketClt(Inst):
 
         self.send = fonction_py_to_cl(self.send)
         self.recv = fonction_py_to_cl(self.recv)
+
+        self.settimeout = fonction_py_to_cl(self.settimeout)
 
         self.close = fonction_py_to_cl(self.close)
 
