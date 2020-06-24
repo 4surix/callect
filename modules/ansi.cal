@@ -14,7 +14,7 @@ TEXT = {
 
 }
 
-//FOREGROUND//
+// Couleur texte //
 
 FG = {
 
@@ -40,7 +40,7 @@ FG = {
 
 }
 
-//BACKGROUND//
+// Surlignage texte //
 
 BG = {
 
@@ -66,7 +66,7 @@ BG = {
 
 }
 
-// cursor positioning //
+// Position du curseur //
 
 CURSOR = {
 
@@ -79,18 +79,22 @@ CURSOR = {
 
 }
 
+// Effacement de l'écran //
+
 CLEAR = {
 
 //
 	mode == 0, effacez du curseur jusqu'à la fin de l'écran
 	mode == 1, effacez du curseur au début de l'écran
 	mode == 2, effacez tout l'écran (et déplace le curseur en haut à gauche)
-	mode == 3, effacez tout l'écran et supprimez toutes les lignes enregistrées dans le tampon de défilement
+	mode == 3, effacez tout l'écra
+	           et supprimez toutes les lignes enregistrées
+	           dans le tampon de défilement
 //
 'screen' = @{mode}[return "\e[" + mode:txt + "J"]
 
 //
-	mode == 0, effacez le curseur jusqu'à la fin de la ligne. 
+	mode == 0, effacez du curseur jusqu'à la fin de la ligne.
 	mode == 1, effacez du curseur au début de la ligne.
 	mode == 2, effacez toute la ligne. La position du curseur ne change pas.
 //
