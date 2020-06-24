@@ -701,11 +701,11 @@ def decode(data, path_file):
 
             cont, objet = end_objet(cont, objet)
 
-            objet, cont = cont.action(objet, Objet, get_last=False)    
+            objet, cont = cont.action(objet, Objet, get_last=False)
 
             if isinstance(cont.last.value, Asi):
 
-                value = cont.last.value.value[-1]
+                value = cont.last.value.value[0]
 
                 if isinstance(value, Var):
                     cont.value.push__(Txt(value.value))
