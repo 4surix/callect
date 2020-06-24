@@ -116,10 +116,10 @@ class Info:
 
         self.get_event = self.events_vars.get
 
-    def add(self, variables):
+    def add(self, variables, events_vars={}):
         return Info(
             [variables] + self.variables, 
-            dict(self.events_vars),
+            self.events_vars.copy().update(events_vars),
             self.events_date,
             self.events_keys,
             self.path_file, 
