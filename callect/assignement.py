@@ -28,7 +28,14 @@ class Typ(Base): # Type var
     def __str__(self):
         return '%s:%s' % self.objet, self.type
 
-    def end__(self, cont): 
+    def __eq__(self, obj):
+        # L'ors de la fusion des dict pour le call__ des objets
+        return self.objet.value == obj.value
+
+    def __hash__(self):
+        return hash(self.objet.value)
+
+    def end__(self, cont):
         self.objet, self.type = self.value
 
         if self.objet.__class__.__name__ not in ('Var', 'Txt', 'Pos', 'Neg', 'Nul', 'Prio', 'RedirecPoint'):
