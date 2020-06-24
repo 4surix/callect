@@ -83,9 +83,7 @@ class Time(Thread):
 
         events = self.variables.events_date
 
-        variables = {}
-
-        infos = self.variables.add(variables)
+        variables = self.variables.variables[0]
 
         while 1:
 
@@ -106,8 +104,8 @@ class Time(Thread):
                 variables['second'] = variables['seconde'] = variables['segundo'] = mk_nbr(s)
 
                 for event in events:
-                    if event.conditions(infos):
-                        event.bloc(infos)
+                    if event.conditions(self.variables):
+                        event.bloc(self.variables)
 
 
             time.sleep(1)
