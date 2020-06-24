@@ -413,11 +413,13 @@ def decode(data, path_file):
         elif carac == '~':
             # pouet~piaf
 
-            cont = cont.mise_a_niveau(acts_redirec)
+            cont = cont.mise_a_niveau((RedirecPoint, Typ))
 
             cont, objet = end_objet(cont, objet)
 
             objet, cont = cont.action(objet, Attachement)
+
+            cont.value.liée = True
 
 
         ### Intervalle
