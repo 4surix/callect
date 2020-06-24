@@ -1,6 +1,6 @@
 
-from ..errors import NotItem, NotIndex, NotValue, ConvertionImpossible
 from ..base import Base, SigneAction, fonction_py_to_cl, methode_py_to_cl
+from ..errors import NotItem, NotIndex, NotValue, ConvertionImpossible, NotCompatible
 from ..assignement import Asi
 
 from .nbr import Pos, Neg, Nul, mk_nbr
@@ -231,6 +231,15 @@ class Table(Base):
             return False
 
         return obj.list__ == self.list__ and obj.dict__ == self.dict__
+
+
+    @methode_py_to_cl
+    def mul__(variables, self, obj):
+
+        if obj.__class__.__name__ != 'Pos':
+            raise NotCompatible(self, obj, self.ligne__)
+
+        return mk_table(_list=self.list__ * obj.value, _dict={**self.dict__})
 
 
     ### Methodes
