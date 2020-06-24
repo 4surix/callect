@@ -4,9 +4,14 @@ NotItem = None
 
 def methode_py_to_cl(func):
 
-    def conv(self, variables, args=[], kwargs={}):
+    def conv(self, variables, args=[], kwargs=None):
 
-        return func(variables, self, *args, **({str(k):v for k, v in kwargs.items()} if kwargs else {}))
+        return func(
+            variables, 
+            self, 
+            *args, 
+            **({str(k): v for k, v in kwargs.items()} if kwargs else {})
+        )
 
     conv.__name__ = func.__name__
 
@@ -27,9 +32,17 @@ class fonction_py_to_cl:
     def __setitem__(self, item, value):
         return setattr(self, str(item), value)
 
-    def call__(self, variables, args=[], kwargs={}):
+    def call__(self, variables, args=[], kwargs=None):
         self.variables = variables
-        return self.func__(*args, **{str(k): v for k, v in kwargs.items()})
+
+        value = self.func__(
+            *args, 
+            **({str(k): v for k, v in kwargs.items()} if kwargs else {})
+        )
+
+        self.variables = None
+
+        return value
 
 
 

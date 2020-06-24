@@ -38,15 +38,17 @@ class Typ(Base): # Type var
     def end__(self, cont):
         self.objet, self.type = self.value
 
-        if self.objet.__class__.__name__ not in ('Var', 'Txt', 'Pos', 'Neg', 'Nul', 'Prio', 'RedirecPoint'):
-            raise NotCompatible(self.type, self, self.ligne__)
+        if self.objet.__class__.__name__ not in (
+                'Var', 'Txt', 'Pos', 'Neg', 'Nul', 'Prio', 'RedirecPoint'
+            ):
+            raise NotCompatible(self, self.objet, self.ligne__)
 
         if self.type.__class__.__name__ not in ('Var', 'RedirecPoint'):
-            raise NotCompatible(self.type, self, self.ligne__)
+            raise NotCompatible(self, self.type, self.ligne__)
 
 
 class Asi(Base): # Asignement
-    
+
     def __call__(self, variables):
 
         value = self.objet(variables)
@@ -80,7 +82,7 @@ class Global(Base):
         type_name = self.objet.__class__.__name__
 
         if type_name not in ['Var', 'Typ', 'Hidden']:
-            raise NotCompatible(self.objet, self, self.ligne__)
+            raise NotCompatible(self, self.objet, self.ligne__)
 
 
 class IsExist(Base): # Verification existe
@@ -100,8 +102,11 @@ class IsExist(Base): # Verification existe
 
         self.value = [v for v in self.value if v != SigneAction]
 
-        types_valables = ['Var', 'RedirecItem', 'RedirecPoint', 'Txt', 'Pos', 'Neg', 'Nul', 'Table', 'Objet', 'Intervalle']
+        types_valables = [
+            'Var', 'RedirecItem', 'RedirecPoint', 'Txt', 'Pos', 'Neg', 'Nul',
+            'Table', 'Objet', 'Intervalle'
+        ]
 
         for value in self.value:
             if value.__class__.__name__ not in types_valables:
-                raise NotCompatible(value, self, self.ligne__)
+                raise NotCompatible(self, value, self.ligne__)

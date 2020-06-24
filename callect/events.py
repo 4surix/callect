@@ -237,6 +237,9 @@ class Key(Thread):
                     if not event.conditions or event.conditions(self.variables):
                         event.bloc(self.variables)
 
+            else:
+                time.sleep(1)
+
 
 def run(variables):
 

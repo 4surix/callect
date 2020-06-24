@@ -1,10 +1,7 @@
 
 from ..base import Base, SigneAction
 from .nbr import Pos, Neg, Nul, mk_nbr
-
-from ..errors import NotCompatible
-
-from ..errors import SyntaxIncorrect
+from ..errors import NotCompatible, SyntaxIncorrect
 
 
 class Intervalle(Base):

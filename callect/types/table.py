@@ -364,11 +364,11 @@ class Table(Base):
 
     def indexs(self):
 
-        return mk_table(_list=[mk_nbr(v) for v in range(1, self.next_index_list)] + [k for k in self.dict__])
+        return mk_table(_list=[*[mk_nbr(v) for v in range(1, self.next_index_list)], *self.dict__])
 
     def values(self):
 
-        return mk_table(_list=self.list__ + list(self.dict__.values()))
+        return mk_table(_list=[*self.list__, *self.dict__.values()])
 
 
     ### Appel de table

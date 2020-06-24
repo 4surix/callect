@@ -1,19 +1,14 @@
 
 import os
 import sys
-
 import socket
-
 import random
-
 import time
 
+
 from .decode import decode
-
 from .errors import FileNotFound, NotCompatible, ValueIncorrect
-
 from .importation import import_
-
 from .base import fonction_py_to_cl, methode_py_to_cl
 
 from .types.nbr import Nbr, Pos, Neg, Nul, mk_nbr
@@ -121,8 +116,8 @@ else:
         return False__
 
 
-print_.end__ = '\n'
-print_.sep__ = ' '
+print_.end__ = mk_txt('\n')
+print_.sep__ = mk_txt(' ')
 
 
 ## Input
@@ -489,7 +484,7 @@ if colorama:
 
         colorama.deinit()
 
-    print_ansi.end__ = '\n'
-    print_ansi.sep__ = ' '
+    print_ansi.end__ = mk_txt('\n')
+    print_ansi.sep__ = mk_txt(' ')
 
     fonctions_intégrées['printANSI'] = print_ansi

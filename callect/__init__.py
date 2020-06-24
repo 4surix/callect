@@ -75,7 +75,7 @@ def run(data, path_file, path_exe=None, *, time=False):
         except Exception as e:
             msg_exception = 'Exception run Python:\n\n' + traceback.format_exc() + "\n\n\nPress Entrée to exit.\n"
 
-    except ALLExcept as e:
+    except ALLExcept as e: 
         msg_exception = "Exception decode:\n\n%s\n\n\nPress Entrée to exit.\n" % e
 
     except Exception as e:
