@@ -63,9 +63,11 @@ class Div(Base): # Division
 
             e2 = e2(variables)
 
-            try: e1 = e1['div__'](variables, [e2])
+            try: div__ = e1['div__']
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'div__') 
+
+            e1 = div__(variables, [e2])
 
         return e1
 
@@ -84,9 +86,11 @@ class Mod(Base): # Modulo
 
             e2 = e2(variables)
 
-            try: e1 = e1['mod__'](variables, [e2])
+            try: mod__ = e1['mod__']
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'mod__') 
+
+            e1 = mod__(variables, [e2])
 
         return e1
 
@@ -105,9 +109,11 @@ class Mul(Base): # Multiplication
 
             e2 = e2(variables)
 
-            try: e1 = e1['mul__'](variables, [e2])
+            try: mul__ = e1['mul__']
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'mul__') 
+
+            e1 = mul__(variables, [e2])
 
         return e1
 
@@ -126,9 +132,11 @@ class Exp(Base): # Exposant
 
             e2 = e2(variables)
 
-            try: e1 = e1['exp__'](variables, [e2])
+            try: exp__ = e1['exp__']
             except (AttributeError, KeyError):
-                raise NotSupported(e1, 'exp__') 
+                raise NotSupported(e1, 'exp__')
+
+            e1 = exp__(variables, [e2])
 
         return e1
 
@@ -147,8 +155,10 @@ class Rac(Base): # Racine
 
             e2 = e2(variables)
 
-            try: e1 = e1['rac__'](variables, [e2])
+            try: rac__ = e1['rac__']
             except (AttributeError, KeyError):
                 raise NotSupported(e1, 'rac__')
+
+            e1 = rac__(variables, [e2])
 
         return e1
