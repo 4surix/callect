@@ -88,8 +88,12 @@ class While(Base):
 
     def __call__(self, variables):
 
-        while self.conditions(variables):
-            self.bloc(variables)
+        try:
+            while self.conditions(variables):
+                self.bloc(variables)
+
+        except StopIteration:
+            pass
 
     def end__(self, cont):
 
