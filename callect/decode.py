@@ -707,19 +707,8 @@ def decode(data, path_file):
                     cont.value.push__(Txt(str(value)))
 
 
-        ### Event
 
-        elif carac == '$' or carac == '§':
-            # $vars pomme []
 
-            cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
-
-            cont, objet = end_objet(cont, objet)
-            
-            while not isinstance(cont.value, Bloc):
-                cont = cont.rem__()
-
-            objet, cont = cont.action(objet, Event, get_last=False)    
 
 
 
