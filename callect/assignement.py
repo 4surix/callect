@@ -42,10 +42,10 @@ class Typ(Base): # Type var
         if self.objet.__class__.__name__ not in (
                 'Var', 'RedirecPoint', 'Local', 'Global', 'Prio'
             ):
-            raise NotCompatible(self, self.objet, self.ligne__)
+            raise SyntaxIncorrect(self.ligne__)
 
         if self.type.__class__.__name__ not in ('Var', 'RedirecPoint'):
-            raise NotCompatible(self, self.type, self.ligne__)
+            raise SyntaxIncorrect(self.ligne__)
 
 
 class Asi(Base): # Asignement
@@ -133,7 +133,7 @@ class IsExist(Base): # Verification existe
 
         for value in self.value:
             if value.__class__.__name__ not in types_valables:
-                raise NotCompatible(self, value, self.ligne__)
+                raise SyntaxIncorrect(self.ligne__)
 
 
 class Del(Base):

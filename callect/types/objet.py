@@ -180,7 +180,7 @@ class Objet(Base):
 
             if name_type_value == 'Var':
                 if self.parent:
-                    raise
+                    raise SyntaxIncorrect(self.ligne__)
                 elif self.self:
                     self.parent = mk_txt(value)
                 else:
