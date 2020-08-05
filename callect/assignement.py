@@ -36,10 +36,11 @@ class Typ(Base): # Type var
         return hash(self.objet.value)
 
     def end__(self, cont):
+
         self.objet, self.type = self.value
 
         if self.objet.__class__.__name__ not in (
-                'Var', 'Txt', 'Pos', 'Neg', 'Nul', 'Prio', 'RedirecPoint'
+                'Var', 'RedirecPoint', 'Local', 'Global', 'Prio'
             ):
             raise NotCompatible(self, self.objet, self.ligne__)
 
@@ -69,6 +70,14 @@ class Asi(Base): # Asignement
         # Cela évite des beugs comme l'assigment d'item dans des tables.
         self.elements = self.elements[::-1]
 
+        for element in self.elements:
+            if element.__class__.__name__ not in [
+                    'Var', 'Typ', 'Hidden', 'Global',
+                    'Txt', 'Pos', 'Neg', 'Nul',
+                    'RedirecPoint', 'RedirecItem'
+                ]:
+                raise SyntaxIncorrect(self.ligne__)
+
 
 class Global(Base):
 
@@ -77,12 +86,12 @@ class Global(Base):
         return self.objet(variables, setvar=setvar, is_global=True)
 
     def end__(self, cont):
+
         self.objet = self.value[0]
 
-        type_name = self.objet.__class__.__name__
+        if self.objet.__class__.__name__ not in ['Var', 'Hidden']:
+            raise SyntaxIncorrect(self.ligne__)
 
-        if type_name not in ['Var', 'Typ', 'Hidden']:
-            raise NotCompatible(self, self.objet, self.ligne__)
 
 class Local(Base):
 
@@ -116,8 +125,10 @@ class IsExist(Base): # Verification existe
         self.value = [v for v in self.value if v != SigneAction]
 
         types_valables = [
-            'Var', 'RedirecItem', 'RedirecPoint', 'Txt', 'Pos', 'Neg', 'Nul',
-            'Table', 'Objet', 'Intervalle'
+            # Potentielement inexistant
+            'Var', 'RedirecItem', 'RedirecPoint',
+            # Objets forcément existant
+            'Txt', 'Pos', 'Neg', 'Nul', 'Table', 'Objet', 'Intervalle'
         ]
 
         for value in self.value:

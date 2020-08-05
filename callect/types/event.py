@@ -165,5 +165,5 @@ class Hidden(Base):
 
         type_name = self.objet.__class__.__name__
 
-        if type_name not in ['Var', 'Typ', 'RedirecPoint']:
-            raise NotCompatible(self.objet, self, self.ligne__)
+        if type_name not in ['Var', 'RedirecPoint']:
+            raise SyntaxIncorrect(self.ligne__)

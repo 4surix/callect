@@ -617,7 +617,12 @@ def decode(data, path_file):
         elif carac == ':':
             # pouet:pos = 1:neg
 
-            objet, cont = cont.action(objet, Typ, (RedirecPoint,))
+            objet, cont = cont.action(objet, Typ, (
+                RedirecPoint, # pomme.pouet:pos
+                Local,        # local pouf:pos
+                Global,       # global pouf:pos
+                Hidden        # hide pouf:pos
+            ))
 
         elif carac == '=':
             # pouet = 1
@@ -697,7 +702,6 @@ def decode(data, path_file):
                 and isinstance(cont.value.last__(), (
                     Var,           # pouet{}
                     RedirecPoint,  # pouf.piaf{}
-                    RedirecItem,   # patate#134{}
                     Call,          # piaf{}{}
                     Prio           # (123 + 456){}
             ))):
