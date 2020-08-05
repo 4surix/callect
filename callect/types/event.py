@@ -33,9 +33,6 @@ class Event(Base):
             value = self.type.value
 
             if value == 'keypress':
-                value = 'keys'
-
-            if value == 'keys':
 
                 if self.key.__class__ == Var:
                     self.key_is_var = True
@@ -65,8 +62,8 @@ class Event(Base):
                 print{'a'}
             ]
 
-            event date
-            (date__ # 6 == 0) [
+            event changedate
+            (seconde == 0) [
                 print{'Nouvelle minute !'}
             ]
 
@@ -76,22 +73,13 @@ class Event(Base):
             """
             self.type, self.conditions, self.bloc = self.value
 
+            self.type = value = self.type.value
 
-            value = self.type.value
-
-            if value == 'keypress':
-                value = 'keys'
-
-            elif value == 'changevars':
-                value = 'vars'
-
-            self.type = value
-
-
-            if value in ['vars', 'date']:
+            if value in ['changevars', 'changedate']:
                 pass
 
-            elif value == 'keys':
+            elif value == 'keypress':
+
                 self.key = self.conditions
 
                 if self.key.__class__ == Var:

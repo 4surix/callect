@@ -155,7 +155,7 @@ class Info:
 
         event.variables = self
 
-        if event.type == 'vars':
+        if event.type == 'changevars':
 
             for var in event.vars:
                 if var not in self.events_vars:
@@ -163,10 +163,10 @@ class Info:
                 else:
                     self.events_vars[var].append(event)
 
-        elif event.type == 'date':
+        elif event.type == 'changedate':
 
             self.events_date.append(event)
 
-        elif event.type == 'keys':
+        elif event.type == 'keypress':
 
             self.events_keys.append(event)
