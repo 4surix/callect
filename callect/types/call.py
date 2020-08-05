@@ -9,22 +9,13 @@ class Call(Base):
     
     def __call__(self, variables):
 
-        args = []
-        add = args.append
+        args = self.args
+        if args:
+            args = [value(variables) for value in args]
 
-        for value in self.args:
-            value = value(variables)
-            value.ligne__ = self.ligne__
-            add(value)
-
-
-        kwargs = {}
-
-        for key, value in self.kwargs:
-            value = value(variables)
-            value.ligne__ = self.ligne__
-            kwargs[key] = value
-
+        kwargs = self.kwargs
+        if kwargs:
+            kwargs = {key: value(variables) for key, value in kwargs.items()}
 
         obj = self.objet(variables)
 
@@ -44,7 +35,7 @@ class Call(Base):
         self.objet, args = self.value
 
         self.args = args.list__
-        self.kwargs = args.dict__.items()
+        self.kwargs = args.dict__
 
 
 class Attachement(Base):
@@ -58,20 +49,17 @@ class Attachement(Base):
 
             attache = attache(variables)
 
-
-            args = []
-            add = args.append
-
-            kwargs = {}
-
             if attache.__class__.__name__ != 'Table':
                 raise NotCompatible(self, attache, self.ligne__)
 
-            for value in attache.list__:
-                add(value(variables))
 
-            for key, value in attache.dict__.items():
-                kwargs[key] = value(variables)
+            args = attache.list__
+            if args:
+                args = [value(variables) for value in args]
+
+            kwargs = attache.dict__
+            if kwargs:
+                kwargs = {key: value(variables) for key, value in kwargs.items()}
 
 
             try:
