@@ -1,19 +1,25 @@
-from .base import Base
-
+from .base import Base, SigneAction
 from .errors import NotSupported
 
 
-class Add(Base): # Addition
+class Operation(Base):
+
+    def end__(self, cont):
+
+        self.premier_objet, *self.objets = [
+            element 
+            for element in self.value
+            if element != SigneAction
+        ]
+
+
+class Add(Operation): # Addition
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -26,17 +32,13 @@ class Add(Base): # Addition
         return e1
 
 
-class Sub(Base): # Soustraction
+class Sub(Operation): # Soustraction
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -49,17 +51,13 @@ class Sub(Base): # Soustraction
         return e1
 
 
-class Div(Base): # Division
+class Div(Operation): # Division
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -72,17 +70,13 @@ class Div(Base): # Division
         return e1
 
 
-class Mod(Base): # Modulo
+class Mod(Operation): # Modulo
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -95,17 +89,13 @@ class Mod(Base): # Modulo
         return e1
 
 
-class Mul(Base): # Multiplication
+class Mul(Operation): # Multiplication
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -118,17 +108,13 @@ class Mul(Base): # Multiplication
         return e1
 
 
-class Exp(Base): # Exposant
+class Exp(Operation): # Exposant
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -141,17 +127,13 @@ class Exp(Base): # Exposant
         return e1
 
 
-class Rac(Base): # Racine
+class Rac(Operation): # Racine
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
