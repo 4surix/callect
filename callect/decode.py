@@ -580,30 +580,37 @@ def decode(data, path_file):
 
             cont.value.push__(SigneAction)
 
-        elif carac == '&':
-            # 5 > 6 & 5 == 5
-
-            objet, cont = cont.action(objet, And, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
-
-        elif carac == '|':
-            # 5 > 6 | 5 == 5
-
-            objet, cont = cont.action(objet, Or, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
-
         elif carac2 == '&&':
             # 5 > 6 && 5 == 5
 
             index_min = icarac + 2
 
-            objet, cont = cont.action(objet, XAnd, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
+            objet, cont = cont.action(objet, XAnd, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden, And, Or, XOr))
+
+            cont.value.push__(SigneAction)
+
+        elif carac == '&':
+            # 5 > 6 & 5 == 5
+
+            objet, cont = cont.action(objet, And, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden, Or))
+
+            cont.value.push__(SigneAction)
 
         elif carac2 == '||':
             # 5 > 6 || 5 == 5
 
             index_min = icarac + 2
 
-            objet, cont = cont.action(objet, XOr, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden))
+            objet, cont = cont.action(objet, XOr, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden, And, Or, XAnd))
 
+            cont.value.push__(SigneAction)
+
+        elif carac == '|':
+            # 5 > 6 | 5 == 5
+
+            objet, cont = cont.action(objet, Or, acts_redirec + acts_calcul + acts_condition + (IsExist, Hidden, And))
+
+            cont.value.push__(SigneAction)
 
         ### Variable
 
