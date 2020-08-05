@@ -1,4 +1,5 @@
-from ..base import Base
+from ..base import Base, SigneAction
+from ..errors import SyntaxIncorrect
 from .bool import False__, True__
 
 
@@ -33,6 +34,9 @@ class Bloc(Base):
         return value
 
     def end__(self, cont):
+
+        # [pomme = 1, poire = pomme = 13, print{poire}]
+        self.value = [v for v in self.value if v != SigneAction]
 
         objet = None
 

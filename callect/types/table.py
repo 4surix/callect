@@ -412,6 +412,8 @@ class Table(Base):
         for value in self.value:
 
             if isinstance(value, Asi):
+            if value == SigneAction:
+                continue
 
                 keys = [v for v in value.elements if v != SigneAction]
                 value = value.objet

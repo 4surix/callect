@@ -721,7 +721,7 @@ def decode(data, path_file):
                 objet, cont = cont.action(objet, Call, (RedirecPoint,))
 
             elif (
-                not isinstance(cont.value, (Objet, IsExist)) # pouet = paf ? {}
+                not isinstance(cont.value, Objet)
                 and isinstance(cont.value.last__(), (
                     Var,           # pouet{}
                     RedirecPoint,  # pouf.piaf{}
@@ -784,7 +784,9 @@ def decode(data, path_file):
 
         elif carac == ',':
             # pomme, poire, pouf
-            pass
+
+            # Pour éviter les cas comme `{pomme, {1, 2, 3}}`
+            cont.value.push__(SigneAction)
 
 
         ### Autre
