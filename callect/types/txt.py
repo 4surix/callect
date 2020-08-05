@@ -102,7 +102,7 @@ class Txt(Base):
         return '%s' % self.value
 
     def __repr__(self):
-        return '"%s"' % self.value
+        return repr(self.value)
 
 
     def __getitem__(self, item):
