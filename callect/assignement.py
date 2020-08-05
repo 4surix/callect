@@ -5,7 +5,7 @@ from .errors import AllNonexistent, NotDefined, NotItem, SyntaxIncorrect
 
 class Typ(Base): # Type var
 
-    def __call__(self, variables, setvar=None, is_global=False, hidden=False):
+    def __call__(self, variables, setvar=None, hidden=False):
 
         obj = self.type(variables)
 
@@ -14,7 +14,7 @@ class Typ(Base): # Type var
             if obj.__name__ != setvar.__class__.__name__:
                 setvar = obj.call__(variables, [setvar], {})
 
-            self.objet(variables, setvar=setvar, is_global=is_global, hidden=hidden)
+            self.objet(variables, setvar=setvar, hidden=hidden)
 
         else:
 
@@ -52,22 +52,22 @@ class Asi(Base): # Asignement
 
     def __call__(self, variables):
 
-        value = self.objet(variables)
+        value = self.value(variables)
 
         for element in self.elements:
             element(variables, setvar=value)
 
-    def __iter__(self):
-        for value in self.value:
-            yield value
-
     def end__(self, cont):
-        *self.elements, self.objet = [v for v in self.value if v != SigneAction]
+
+        *self.elements, self.value = [
+            element
+            for element in self.value 
+            if element != SigneAction
+        ]
 
         # Très important, permet de faire dans le bon ordre.
         # a = b = c = 1
         # D'abbord c puis b puis a.
-        # Cela évite des beugs comme l'assigment d'item dans des tables.
         self.elements = self.elements[::-1]
 
         for element in self.elements:
@@ -119,7 +119,6 @@ class IsExist(Base): # Verification existe
         raise AllNonexistent(self, self.ligne__)
 
     def end__(self, cont):
-        self.ligne__ = str(cont.ligne)
 
         self.value = [v for v in self.value if v != SigneAction]
 

@@ -64,19 +64,19 @@ class Conteneur:
 
         return last
 
-    def action(self, objet, Act, acts=None, *, get_last=True, prio=False):
+    def action(self, objet, Act, type_acts=None, *, get_last=True, prio=False):
 
         cont = self
 
         cont, objet = end_objet(cont, objet)
 
-        if acts:
-            while isinstance(cont.value, acts):
+        if type_acts:
+            while cont.value.__class__ in type_acts:
                 cont = cont.rem__()
 
-        if not isinstance(cont.value, Act) or prio:
+        if cont.value.__class__ != Act or prio:
             act = Act()
-            
+
             if get_last:
                 act.push__(cont.value.pop__())
 
@@ -90,18 +90,14 @@ class Conteneur:
 
         return None, cont
 
-    def mise_a_niveau(self, acts):
+    def mise_a_niveau(self, type_acts):
 
         cont = self
 
-        value_type = type(cont.value)
-
-        while value_type in acts and not cont.value.liée:
-            while not isinstance(cont.value, value_type):
-                cont = cont.rem__()
-
+        while (cont.value.__class__ in type_acts 
+               and not cont.value.liée
+            ):
             cont = cont.rem__()
-            value_type = type(cont.value)
 
         cont.value.liée = False
 
@@ -137,13 +133,16 @@ def end_objet(cont, objet):
     ### Condition
 
     if value == 'if':
+        # if (cond) []
         cont.value.push__(None)
         objet, cont = cont.action(None, InsCond)    
 
     elif value == 'elif':
+        # if (cond) [] elif (cond) []
         objet, cont = cont.action(None, InsCond)
 
     elif value == 'else':
+        # if (cond) [] else []
         objet, cont = cont.action(None, InsCond)
         cont.value.push__(True__)
 
@@ -151,6 +150,7 @@ def end_objet(cont, objet):
     ### Boucle
 
     elif value == 'for':
+        # for element in iter []
         objet, cont = cont.action(None, For, get_last=False)    
 
     elif value == 'ifor':
@@ -239,15 +239,6 @@ def end_objet(cont, objet):
     ### Event
 
     elif value == 'event':
-
-        cont = cont.mise_a_niveau((
-            RedirecItem, RedirecPoint, Intervalle, Typ, Attachement, Asi, Hidden, Global, Return, IsExist,
-            Not, Inf, Sup, InfOrEga, SupOrEga, Ega, In, RemIn, PopIn, Rac, Exp, Mul, Div, Mod, Sub, Add
-        ))
-        
-        while not isinstance(cont.value, Bloc):
-            cont = cont.rem__()
-
         objet, cont = cont.action(None, Event, get_last=False)  
 
 

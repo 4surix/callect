@@ -33,6 +33,7 @@ class fonction_py_to_cl:
         return setattr(self, str(item), value)
 
     def call__(self, variables, args=[], kwargs=None):
+
         self.variables = variables
 
         value = self.func__(
@@ -43,7 +44,6 @@ class fonction_py_to_cl:
         self.variables = None
 
         return value
-
 
 
 class Base:
@@ -66,8 +66,7 @@ class Base:
 
     def __getitem__(self, item):
 
-        try:
-            return getattr(self, str(item))
+        try: return getattr(self, str(item))
         except:
             raise NotItem(self, item, item.ligne__)
 
@@ -123,10 +122,10 @@ class Commentaire:
 
 
 class Prio(Base):
-    
-    def __call__(self, variables):
 
-        return self.value[0](variables)
+    def __call__(self, variables, *args, **kwargs):
+
+        return self.value[0](variables, *args, **kwargs)
 
 
 class SigneAction:

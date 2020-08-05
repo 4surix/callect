@@ -38,9 +38,6 @@ class Inst:
     def __repr__(self):
         return '<Objet %s>' % self.__class__.__name__
 
-    def __call__(self, *args):
-        return self
-
 
     def __bool__(self):
         return True
@@ -50,8 +47,7 @@ class Inst:
 
 
     def __getitem__(self, item):
-        try:
-            value = self.__dict__[item]
+        try: value = self.__dict__[item]
         except:
             raise NotItem(self, item, item.ligne__)
 
@@ -101,7 +97,7 @@ class Objet(Base):
     def __repr__(self):
         return '<Objet %s>' % self.__name__
     
-    def call__(self, variables, args, kwargs={}, parent=None):
+    def call__(self, variables, args=[], kwargs={}, parent=None):
 
         inst = None
 
@@ -172,7 +168,6 @@ class Objet(Base):
         self.variables_modules = None
 
         self.callable_without_call = True
-
 
         for value in self.value:
 

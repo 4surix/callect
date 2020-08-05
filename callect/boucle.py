@@ -56,11 +56,7 @@ class Repeat(Base):
     def end__(self, cont):
 
         if len(self.value) == 2:
-            self.bloc = self.value[1]
-
-            value = self.value[0]
-
-            self.conteneur = value
+            self.conteneur, self.bloc = self.value
 
         else:
             raise SyntaxIncorrect(self.ligne__)

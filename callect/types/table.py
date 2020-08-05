@@ -92,9 +92,7 @@ class Table(Base):
             ]
         )
 
-    def __repr__(self):
-
-        return str(self)
+    def __repr__(self): return str(self)
 
     def __getitem__(self, item):
 
@@ -113,8 +111,7 @@ class Table(Base):
         if value is not None:
             return value
 
-        try:
-            return getattr(self, str(item))
+        try: return getattr(self, str(item))
         except:
             raise NotItem(self, item, item.ligne__)
 
@@ -160,9 +157,7 @@ class Table(Base):
             self.next_index_list -= 1
 
         else:
-
-            try:
-                del self.dict__[item]
+            try: del self.dict__[item]
             except:
                 raise NotItem(self, item, item.ligne__)
 
@@ -209,22 +204,20 @@ class Table(Base):
     @methode_py_to_cl
     def popin__(variables, self, obj):
 
-        try:
-            self.__class__.pop(self, obj)
-            return True
-
+        try: self.__class__.pop(self, obj)
         except NotIndex:
             return False
+        else:
+            return True
 
     @methode_py_to_cl
     def remin__(variables, self, obj):
 
-        try:
-            self.__class__.rem(self, obj)
-            return True
-
+        try: self.__class__.rem(self, obj)
         except NotValue:
             return False
+        else:
+            return True
 
 
     @methode_py_to_cl
@@ -263,8 +256,6 @@ class Table(Base):
         self.values = fonction_py_to_cl(self.values)
 
     def insert(self, item, value):
-
-        type_name = type(item).__name__
 
         if item.__class__ == Pos:
 
@@ -308,8 +299,7 @@ class Table(Base):
             self.next_index_list -= 1
             return value
 
-        try:
-            return self.dict__.pop(item)
+        try: return self.dict__.pop(item)
         except:
             raise NotIndex(self, item, item.ligne__)
 
@@ -340,9 +330,7 @@ class Table(Base):
 
     def index(self, obj):
 
-        try:
-            return Pos(self.list__.index(obj) + 1)
-
+        try: return Pos(self.list__.index(obj) + 1)
         except:
             for index, value in self.dict__.items():
                 if obj == value:
@@ -352,14 +340,9 @@ class Table(Base):
 
     def func__value(self, obj):
 
-        try:
-            return self.list__[obj]
-
+        try: return self.list__[obj]
         except:
-
-            try:
-                return self.dict__[obj]
-
+            try: return self.dict__[obj]
             except:
                 pass
 
@@ -407,20 +390,19 @@ class Table(Base):
         self.dict__ = {}
         self.next_index_list = 1
 
-        self.ligne__ = str(cont.ligne)
-
         for value in self.value:
 
-            if isinstance(value, Asi):
             if value == SigneAction:
                 continue
 
-                keys = [v for v in value.elements if v != SigneAction]
-                value = value.objet
+            elif value.__class__ == Asi:
+
+                keys = value.elements
+                value = value.value
 
                 for key in keys:
 
-                    if key.__class__ == Pos:
+                    if key.__class__ == Pos: # key > 1
 
                         if key.value < self.next_index_list:
                             self.next_index_list += 1
@@ -431,11 +413,10 @@ class Table(Base):
                             self.next_index_list += 1
                             self.list__.append(value)
                             continue
-                    
+
                     self.dict__[key] = value
 
-            elif type(value).__name__ == 'Objet' and value.__name__:
-
+            elif value.__class__.__name__ == 'Objet' and value.__name__:
                 self.dict__[value.__name__] = value
 
             else:

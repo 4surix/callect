@@ -102,10 +102,13 @@ class Info:
             self.path_exe
         )
 
-    def get(self, var, ligne=None, is_global=False):
+    def get(self, var, ligne=None, is_global=False, is_local=False):
 
         if is_global:
             variables = self.variables[1:]
+
+        elif is_local:
+            variables = self.variables[:1]
 
         else:
             variables = self.variables
@@ -120,7 +123,7 @@ class Info:
     def set(self, var, value, is_global=False):
 
         if is_global:
-            for variables in self.variables[1:]:
+            for variables in self.variables[1:-1]:
                 if var in variables:
                     variables[var] = value
                     return

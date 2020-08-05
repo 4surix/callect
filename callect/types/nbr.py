@@ -373,8 +373,6 @@ class Nul(Base, Nbr):
 
         self.value = 0
 
-        self.ligne__ = str(cont.ligne)
-
 
 ### Booléens
 

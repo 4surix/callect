@@ -23,17 +23,16 @@ class Var(Base):
                 if events:
                     for event in events:
                         if event.conditions(variables):
-                            for element in event.bloc.value:
-                                element(variables)
+                            event.bloc(variables)
 
         else:
             value = variables.get(self.value, is_global=is_global, ligne=self.ligne__)
 
             if isinstance(value, Inst):
                 """
-                @'pouet' {
+                @'pouet' self {
                     'obj__' @[return 'pouf']
-                } []
+                } [return self]
                 pouet == 'pouf'
                 """
 
