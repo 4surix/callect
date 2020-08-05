@@ -1,34 +1,26 @@
 from .base import Base, SigneAction
-
 from .errors import NotSupported
-
 from .types.bool import True__, False__
 
 
-class Not(Base): # Not
-    
-    def __call__(self, variables):
+class Comparaison(Base):
 
-        objet = self.value[0](variables)
+    def end__(self, cont):
 
-        try: bool__ = objet['bool__']
-        except (KeyError, AttributeError):
-            raise NotSupported(objet, 'bool__')
-
-        return (True__, False__)[bool__(variables)]
+        self.premier_objet, *self.objets = [
+            element 
+            for element in self.value
+            if element != SigneAction
+        ]
 
 
-class Ega(Base): # Egal
+class Ega(Comparaison): # Egal
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -43,22 +35,14 @@ class Ega(Base): # Egal
 
         return True__
 
-    def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SigneAction]
-
-
-class EgaObj(Base): # Egal
+class EgaObj(Comparaison): # Egal
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -73,22 +57,14 @@ class EgaObj(Base): # Egal
 
         return True__
 
-    def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SigneAction]
-
-
-class Sup(Base): # Supérieur
+class Sup(Comparaison): # Supérieur
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -103,22 +79,14 @@ class Sup(Base): # Supérieur
 
         return True__
 
-    def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SigneAction]
-
-
-class Inf(Base): # Inférieur
+class Inf(Comparaison): # Inférieur
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -133,22 +101,14 @@ class Inf(Base): # Inférieur
 
         return True__
 
-    def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SigneAction]
-
-
-class SupOrEga(Base): # Supérieur ou égal
+class SupOrEga(Comparaison): # Supérieur ou égal
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -163,22 +123,14 @@ class SupOrEga(Base): # Supérieur ou égal
 
         return True__
 
-    def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SigneAction]
-
-
-class InfOrEga(Base): # Inférieur ou égal
+class InfOrEga(Comparaison): # Inférieur ou égal
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -193,22 +145,14 @@ class InfOrEga(Base): # Inférieur ou égal
 
         return True__
 
-    def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SigneAction]
-
-
-class In(Base): # Contient
+class In(Comparaison): # Contient
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -223,22 +167,14 @@ class In(Base): # Contient
 
         return True__
 
-    def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SigneAction]
-
-
-class RemIn(Base): # Contient
+class RemIn(Comparaison): # Contient
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -253,23 +189,14 @@ class RemIn(Base): # Contient
 
         return True__
 
-    def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SigneAction]
-
-
-
-class PopIn(Base): # Contient
+class PopIn(Comparaison): # Contient
 
     def __call__(self, variables):
 
-        e1 = None
+        e1 = self.premier_objet(variables)
 
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+        for e2 in self.objets:
 
             e2 = e2(variables)
 
@@ -284,114 +211,114 @@ class PopIn(Base): # Contient
 
         return True__
 
+
+class ComparaisonBooleenne(Base):
+
     def end__(self, cont):
 
-        self.value = [v for v in self.value if v != SigneAction]
+        self.objets = [
+            element 
+            for element in self.value
+            if element != SigneAction
+        ]
 
 
-class And(Base): # ET
+class Not(ComparaisonBooleenne): # Not
+    
+    def __call__(self, variables):
+
+        objet = self.objets[0](variables)
+
+        try: bool__ = objet['bool__']
+        except (KeyError, AttributeError):
+            raise NotSupported(objet, 'bool__')
+
+        if bool__(variables):
+            return False__
+        else:
+            return True__
+
+
+class And(ComparaisonBooleenne): # ET
 
     def __call__(self, variables):
 
-        e1 = None
+        for e1 in self.objets:
 
-        for e2 in self.value:
+            e1 = e1(variables)
 
-            if e1 is None:
-                e1 = e2(variables)
-                continue
-
-            e2 = e2(variables)
-
-            try:
-                if not e1['and__'](variables, [e2]):
-                    return False__
-
+            try: bool__ = e1['bool__']
             except (KeyError, AttributeError):
-                if not (e1 and e2):
-                    return False__
+                raise NotSupported(e1, 'bool__')
 
-            e1 = e2
+            if not bool__(variables):
+                return False__
 
         return True__
 
 
-class Or(Base): # OU
+class Or(ComparaisonBooleenne): # OU
 
     def __call__(self, variables):
 
-        e1 = None
+        for e1 in self.objets:
 
-        for e2 in self.value:
+            e1 = e1(variables)
 
-            if e1 is None:
-                e1 = e2(variables)
-                continue
-
-            e2 = e2(variables)
-
-            try:
-                if not e1['or__'](variables, [e2]):
-                    return False__
-
+            try: bool__ = e1['bool__']
             except (KeyError, AttributeError):
-                if not (e1 or e2):
-                    return False__
+                raise NotSupported(e1, 'bool__')
 
-            e1 = e2
+            if bool__(variables):
+                return True__
 
-        return True__
-
-
-class XAnd(Base): # XET
-
-    def __call__(self, variables):
-
-        e1 = None
-
-        for e2 in self.value:
-
-            if e1 is None:
-                e1 = e2(variables)
-                continue
-
-            e2 = e2(variables)
-
-            if getattr(e1, 'xand__', None):
-                if not e1.xand__(variables, [e2]):
-                    return False__
-
-            else:
-                if (e1 and e2) or not (e1 or e2):
-                    return False__
-
-            e1 = e2
-
-        return True__
+        return False__
 
 
-class XOr(Base): # XOU
+class XAnd(ComparaisonBooleenne): # XET
 
     def __call__(self, variables):
 
-        e1 = None
+        last_bool = None
 
-        for e2 in self.value:
+        for e1 in self.objets:
 
-            if e1 is None:
-                e1 = e2(variables)
-                continue
+            e1 = e1(variables)
 
-            e2 = e2(variables)
+            try: bool__ = e1['bool__']
+            except (KeyError, AttributeError):
+                raise NotSupported(e1, 'bool__')
 
-            if getattr(e1, 'xor__', None):
-                if not e1.xor__(variables, [e2]):
-                    return False__
+            e1_bool = bool__(variables)
 
-            else:
-                if (e1 or e2) and not (e1 and e2):
-                    return False__
+            if last_bool != e1_bool and last_bool is not None:
+                return False__
 
-            e1 = e2
+            last_bool = e1_bool
 
         return True__
+
+
+class XOr(ComparaisonBooleenne): # XOU
+
+    def __call__(self, variables):
+
+        déjà_true = False
+
+        for e1 in self.objets:
+
+            e1 = e1(variables)
+
+            try: bool__ = e1['bool__']
+            except (KeyError, AttributeError):
+                raise NotSupported(e1, 'bool__')
+
+            if bool__(variables):
+                if déjà_true:
+                    return False__
+                déjà_true = True
+
+        if déjà_true:
+            return True__
+        else:
+            return False__
