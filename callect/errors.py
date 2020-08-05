@@ -58,6 +58,39 @@ class Except(Base):
             raise SyntaxIncorrect(self.ligne__)
 
 
+###
+
+class Error(Exception):
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return self.value
+
+
+class Raise(Base):
+
+    def __call__(self, variables):
+
+        objet = self.value(variables)
+        desc = objet['txt__'](variables)
+
+        Error.__name__ = objet.__class__.__name__
+
+        raise Error(f"{self.ligne__} {objet.__class__.__name__}: {desc}")
+
+    def end__(self, cont):
+
+        if (len(self.value) != 1 
+            or self.value[0].__class__.__name__ not in {
+                'Var', 'RedirecPoint', 'Call'
+            }):
+            raise SyntaxIncorrect(self.ligne__)
+
+        self.value = self.value[0]
+
+
 ### Erreurs
 
 class NotSupported(Exception):
@@ -192,6 +225,7 @@ class LigneTooBig(Exception):
 
 
 ALLExcept = (
+    Error,
     NotSupported,
     NotDefined,
     NotCompatible,
