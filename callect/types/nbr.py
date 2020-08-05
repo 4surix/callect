@@ -228,8 +228,8 @@ class Pos(Base, Nbr):
         
         if self.value.__class__ == int:
             for i, e in zip(
-                    [Neg(value) for value in range(-1, -self.value-1, -1)], 
-                    [Pos(value) for value in range(1, self.value+1)]
+                    (Neg(value) for value in range(-1, -self.value - 1, -1)), 
+                    (Pos(value) for value in range(1, self.value + 1))
                 ):
                 yield i, e
 
@@ -259,7 +259,11 @@ class Pos(Base, Nbr):
 
         else:
             self = args[0]
-            self.value += args[2][0].value if args[2] else 1
+            self.value += (
+                args[2][0].value
+                if args[2] and args[2][0].__class__ == Pos
+                else 1
+            )
             return self
 
     def end__(self, cont):
@@ -285,8 +289,8 @@ class Neg(Base, Nbr):
 
         if self.value.__class__ == int:
             for i, e in zip(
-                    [Pos(value) for value in range(1, self.value*-1 + 1)], 
-                    [Neg(value) for value in range(-1, self.value-1, -1)]
+                    (Pos(value) for value in range(1, self.value*-1 + 1)), 
+                    (Neg(value) for value in range(-1, self.value-1, -1))
                 ):
                 yield i, e
 
@@ -316,7 +320,11 @@ class Neg(Base, Nbr):
 
         else:
             self = args[0]
-            self.value -= args[2][0].value if args[2] else 1
+            self.value += (
+                args[2][0].value 
+                if args[2] and args[2][0].__class__ == Neg
+                else -1
+            )
             return self
 
     def end__(self, cont):
