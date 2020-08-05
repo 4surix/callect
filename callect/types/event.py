@@ -110,12 +110,18 @@ class Event(Base):
 
         self.vars = vars__ = []
 
-        types = (Ega, Sup, Inf, SupOrEga, InfOrEga, Not, And, Or, XAnd, XOr, In, Intervalle, Prio)
+        if self.type != 'changevars':
+            return
+
+        types = (
+            Ega, Sup, Inf, SupOrEga, InfOrEga, Not, 
+            And, Or, XAnd, XOr, In
+        )
 
 
         def recolte(elements):
 
-            for element in elements:
+            for i, element in enumerate(elements):
 
                 type_element = element.__class__
 
@@ -124,33 +130,33 @@ class Event(Base):
                     recolte(element.dict__.keys())
                     recolte(element.dict__.values())
 
-                elif type_element == Var:
+                elif (type_element == Var
+                or    type_element == RedirecPoint):
                     vars__.append(element.value)
 
-                elif type_element == RedirecPoint:
-                    vars__.append(element.value)
+                elif type_element == Prio:
+                    recolte(element.value)
 
                 elif type_element in types:
-                    recolte(element.value)
+                    recolte([element.first] + element.value)
+
+                elif type_element == Hidden:
+                    elements[i] = element.objet
 
 
         element = self.conditions
 
         type_element = element.__class__
 
-        if type_element == Table:
-            recolte(element.list__)
-            recolte(element.dict__.keys())
-            recolte(element.dict__.values())
-
-        elif type_element == Var:
-            vars__.append(element.value)
-
-        elif type_element == RedirecPoint:
+        if (type_element == Var
+        or  type_element == RedirecPoint):
             vars__.append(element.value)
 
         elif type_element in types:
             recolte(element.value)
+
+        else:
+            raise SyntaxIncorrect(self.ligne__)
 
 
 class Hidden(Base):
