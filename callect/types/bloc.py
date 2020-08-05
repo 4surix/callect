@@ -8,8 +8,27 @@ class Bloc(Base):
 
         value = False__
 
-        for element in self.value:
-            value = element(variables)
+        while True:
+
+            try:
+                for element in self.value:
+                    value = element(variables)
+
+                return value
+
+            except Up:
+                # [  ...
+                #    up 1
+                #    ...
+                # ]
+                continue
+
+            except Down:
+                # [  ...
+                #    down 1
+                #    ...
+                # ]
+                break
 
         return value
 
@@ -28,3 +47,39 @@ class Bloc(Base):
                     objet = value
             else:
                 objet = None
+
+
+class Up(Base, Exception):
+
+    def __call__(self, variables):
+
+        if self.condition(variables):
+            raise self
+
+        return False__
+
+    def end__(self, cont):
+
+        if len(self.value) == 1:
+            self.condition = self.value[0]
+
+        else:
+            raise SyntaxIncorrect(self.ligne__)
+
+
+class Down(Base, Exception):
+
+    def __call__(self, variables):
+
+        if self.condition(variables):
+            raise self
+
+        return False__
+
+    def end__(self, cont):
+
+        if len(self.value) == 1:
+            self.condition = self.value[0]
+
+        else:
+            raise SyntaxIncorrect(self.ligne__)
