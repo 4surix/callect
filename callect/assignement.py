@@ -84,6 +84,19 @@ class Global(Base):
         if type_name not in ['Var', 'Typ', 'Hidden']:
             raise NotCompatible(self, self.objet, self.ligne__)
 
+class Local(Base):
+
+    def __call__(self, variables):
+
+        return self.objet(variables, is_local=True)
+
+    def end__(self, cont):
+
+        self.objet = self.value[0]
+
+        if self.objet.__class__.__name__ not in ['Var']:
+            raise SyntaxIncorrect(self.ligne__)
+
 
 class IsExist(Base): # Verification existe
 
