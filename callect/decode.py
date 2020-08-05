@@ -1,21 +1,16 @@
 import os
 
-
 from .base import Return, Commentaire, Prio, SigneAction
-
-from .conditions import Not, Inf, Sup, InfOrEga, SupOrEga, Ega, EgaObj, In, RemIn, PopIn, And, Or, XAnd, XOr
-
 from .operations import Rac, Exp, Mul, Div, Mod, Sub, Add
-
-from .assignement import Asi, Typ, Global, IsExist
-
-from .boucle import For, IFor, While, Repeat, Break
-
+from .assignement import Asi, Typ, Global, Local, IsExist, Del
+from .boucle import For, IFor, While, Repeat, Break, Continue
 from .redirec import RedirecItem, RedirecPoint
-
-from .errors import Try, Except, LigneTooBig
-
-from .types.bloc import Bloc
+from .errors import Try, Except, Raise
+from .conditions import (
+    Not, Inf, Sup, InfOrEga, SupOrEga, Ega, EgaObj, In, RemIn, PopIn,
+    And, Or, XAnd, XOr
+)
+from .types.bloc import Bloc, Up, Down
 from .types.bool import True__, False__
 from .types.call import Call, Attachement
 from .types.event import Event, Hidden
@@ -170,11 +165,35 @@ def end_objet(cont, objet):
     elif value == 'break':
         cont.value.push__(Break())
 
+    elif value == 'continue':
+        cont.value.push__(Continue())
+
+
+    ### Déplacement
+
+    elif value == 'up':
+        # [up]
+        objet, cont = cont.action(None, Up, get_last=False) 
+        cont.value.liée = True
+
+    elif value == 'down':
+        # [down]
+        objet, cont = cont.action(None, Down, get_last=False) 
+        cont.value.liée = True
+
 
     ### Var
 
+    elif value == 'del':
+        objet, cont = cont.action(None, Del, get_last=False)    
+        cont.value.liée = True
+
     elif value == 'hide':
         objet, cont = cont.action(None, Hidden, get_last=False)    
+        cont.value.liée = True
+
+    elif value == 'local':
+        objet, cont = cont.action(None, Local, get_last=False)    
         cont.value.liée = True
 
     elif value == 'global':
@@ -203,6 +222,10 @@ def end_objet(cont, objet):
 
 
     ### Essaies
+
+    elif value == 'raise':
+        objet, cont = cont.action(None, Raise, get_last=False)
+        cont.value.liée = True
 
     elif value == 'try':
         objet, cont = cont.action(None, Try, get_last=False)    
@@ -244,7 +267,7 @@ def decode(data, path_file):
     objet = None
 
 
-    acts_var = (Asi, Hidden, Global, Return, IsExist)
+    acts_var = (Asi, Hidden, Global, Local, Return, IsExist, Del, Raise, Up, Down)
 
     acts_redirec = (RedirecItem, RedirecPoint, Intervalle, Typ, Attachement)
 
