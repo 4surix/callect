@@ -3,7 +3,6 @@ __version__ = "1.0.0-pre5"
 
 
 import traceback
-import time
 import sys
 
 
@@ -17,57 +16,25 @@ from .built_in import fonctions_intégrées
 fonctions_intégrées['version__'] = types.txt.mk_txt(__version__)
 
 
-def calcul_time(func):
-    
-    temps = []
-
-    for _ in range(30):
-        start_time = time.time()
-
-        func()
-
-        temps.append(time.time() - start_time)
-
-    value = 0
-    for t in temps:
-        value += t
-
-    return value/len(temps)
-
-
-def run(data, path_file, path_exe=None, *, time=False):
-
-    msg_exception = None
+def run(data, path_file, path_exe=None):
 
     try:
         data = decode(data, path_file)
 
         try:
+            variables = Info(
+                [fonctions_intégrées], {}, [], [], path_file, path_exe
+            ).add({})
 
-            if time:
+            threads = events.run(variables)
+        
+            value = data(variables)
 
-                def run():
-                    variables = Info([fonctions_intégrées], {}, [], [], path_file, path_exe).add({})
+            for thread in threads:
+                # On termine le thread
+                thread.running = False
 
-                    threads = events.run(variables)
-
-                    data(variables)
-
-                    for thread in threads:
-                        thread.running = False
-
-                print(calcul_time(run))
-
-            else:
-                variables = Info([fonctions_intégrées], {}, [], [], path_file, path_exe).add({})
-
-                threads = events.run(variables)
-
-                data(variables)
-
-                for thread in threads:
-                    # On termine le thread
-                    thread.running = False
+            return value
 
         except ALLExcept as e:
             msg_exception = (
@@ -93,14 +60,14 @@ def run(data, path_file, path_exe=None, *, time=False):
             + "\n\n\nPress Entrée to exit.\n"
         )
 
-        try: input(msg_exception)
-        except KeyboardInterrupt:
-            # CTRL + C
-            print("KeyboardInterrupt")
-            sys.exit()
-        except EOFError:
-            # CTRL + D
-            sys.exit()
+    try: input(msg_exception)
+    except KeyboardInterrupt:
+        # CTRL + C
+        print("KeyboardInterrupt")
+        sys.exit()
+    except EOFError:
+        # CTRL + D
+        sys.exit()
 
 
 class Info:
