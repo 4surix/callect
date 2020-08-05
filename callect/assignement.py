@@ -110,3 +110,22 @@ class IsExist(Base): # Verification existe
         for value in self.value:
             if value.__class__.__name__ not in types_valables:
                 raise NotCompatible(self, value, self.ligne__)
+
+
+class Del(Base):
+
+    def __call__(self, variables):
+
+        for variables in variables.variables[:-1]:
+            value = variables.get(self.value.value)
+            if value:
+                del variables[self.value.value]
+                return
+
+    def end__(self, cont):
+
+        if (len(self.value) != 1 
+        or  self.value[0].__class__.__name__ != 'Var'):
+            raise SyntaxIncorrect(self.ligne__)
+
+        self.value = self.value[0]
