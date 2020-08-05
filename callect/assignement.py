@@ -1,6 +1,6 @@
 
 from .base import Base, SigneAction
-from .errors import AllNonexistent, NotCompatible
+from .errors import AllNonexistent, NotDefined, NotItem, SyntaxIncorrect
 
 
 class Typ(Base): # Type var
@@ -112,9 +112,8 @@ class IsExist(Base): # Verification existe
     def __call__(self, variables):
 
         for value in self.value:
-            try:
-                return value(variables)
-            except:
+            try: return value(variables)
+            except (NotDefined, NotItem):
                 pass
 
         raise AllNonexistent(self, self.ligne__)
