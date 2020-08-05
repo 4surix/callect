@@ -14,8 +14,12 @@ class For(Base):
 
         try:
             for _, element in self.conteneur(variables):
+
                 self.var(variables, setvar=element)
-                self.bloc(variables)
+
+                try: self.bloc(variables)
+                except ContinueIteration:
+                    pass
 
         except StopIteration:
             pass
@@ -42,7 +46,9 @@ class Repeat(Base):
 
         try:
             for _ in value:
-                self.bloc(variables)
+                try: self.bloc(variables)
+                except ContinueIteration:
+                    pass
                 
         except StopIteration:
             pass
@@ -66,9 +72,13 @@ class IFor(Base):
 
         try:
             for index, element in self.conteneur(variables):
+
                 self.index(variables, setvar=index)
                 self.var(variables, setvar=element)
-                self.bloc(variables)
+
+                try: self.bloc(variables)
+                except ContinueIteration:
+                    pass
 
         except StopIteration:
             pass
@@ -90,7 +100,9 @@ class While(Base):
 
         try:
             while self.conditions(variables):
-                self.bloc(variables)
+                try: self.bloc(variables)
+                except ContinueIteration:
+                    pass
 
         except StopIteration:
             pass
@@ -108,4 +120,15 @@ class Break(Base):
 
     def __call__(self, variables):
 
-        raise StopIteration('') 
+        raise StopIteration()
+
+
+class Continue(Base):
+
+    def __call__(self, variables):
+
+        raise ContinueIteration()
+
+
+class ContinueIteration(Exception):
+    pass
