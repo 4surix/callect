@@ -1,11 +1,10 @@
 from ..base import Base, Prio
-
-from ..conditions import Ega, Sup, Inf, SupOrEga, InfOrEga, Not, And, Or, XAnd, XOr, In
-
+from ..conditions import (
+    Ega, Sup, Inf, SupOrEga, InfOrEga, Not, 
+    And, Or, XAnd, XOr, In
+)
 from ..redirec import RedirecPoint, RedirecItem
-
 from ..errors import SyntaxIncorrect, NotCompatible
-
 from .var import Var
 from .intervalle import Intervalle
 from .table import Table
@@ -158,9 +157,13 @@ class Hidden(Base):
 
     def __call__(self, variables, setvar=None, is_global=False):
 
-        return self.objet(variables, setvar=setvar, is_global=is_global, hidden=True)
+        return self.objet(
+            variables, 
+            setvar=setvar, is_global=is_global, hidden=True
+        )
 
     def end__(self, cont):
+
         self.objet = self.value[0]
 
         type_name = self.objet.__class__.__name__

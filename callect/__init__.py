@@ -70,19 +70,28 @@ def run(data, path_file, path_exe=None, *, time=False):
                     thread.running = False
 
         except ALLExcept as e:
-            msg_exception = "Exception run:\n\n%s\n\n\nPress Entrée to exit.\n" % e
+            msg_exception = (
+                f"Exception run:\n\n{e}\n\n\nPress Entrée to exit.\n"
+            )
 
         except Exception as e:
-            msg_exception = 'Exception run Python:\n\n' + traceback.format_exc() + "\n\n\nPress Entrée to exit.\n"
+            msg_exception = (
+                'Exception run Python:\n\n'
+                + traceback.format_exc()
+                + "\n\n\nPress Entrée to exit.\n"
+            )
 
-    except ALLExcept as e: 
-        msg_exception = "Exception decode:\n\n%s\n\n\nPress Entrée to exit.\n" % e
+    except ALLExcept as e:
+        msg_exception = (
+            f"Exception decode:\n\n{e}\n\n\nPress Entrée to exit.\n"
+        )
 
     except Exception as e:
-        msg_exception = 'Exception decode Python:\n\n' + traceback.format_exc() + "\n\n\nPress Entrée to exit.\n"
-
-
-    if msg_exception:
+        msg_exception = (
+            'Exception decode Python:\n\n' 
+            + traceback.format_exc() 
+            + "\n\n\nPress Entrée to exit.\n"
+        )
 
         try: input(msg_exception)
         except KeyboardInterrupt:

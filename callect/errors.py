@@ -99,7 +99,10 @@ class NotSupported(Exception):
 
     def __init__(self, value, methode):
 
-        self.value = "%s NotSupported: Type '%s' not have '%s' methode." % (value.ligne__, value.__class__.__name__, methode)
+        self.value = (
+            "%s NotSupported: Type '%s' not have '%s' methode." 
+            % (value.ligne__, value.__class__.__name__, methode)
+        )
 
     def __str__(self):
 
@@ -109,7 +112,7 @@ class NotDefined(Exception):
 
     def __init__(self, value, ligne):
 
-        self.value = "%s NotDefined: '%s' is not defined." % (ligne, value)
+        self.value = f"{ligne} NotDefined: '{value}' is not defined."
 
     def __str__(self):
 
@@ -119,7 +122,10 @@ class NotCompatible(Exception):
 
     def __init__(self, obj1, obj2, ligne):
 
-        self.value = "%s NotCompatible: Type '%s' is not compatible with type '%s'." % (ligne, obj1.__class__.__name__, obj2.__class__.__name__)
+        self.value = (
+            "%s NotCompatible: Type '%s' is not compatible with type '%s'." 
+            % (ligne, obj1.__class__.__name__, obj2.__class__.__name__)
+        )
 
     def __str__(self):
 
@@ -129,7 +135,7 @@ class AllNonexistent(Exception):
 
     def __init__(self, obj, ligne):
 
-        self.value = "%s AllNonexistent: All verification is nonexistent." % (ligne)
+        self.value = f"{ligne} AllNonexistent: All verification is nonexistent."
 
     def __str__(self):
 
@@ -139,7 +145,10 @@ class NotItem(Exception):
 
     def __init__(self, obj, item, ligne):
 
-        self.value = "%s NotItem: Objet '%s' not have item '%s'." % (ligne, obj.__class__.__name__, item)
+        self.value = (
+            "%s NotItem: Objet '%s' not have item '%s'." 
+            % (ligne, obj.__class__.__name__, item)
+        )
 
     def __str__(self):
 
@@ -149,7 +158,10 @@ class NotIndex(Exception):
 
     def __init__(self, obj, index, ligne):
 
-        self.value = "%s NotIndex: Objet '%s' not have index '%s'." % (ligne, obj.__class__.__name__, index)
+        self.value = (
+            "%s NotIndex: Objet '%s' not have index '%s'." 
+            % (ligne, obj.__class__.__name__, index)
+        )
 
     def __str__(self):
 
@@ -159,7 +171,10 @@ class NotValue(Exception):
 
     def __init__(self, obj, value, ligne):
 
-        self.value = "%s NotValue: Objet '%s' not have value '%s'." % (ligne, obj.__class__.__name__, value)
+        self.value = (
+            "%s NotValue: Objet '%s' not have value '%s'." 
+            % (ligne, obj.__class__.__name__, value)
+        )
 
     def __str__(self):
 
@@ -169,7 +184,10 @@ class ConvertionImpossible(Exception):
 
     def __init__(self, obj, conv, ligne):
 
-        self.value = "%s ConvertionImpossible: Type '%s' can not be convert to type '%s'." % (ligne, obj.__class__.__name__, conv.__name__)
+        self.value = (
+            "%s ConvertionImpossible: Type '%s' can not be convert to type '%s'." 
+            % (ligne, obj.__class__.__name__, conv.__name__)
+        )
 
     def __str__(self):
 
@@ -179,7 +197,7 @@ class ModuleNotFound(Exception):
 
     def __init__(self, fichier, ligne=''):
 
-        self.value = "%s ModuleNotFound: Module '%s' not found." % (ligne, fichier)
+        self.value = f"{ligne} ModuleNotFound: Module '{fichier}' not found."
 
     def __str__(self):
 
@@ -189,7 +207,7 @@ class FileNotFound(Exception):
 
     def __init__(self, fichier, ligne=''):
 
-        self.value = "%s FileNotFound: File '%s' not found." % (ligne, fichier)
+        self.value = f"{ligne} FileNotFound: File '{fichier}' not found." 
 
     def __str__(self):
 
@@ -199,7 +217,7 @@ class ValueIncorrect(Exception):
 
     def __init__(self, fichier, ligne=''):
 
-        self.value = "%s ValueIncorrect: Value '%s' is incorrect." % (ligne, fichier)
+        self.value = f"{ligne} ValueIncorrect: Value '{fichier}' is incorrect."
 
     def __str__(self):
 
@@ -209,7 +227,7 @@ class SyntaxIncorrect(Exception):
 
     def __init__(self, ligne=''):
 
-        self.value = "%s SyntaxIncorrect: Syntax incorrect." % (ligne)
+        self.value = f"{ligne} SyntaxIncorrect: Syntax incorrect."
 
     def __str__(self):
 
@@ -219,7 +237,7 @@ class LigneTooBig(Exception):
 
     def __init__(self, ligne=''):
 
-        self.value = "%s LigneTooBig: len ligne > 79." % (ligne)
+        self.value = f"{ligne} LigneTooBig: len ligne > 79."
 
     def __str__(self):
 

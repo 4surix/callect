@@ -1,6 +1,8 @@
 
 from ..base import Base, SigneAction, fonction_py_to_cl, methode_py_to_cl
-from ..errors import NotItem, NotIndex, NotValue, ConvertionImpossible, NotCompatible
+from ..errors import (
+    NotItem, NotIndex, NotValue, ConvertionImpossible, NotCompatible
+)
 from ..assignement import Asi
 
 from .nbr import Pos, Neg, Nul, mk_nbr
@@ -24,7 +26,9 @@ def mk_table(obj=None, variables=None, *, _list=None, _dict=None):
 
         if obj is not None:
 
-            if obj.__class__.__name__ not in ('Pos', 'Neg', 'Txt', 'Table', 'Intervalle'):
+            if obj.__class__.__name__ not in (
+                    'Pos', 'Neg', 'Txt', 'Table', 'Intervalle'
+                ):
                 raise ConvertionImpossible(obj, Table, obj.ligne__)
 
 
@@ -79,7 +83,13 @@ class Table(Base):
     def __str__(self):
 
         return '{%s}' % ', '.join(
-            [repr(e) for e in self.list__] + ['%s=%s' % (repr(k),repr(v)) for k,v in self.dict__.items()]
+            [
+                repr(e) 
+                for e in self.list__
+            ] + [
+                '%s=%s' % (repr(k), repr(v)) 
+                for k,v in self.dict__.items()
+            ]
         )
 
     def __repr__(self):
@@ -95,7 +105,9 @@ class Table(Base):
             return self.list__[item.value]
 
         if item.__class__.__name__ == 'Intervalle':
-            return mk_table(_list=self.list__[slice(item.debut, item.fin, item.step)])
+            return mk_table(
+                _list=self.list__[slice(item.debut, item.fin, item.step)]
+            )
 
         value = self.dict__.get(item)
         if value is not None:
@@ -355,7 +367,12 @@ class Table(Base):
 
     def indexs(self):
 
-        return mk_table(_list=[*[mk_nbr(v) for v in range(1, self.next_index_list)], *self.dict__])
+        return mk_table(
+            _list=[
+                *[mk_nbr(v) for v in range(1, self.next_index_list)],
+                *self.dict__
+            ]
+        )
 
     def values(self):
 

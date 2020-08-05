@@ -60,19 +60,36 @@ class Txt(Base):
 
     def join(self, obj):
 
-        txt = mk_txt(self.value.join(mk_txt(v, return_str=True) for index, v in obj))
+        txt = mk_txt(
+            self.value.join(
+                mk_txt(v, return_str=True) 
+                for index, v in obj
+            )
+        )
         txt.ligne__ = obj.ligne__
         return txt
 
     def split(self, obj):
 
-        table = mk_table(_list=[mk_txt(v) for v in self.value.split(mk_txt(obj, return_str=True))])
+        table = mk_table(
+            _list=[
+                mk_txt(v) 
+                for v in self.value.split(
+                    mk_txt(obj, return_str=True)
+                )
+            ]
+        )
         table.ligne__ = obj.ligne__
         return table
 
     def replace(self, obj_1, obj_2):
 
-        txt = mk_txt(self.value.replace(mk_txt(obj_1, return_str=True), mk_txt(obj_2, return_str=True)))
+        txt = mk_txt(
+            self.value.replace(
+                mk_txt(obj_1, return_str=True), 
+                mk_txt(obj_2, return_str=True)
+            )
+        )
         txt.ligne__ = obj_1.ligne__
         return txt
 

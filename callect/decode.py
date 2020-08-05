@@ -397,7 +397,10 @@ def decode(data, path_file):
 
             cont, objet = end_objet(cont, objet)
 
-            cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
+            cont = cont.mise_a_niveau(
+                acts_redirec + acts_var + acts_condition 
+                + acts_calcul + acts_condition_niv_sup
+            )
 
             objet = Txt()
             objet._symb = carac
@@ -452,7 +455,10 @@ def decode(data, path_file):
 
             cont, objet = end_objet(cont, objet)
 
-            while isinstance(cont.value, acts_calcul + (RedirecPoint, Typ, Attachement)):
+            while isinstance(
+                    cont.value, 
+                    acts_calcul + (RedirecPoint, Typ, Attachement)
+                ):
                 cont = cont.rem__()
 
             cont = action(cont, Intervalle)
@@ -471,7 +477,9 @@ def decode(data, path_file):
 
             if not isinstance(cont.value.last__(), (RedirecPoint, RedirecItem, Var, Nul, Pos, Neg, Txt, Call, Prio)):
 
-                cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
+                cont = cont.mise_a_niveau(
+                    acts_redirec + acts_var + acts_condition + acts_calcul + acts_condition_niv_sup
+                )
 
                 nul = Nul(0)
                 nul.ligne__ = str(cont.ligne)
@@ -486,7 +494,9 @@ def decode(data, path_file):
 
             if not isinstance(cont.value.last__(), (RedirecPoint, RedirecItem, Var, Nul, Pos, Neg, Txt, Call, Prio)):
 
-                cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
+                cont = cont.mise_a_niveau(
+                    acts_redirec + acts_var + acts_condition + acts_calcul + acts_condition_niv_sup
+                )
 
                 nul = Nul(0)
                 nul.ligne__ = str(cont.ligne)
@@ -525,6 +535,11 @@ def decode(data, path_file):
         elif carac == '!':
             # !1 == 0
             # !!1 == 1
+
+            cont = cont.mise_a_niveau(
+                acts_redirec + acts_var + acts_condition 
+                + acts_calcul + acts_condition_niv_sup
+            )
 
             objet, cont = cont.action(objet, Not, get_last=False, prio=True)    
 
@@ -627,7 +642,9 @@ def decode(data, path_file):
         elif carac == '=':
             # pouet = 1
 
-            objet, cont = cont.action(objet, Asi, (Hidden, Global, Return, Typ) + acts_redirec)
+            objet, cont = cont.action(
+                objet, Asi, (Hidden, Global, Return, Typ) + acts_redirec
+            )
 
             cont.value.push__(SigneAction)
 
@@ -662,7 +679,13 @@ def decode(data, path_file):
 
         elif carac == '[':
 
-            objet, cont = cont.action(objet, Bloc, acts_condition_niv_sup + acts_calcul + acts_condition + acts_redirec, get_last=False, prio=True)
+            objet, cont = cont.action(
+                objet, 
+                Bloc, 
+                acts_condition_niv_sup + acts_calcul + acts_condition 
+                + acts_redirec + acts_var, 
+                get_last=False, prio=True
+            )
 
         elif carac == ']':
 
@@ -708,7 +731,10 @@ def decode(data, path_file):
                 objet, cont = cont.action(objet, Call, (RedirecPoint,))
 
             else:
-                cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_calcul)
+                cont = cont.mise_a_niveau(
+                    acts_redirec + acts_var + acts_calcul 
+                    + acts_condition + acts_condition_niv_sup
+                )
 
             objet, cont = cont.action(objet, Table, get_last=False, prio=True)
 
@@ -731,7 +757,10 @@ def decode(data, path_file):
         elif carac == '@':
             # @'pouet' {a, b}[return a + b]
 
-            cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
+            cont = cont.mise_a_niveau(
+                acts_redirec + acts_var + acts_condition
+                + acts_calcul + acts_condition_niv_sup
+            )
 
             cont, objet = end_objet(cont, objet)
 
@@ -774,7 +803,10 @@ def decode(data, path_file):
 
         else:
 
-            cont = cont.mise_a_niveau(acts_redirec + acts_var + acts_condition + acts_calcul)
+            cont = cont.mise_a_niveau(
+                acts_redirec + acts_var + acts_condition 
+                + acts_calcul + acts_condition_niv_sup
+            )
 
             if carac == '0' and data[icarac+1] != '.':
                 # 0

@@ -1,5 +1,4 @@
 from .base import Base
-
 from .errors import NotCompatible
 
 from .types.txt import mk_txt
@@ -27,7 +26,8 @@ class RedirecItem(Base):
 
         else:
             value = value[item]
-            if value.__class__ == CallObjetWithParent and value.value.callable_without_call:
+            if (value.__class__ == CallObjetWithParent 
+            and value.value.callable_without_call):
                 value = value(variables, [], {})
 
 
@@ -64,7 +64,8 @@ class RedirecPoint(Base):
 
         else:
             value = value[self.item]
-            if value.__class__ == CallObjetWithParent and value.value.callable_without_call:
+            if (value.__class__ == CallObjetWithParent 
+            and value.value.callable_without_call):
                 value = value(variables, [], {})
 
 
