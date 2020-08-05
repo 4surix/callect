@@ -26,13 +26,6 @@ class InsCond(Base):
                 """
                 insconds = []
 
-            elif inscond.__class__.__name__ == 'Try':
-                """
-                try 1 + 1
-                else []
-                """
-                raise SyntaxIncorrect(self.ligne__)
-
             elif inscond.__class__.__name__ == 'Except':
                 """
                 try 1 + 1
@@ -41,12 +34,20 @@ class InsCond(Base):
                 """
                 insconds = [(inscond, lambda vars: None)]
 
-            else:
+            elif inscond.__class__.__name__ == 'InsCond':
                 """
                 elif 1 []
                 else []
                 """
                 insconds = inscond.insconds
+
+            else:
+                """
+                Autre nom compatible comme par exemple :
+                try 1 + 1
+                else []
+                """
+                raise SyntaxIncorrect(self.ligne__)
 
             self.insconds = insconds + [(condition, bloc)]
 
