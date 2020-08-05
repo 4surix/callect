@@ -403,11 +403,13 @@ class Table(Base):
 
                     if key.__class__ == Pos:
 
-                        if key.value <= len(self.list__):
+                        if key.value < self.next_index_list:
+                            self.next_index_list += 1
                             self.list__[key.value-1] = value
                             continue
 
-                        elif key.value == len(self.list__) + 1:
+                        elif key.value == self.next_index_list:
+                            self.next_index_list += 1
                             self.list__.append(value)
                             continue
                     
