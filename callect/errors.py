@@ -16,17 +16,19 @@ class Except(Base):
 
         try: self.essaie(variables)
         except Exception as erreur:
-            name_erreur = erreur.__class__.__name__
 
             for except_ in self.excepts:
-                if not except_.erreur or str(except_.erreur) == name_erreur:
+
+                if (not except_.erreur
+                or except_.erreur(variables).__name__ 
+                   == erreur.__class__.__name__):
                     except_.bloc(variables)
-                    break
+                    return True
+
+            raise erreur
 
         else:
             return False
-
-        return True
 
     def push__(self, obj):
 
