@@ -7,7 +7,7 @@ import time
 
 
 from .decode import decode
-from .errors import FileNotFound, NotCompatible, ValueIncorrect
+from .errors import FileNotFound, NotCompatible, ValueIncorrect, ALLExcept
 from .importation import import_
 from .base import fonction_py_to_cl, methode_py_to_cl
 
@@ -19,6 +19,14 @@ from .types.bool import True__, False__
 
 
 ### Fonction built-in
+
+
+@fonction_py_to_cl
+def vars_():
+    return mk_table(_list=[
+    	mk_table(_dict=variables)
+    	for variables in vars_.variables.variables[:-1]
+    ])
 
 
 ## Récupérer le type d'un objet
@@ -451,7 +459,14 @@ fonctions_intégrées = {
     'neg': Neg,
     'nul': Nul,
     'txt': Txt,
-    'tbl': Table
+    'tbl': Table,
+
+    'vars': vars_,
+
+    **{
+        exception.__name__: exception
+        for exception in ALLExcept
+    }
 }
 
 
