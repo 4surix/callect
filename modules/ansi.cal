@@ -1,3 +1,7 @@
+// Callect v1.0.0-pre6
+   ---------------------------------------------------------------------------
+//
+
 reset_all = "\e[0m"
 
 TEXT = {
@@ -71,7 +75,6 @@ BG = {
 CURSOR = {
 
 'move'     = @{x, y}[return "\e[" + y:txt + ";" + x:txt + "H"]
-// 'position' = "\e[y;xf" //
 'up'       = @{n}[return "\e[" + n:txt + "A"]
 'down'     = @{n}[return "\e[" + n:txt + "B"]
 'forward'  = @{n}[return "\e[" + n:txt + "C"]
@@ -87,7 +90,7 @@ CLEAR = {
 	mode == 0, effacez du curseur jusqu'à la fin de l'écran
 	mode == 1, effacez du curseur au début de l'écran
 	mode == 2, effacez tout l'écran (et déplace le curseur en haut à gauche)
-	mode == 3, effacez tout l'écra
+	mode == 3, effacez tout l'écran
 	           et supprimez toutes les lignes enregistrées
 	           dans le tampon de défilement
 //
