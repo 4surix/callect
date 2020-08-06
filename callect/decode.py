@@ -782,6 +782,12 @@ def decode(data, path_file):
 
         elif carac == ',':
             # pomme, poire, pouf
+            cont, objet = end_objet(cont, objet)
+
+            cont = cont.mise_a_niveau(
+                acts_redirec + acts_var + acts_condition 
+                + acts_calcul + acts_condition_niv_sup
+            )
 
             # Pour éviter les cas comme `{pomme, {1, 2, 3}}`
             cont.value.push__(SigneAction)
