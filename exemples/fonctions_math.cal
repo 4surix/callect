@@ -1,5 +1,6 @@
-//
-	Exemple d'import et d'utilisation des élément importés
+// Callect v1.0.0-pre6
+   ---------------------------------------------------------------------------
+   Exemple des fonctions du module math.
 //
 
 math = import{'math'}

@@ -1,5 +1,6 @@
-//
-	Exemple de ce qu'on peut faire avec la gestion de fichier
+// Callect v1.0.0-pre6
+   ---------------------------------------------------------------------------
+   Exemple de ce qu'on peut faire avec la gestion de fichier
 //
 
 try fichier = open{'cuik.txt', 'write'}

@@ -1,5 +1,6 @@
-//
-	Base du langage
+// Callect v1.0.0-pre6
+   ---------------------------------------------------------------------------
+   Base du langage.
 //
 
 pouet = 10
@@ -16,12 +17,12 @@ pouf = pouet V 1
 piaf = pouet + 2 - 7 * 6 / 8 % 4 ^ 7 V 2
 
 piaf = pouet 
-       + 2 
-       - 7 
-       * 6 
-       / 8 
-       % 4 
-       ^ 7 
+       + 2
+       - 7
+       * 6
+       / 8
+       % 4
+       ^ 7
        V 2
 
 
@@ -30,32 +31,32 @@ cuik = "wouf"
        + "coinc"
 
 if cuik == "woufmiaoucoinc" [
-	print{"oui"}
+    print{"oui"}
 ]
 
 
 fruits = {'fraise', 'cassis', 'abricot'}
 
 for fruit in fruits [
-	print{fruit}
+    print{fruit}
 ]
 
 
 hiboux = {
-	'canard' = {
-		'cuicui' = {
-			'fiou' = 345
-		}
-	}
+    'canard' = {
+        'cuicui' = {
+            'fiou' = 345
+        }
+    }
 }
 
 
 zip = hiboux # 'canard' # 'cuicui' # 'fiou'
 
 zip = hiboux
-	  # 'canard'
-	  # 'cuicui'
-	  # 'fiou'
+      # 'canard'
+      # 'cuicui'
+      # 'fiou'
 
 zip == 345
 
@@ -63,26 +64,26 @@ zip == 345
 zip = hiboux.canard.cuicui.fiou
 
 zip = hiboux
-	  .canard
-	  .cuicui
-	  .fiou
+      .canard
+      .cuicui
+      .fiou
 
 zip == 345
 
 
 zoup = {
-	'poire' = 'verte',
-	'pomme' = 'cerise' = 'fraise' = 'rouge',
-	123 = 'arbre'
+    'poire' = 'verte',
+    'pomme' = 'cerise' = 'fraise' = 'rouge',
+    123 = 'arbre'
 }
 
 if zoup # 'pomme' == zoup.cerise == 'rouge' [
-	print{zoup # 123}
+    print{zoup # 123}
 ]
 
 
 @'patatie' {floup:pos} [
-	return floup + 1
+    return floup + 1
 ]
 
 patatie{'1'} == 2

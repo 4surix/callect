@@ -1,0 +1,41 @@
+// Callect v1.0.0-pre6
+   ---------------------------------------------------------------------------
+   Pierre, Feuille, Ciseaux
+//
+
+ansi = import{'ansi'}
+
+print.end__ = printANSI.end__ = '\n\n'
+
+printANSI{
+    ansi.FG.green + "Jouons à Pierre, Feuille, Ciseaux !" + ansi.FG.reset
+}
+
+choix = {"pierre", "feuille", "ciseaux"}
+
+while 1 [
+    choix_user = input{"Choisissez entre Pierre, Feuille et Ciseaux: "}.lower{}
+    choix_ordi = choix # random{1, len{choix}}
+
+    print{"Vous choisissez", choix_user, "et l'ordinateur choisit", choix_ordi}
+
+    if !(choix_user in choix) [
+        print{"Le choix '" + choix_user + "' n'existe pas !"}
+    ]
+    elif choix_user == choix_ordi [
+        print{"Egalité !"}
+    ]
+    elif (choix_ordi == "pierre" & choix_user == "feuille")  
+       | (choix_ordi == "feuille" & choix_user == "ciseaux") 
+       | (choix_ordi == "ciseaux" & choix_user == "pierre") [
+        print{"Gagné !"}
+    ]
+    else [
+        print{"Perdu !"}
+    ]
+
+    if input{"Voulez-vous rejouer ? (non/oui) : "} == "non" [
+        input{"A la prochaine !"}
+        break
+    ]
+]

@@ -1,3 +1,7 @@
+// Callect v1.0.0-pre6
+   ---------------------------------------------------------------------------
+   Démineur.
+//
 
 ANSI = import{'ansi'}
 
@@ -17,10 +21,10 @@ BORD_DROITE = BORD_GAUCHE + LONGUEUR + 1
 
 @'MAZ' {} [
     printANSI{
-        ANSI.CLEAR.screen{2} // Tout effacer //
+        ANSI.CLEAR.screen{2}
         + ANSI.CURSOR.move{1, 1}
         + ANSI.FG.yellow
-        + '-- [DEMINEUR] --'
+        + '[DEMINEUR]'
         + ANSI.FG.reset
         + ANSI.CURSOR.move{1, 3}
         + ANSI.FG.blue
@@ -79,22 +83,23 @@ GRILLE = {}
             AXE_Y.add{0}
         ]
     ]
-    for y in BORD_HAUT;BORD_BAS [
-        print{'|', 'x'=BORD_GAUCHE, 'y'=y}
-    ]
-    for y in BORD_HAUT;BORD_BAS [
-        print{'|', 'x'=BORD_DROITE, 'y'=y}
-    ]
-    for x in BORD_GAUCHE;BORD_DROITE [
-        print{'-', 'x'=x, 'y'=BORD_HAUT}
-    ]
-    for x in BORD_GAUCHE;BORD_DROITE [
-        print{'-', 'x'=x, 'y'=BORD_BAS}
-    ]
-    print{'o', 'x'=BORD_GAUCHE, 'y'=BORD_HAUT}
-    print{'o', 'x'=BORD_DROITE, 'y'=BORD_BAS}
-    print{'o', 'x'=BORD_GAUCHE, 'y'=BORD_BAS}
-    print{'o', 'x'=BORD_DROITE, 'y'=BORD_HAUT}
+
+    print{'o' 
+          + '-' * LONGUEUR
+          + 'o'
+          + '\n'
+          +( '|'
+             + ' ' * LONGUEUR
+             + '|'
+             + '\n'
+           ) * HAUTEUR
+          + 'o' 
+          + '-' * LONGUEUR
+          + 'o'
+
+        'x'=BORD_GAUCHE, 
+        'y'=BORD_HAUT
+    }
 ]
 
 //
@@ -104,9 +109,7 @@ GRILLE = {}
 @'PLACE_MINES' {} [
     repeat NBR_MINES [
         x = random{1, LONGUEUR}, y = random{1, HAUTEUR}
-        while GRILLE # x # y [
-            x = random{1, LONGUEUR}, y = random{1, HAUTEUR}
-        ]
+        up GRILLE # x # y
         GRILLE # x # y = 'MINE'
     ]
 ]
@@ -118,28 +121,24 @@ GRILLE = {}
 X = Y = 0
 
 event keypress 'Up' [
-    if !(Y == BORD_HAUT + 1) [
-        global Y = Y - 1
-        print{'', 'x'=X, 'y'=Y}
-    ]
+    down Y == BORD_HAUT + 1
+    global Y = Y - 1
+    print{'', 'x'=X, 'y'=Y}
 ]
 event keypress 'Down' [
-    if !(Y == BORD_BAS - 1) [
-        global Y = Y + 1
-        print{'', 'x'=X, 'y'=Y}
-    ]
+    down Y == BORD_BAS - 1
+    global Y = Y + 1
+    print{'', 'x'=X, 'y'=Y}
 ]
 event keypress 'Left' [
-    if !(X == BORD_GAUCHE + 1) [
-        global X = X - 1
-        print{'', 'x'=X, 'y'=Y}
-    ]
+    down X == BORD_GAUCHE + 1
+    global X = X - 1
+    print{'', 'x'=X, 'y'=Y}
 ]
 event keypress 'Right' [
-    if !(X == BORD_DROITE - 1) [
-        global X = X + 1
-        print{'', 'x'=X, 'y'=Y}
-    ]
+    down X == BORD_DROITE - 1
+    global X = X + 1
+    print{'', 'x'=X, 'y'=Y}
 ]
 
 //
@@ -147,8 +146,6 @@ event keypress 'Right' [
 //
 
 @'place_nbr_mines' {x, y} [
-
-    GRILLE # x # y = 'DECOUVERT'
 
     // Enlève le drapeau si existe
     //
@@ -163,10 +160,16 @@ event keypress 'Right' [
         ]
     ]
 
+    GRILLE # x # y = 'DECOUVERT'
+
     // Définition de la zone de recherche
+       OOO
+       OXO
+       OOO
+       X = {x, y}
     //
-    x_min = x - 1        y_min = y - 1
-    x_max = x_min + 2    y_max = y_min + 2
+    x_min = x - 1    y_min = y - 1
+    x_max = x + 1    y_max = y + 1
 
     if x_min < 1 [x_min = 1]
     if y_min < 1 [y_min = 1]
@@ -176,7 +179,6 @@ event keypress 'Right' [
 
     // Récupére les mines autours de la case
     //
-    x__ = y__ = 0
     nombre_mine:pos = 0
 
     for x__ in x_min ; x_max [

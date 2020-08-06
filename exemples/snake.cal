@@ -1,3 +1,7 @@
+// Callect v1.0.0-pre6
+   ---------------------------------------------------------------------------
+   Snake.
+//
 
 ANSI = import{'ansi'}
 
@@ -36,19 +40,19 @@ BORD_droite = len{MAP.split{'\n'} # BORD_haut} - 1
 // SERPENT //
 
 @'SUPR_FIN_QUEUX' [
-	coordonnées = SERPENT.pop{1}
-	x = coordonnées # 1
-	y = coordonnées # 2
-	print{' ', 'x'=x, 'y'=y, 'reset'=1}
+    coordonnées = SERPENT.pop{1}
+    x = coordonnées # 1
+    y = coordonnées # 2
+    print{' ', 'x'=x, 'y'=y, 'reset'=1}
 
-	if x == X_POMME & y == Y_POMME [
-	    print{'6', 'x'=X_POMME, 'y'=Y_POMME, 'reset'=1}
-	]
+    if x == X_POMME & y == Y_POMME [
+        print{'6', 'x'=X_POMME, 'y'=Y_POMME, 'reset'=1}
+    ]
 ]
 
 @'AFF_DEBUT_QUEUX' [
-	SERPENT.add{{X, Y}}
-	print{'o', 'x'=X, 'y'=Y, 'reset'=1}
+    SERPENT.add{{X, Y}}
+    print{'o', 'x'=X, 'y'=Y, 'reset'=1}
 ]
 
 
@@ -60,24 +64,24 @@ MIN_X_POMME = BORD_gauche + 1
 MAX_X_POMME = BORD_droite / 2
 
 event changevars (X == X_POMME & Y == Y_POMME) [
-	// L'orsque la tête du serpent se trouve sur la pomme
-	//
+    // L'orsque la tête du serpent se trouve sur la pomme
+    //
 
-	SERPENT.insert{1, SERPENT#1}
-
-
-	while Y_POMME == Y [hide Y_POMME = random{MIN_Y_POMME, MAX_Y_POMME}]
-	while X_POMME == X [hide X_POMME = random{MIN_X_POMME, MAX_X_POMME} * 2]
-
-	print{'6', 'x'=X_POMME, 'y'=Y_POMME, 'reset'=1}
+    SERPENT.insert{1, SERPENT#1}
 
 
-	score:txt = SCORE{}
+    while Y_POMME == Y [hide Y_POMME = random{MIN_Y_POMME, MAX_Y_POMME}]
+    while X_POMME == X [hide X_POMME = random{MIN_X_POMME, MAX_X_POMME} * 2]
 
-	if SCORE < 10  [score = '0' + score]
-	if SCORE < 100 [score = '0' + score]
+    print{'6', 'x'=X_POMME, 'y'=Y_POMME, 'reset'=1}
 
-	print{score, 'x'=11, 'y'=1, 'reset'=1}
+
+    score:txt = SCORE{}
+
+    if SCORE < 10  [score = '0' + score]
+    if SCORE < 100 [score = '0' + score]
+
+    print{score, 'x'=11, 'y'=1, 'reset'=1}
 ]
 
 
@@ -98,64 +102,64 @@ event keypress 'Return' [PRESS_ENTRY = 1]
 
 while 1 [
 
-	while !PRESS_ENTRY [stop{1}]
+    while !PRESS_ENTRY [stop{1}]
 
-	PRESS_ENTRY = 0, printANSI{ANSI.CLEAR.screen{2}}
-
-
-	// Remise des valeurs à zéro //
-
-	print{MAP}
-
-	DIRECTION = 'S'
-
-	SCORE:pos = 0
-
-	X = BORD_gauche + 1
-	Y = BORD_haut + 1
-
-	Y_POMME = random{MIN_Y_POMME, MAX_Y_POMME}
-	X_POMME = random{MIN_X_POMME, MAX_X_POMME} * 2
-
-	print{'6', 'x'=X_POMME, 'y'=Y_POMME}
-
-	SERPENT = {{X, Y}}
+    PRESS_ENTRY = 0, printANSI{ANSI.CLEAR.screen{2}}
 
 
-	// Lancement partie //
+    // Remise des valeurs à zéro //
 
-	PERDU = 0
+    print{MAP}
 
-	while !PERDU [
+    DIRECTION = 'S'
 
-		if DIRECTION == 'N' [
-			Y =  Y - 1, if Y == BORD_haut [PERDU = 1]
-		]
-		elif DIRECTION == 'S' [
-			Y = Y + 1, if Y == BORD_bas [PERDU = 1]
-		]
-		elif DIRECTION == 'O' [
-			X = X - 2, if X <= BORD_gauche [PERDU = 1]
-		]
-		elif DIRECTION == 'E' [
-			X = X + 2, if X >= BORD_droite [PERDU = 1]
-		]
+    SCORE:pos = 0
 
-		SUPR_FIN_QUEUX
+    X = BORD_gauche + 1
+    Y = BORD_haut + 1
 
-		if {X, Y} in SERPENT [
-		    PERDU = 1
-		]
+    Y_POMME = random{MIN_Y_POMME, MAX_Y_POMME}
+    X_POMME = random{MIN_X_POMME, MAX_X_POMME} * 2
 
-		AFF_DEBUT_QUEUX
+    print{'6', 'x'=X_POMME, 'y'=Y_POMME}
 
-		stop{0.3}
-	]
+    SERPENT = {{X, Y}}
 
-	printANSI{
-	    ANSI.CURSOR.move{1, 2}
-	    + ANSI.FG.red
-	    + 'Vous avez perdu !'
-	    + ANSI.FG.reset
-	}
+
+    // Lancement partie //
+
+    PERDU = 0
+
+    while !PERDU [
+
+        if DIRECTION == 'N' [
+            Y =  Y - 1, if Y == BORD_haut [PERDU = 1]
+        ]
+        elif DIRECTION == 'S' [
+            Y = Y + 1, if Y == BORD_bas [PERDU = 1]
+        ]
+        elif DIRECTION == 'O' [
+            X = X - 2, if X <= BORD_gauche [PERDU = 1]
+        ]
+        elif DIRECTION == 'E' [
+            X = X + 2, if X >= BORD_droite [PERDU = 1]
+        ]
+
+        SUPR_FIN_QUEUX
+
+        if {X, Y} in SERPENT [
+            PERDU = 1
+        ]
+
+        AFF_DEBUT_QUEUX
+
+        stop{0.3}
+    ]
+
+    printANSI{
+        ANSI.CURSOR.move{1, 2}
+        + ANSI.FG.red
+        + 'Vous avez perdu !'
+        + ANSI.FG.reset
+    }
 ]
