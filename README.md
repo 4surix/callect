@@ -8,18 +8,26 @@ J'essaye de faire en sorte qu'il soit le mieux possible.
 Ce langage m'aide à progresser.  
 J'y insère différentes idées/concepts que j'aime bien et que je pense utile.  
   
-Merci aux personnes qui prendront le temps de lire, voir même de tester le langage, et feront des retours ! ❤️  
+Merci aux personnes qui prendront le temps de lire, qui essayeront le langage, et qui feront des retours ! ❤️  
   
 Pour en savoir plus, lisez le [wiki](https://github.com/4surix/callect/wiki) ! Bonne lecture ! ✨  
 
 # Aperçu
 
-```lua
+```
 math = import{'math'}
+
+event changevars pouet [
+    if pouet == 12 [
+        pouet = 24
+    ]
+]
 
 pouet = 12
 
-// On fait la factoriel de 12
+// On fait la factoriel de 24,
+   24 et pas 12 car lors de l'affectation de pouet
+   cela à déclenchée l'event
 //
 resultat = math.fact{pouet}
 
@@ -33,12 +41,7 @@ else [
     print{'oui'}
 ]
 
-fruits = {
-    'pomme',
-    'poire',
-    'fraise',
-    'orange'
-}
+fruits = {'pomme', 'poire', 'fraise'}
 
 panier = {}
 
@@ -46,20 +49,7 @@ for fruit in fruits [
     panier.add{fruit}
 ]
 
-@'verif_nombre_pair' {valeur:nbr} [
-    // Si le résultat du modulo (donc le reste) est égal à 0
-        alors il renvoie 1 (vrai) car c'est un nombre pair
-        sinon il renvoie 0 (faux) 
-    //
-    return valeur % 2 == 0
-]
-
-pharses = {
-    0 = 'Il est impair !',
-    1 = 'Il est pair !'
-}
-resultat = phrases # verif_nombre_pair{13}
-resultat == phrases # 0
+panier # 1 == fruits # 1 == "pomme"
 ```
 
 # Temps
@@ -84,7 +74,7 @@ Le temps d'exéution n'est vraiment pas le point fort du langage, mais cela vous
 ackermann{3, 3} == 61
 ```
   
-**0.7651 secondes**
+**0.68751 secondes**
 
 ## Différence entre `event changevars` et `if`
 
@@ -96,7 +86,7 @@ event changevars (pomme == "rouge") [
 pomme = "rouge"
 ```
 
-**0,0015 secondes**  
+**0,00015 secondes**  
   
 ```lua
 pomme = "rouge"
@@ -106,21 +96,21 @@ if pomme == "rouge" [
 ]
 ```
 
-**0,0015 secondes**
+**0,00015 secondes**
 
 ## Différence entre `for` et `repeat`
 
 ```lua
-for a in 1000 []
+for a in 10000 []
 ```
 
-**0,0156 secondes**  
+**0,1875 secondes**  
   
 ```lua
-repeat 1000 []
+repeat 10000 []
 ```
 
-**0,0100 secondes**
+**0,0937 secondes**
 
 ## Différence entre une addition normal et personnalisée
 
@@ -130,16 +120,17 @@ a = 1
 a + 1
 ```
 
-**0,0010 secondes**  
+**0,000062 secondes**  
   
 ```lua
-@'objet_avec_addition' {
-    @'add__' self parent {b} [return 1 + b]
-} []
+@'objet_avec_addition' self {} [
+    self.add__ = @ self parent {b} [return 1 + b]
+    return self
+]
 
 a = objet_avec_addition{}
 
 a + 1
 ```
 
-**0,0015 secondes**
+**0,000328 secondes**
