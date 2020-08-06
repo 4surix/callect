@@ -98,7 +98,7 @@ else:
 
     term_title("Callect - %s" % path_file)
 
-    with open(path_file, encoding='utf-8') as f:
+    with open(path_file, encoding='utf-8-sig') as f:
         data = f.read()
 
     path_file = path_file.replace('\\', '/')
