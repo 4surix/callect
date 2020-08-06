@@ -129,6 +129,13 @@ def end_objet(cont, objet):
 
     value = objet.value
 
+    # Evite que des objets de type txt soit confondu avec des instructions.
+    # Exemple :
+    # {'up', 'for', 'if', ...}
+    if objet.__class__ != Var:
+        cont.value.push__(objet)
+        return cont, None
+
 
     ### Condition
 
