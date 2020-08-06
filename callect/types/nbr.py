@@ -3,7 +3,10 @@ from ..base import Base, methode_py_to_cl, fonction_py_to_cl
 from ..errors import NotSupported, NotCompatible, NotItem, ConvertionImpossible
 
 
-def mk_nbr(obj, return_value=False, convert=None):
+def mk_nbr(
+        obj, *,
+        return_value=False, convert=None, ligne__=''
+    ):
     nbr = str(obj)
 
     if ',' in nbr:
@@ -42,10 +45,9 @@ def mk_nbr(obj, return_value=False, convert=None):
     else:
         value = Pos(value)
 
-    try:
-        value.ligne__ = obj.ligne__
+    try: value.ligne__ = obj.ligne__
     except:
-        value.ligne__ = ''
+        value.ligne__ = ligne__
 
     return value
 
@@ -243,10 +245,12 @@ class Pos(Base, Nbr):
 
         if len(args) == 3:
 
-            obj = args[1][0]
+            variables, args, kwargs = args
+
+            obj = args[0]
 
             if getattr(obj, 'pos__', None):
-                return obj['pos__'](args[0], args[1], {})
+                return obj['pos__'](variables, args, {})
 
             elif obj.__class__.__name__ in ('Neg', 'Pos', 'Nul'):
                 return Pos(+abs(obj.value))
@@ -255,7 +259,7 @@ class Pos(Base, Nbr):
                 return Pos(+abs(mk_nbr(obj, return_value=True)))
 
             else:
-                raise NotSupported(obj, 'pos__')
+                raise NotSupported(obj, 'pos__', variables.action_ligne__)
 
         else:
             self = args[0]
@@ -304,10 +308,12 @@ class Neg(Base, Nbr):
 
         if len(args) == 3:
 
-            obj = args[1][0]
+            variables, args, kwargs = args
+
+            obj = args[0]
 
             if getattr(obj, 'neg__', None):
-                return obj['neg__'](args[0], args[1], {})
+                return obj['neg__'](variables, args, {})
 
             elif obj.__class__.__name__ in ('Neg', 'Pos', 'Nul'):
                 return Neg(-abs(obj.value))
@@ -316,7 +322,7 @@ class Neg(Base, Nbr):
                 return Neg(-abs(mk_nbr(obj, return_value=True)))
 
             else:
-                raise NotSupported(obj, 'neg__')
+                raise NotSupported(obj, 'neg__', variables.action_ligne__)
 
         else:
             self = args[0]

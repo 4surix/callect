@@ -92,6 +92,8 @@ class Info:
 
         self.get_event = self.events_vars.get
 
+        self.action_ligne__ = ''
+
     def add(self, variables, events_vars={}):
         return Info(
             [variables] + self.variables, 

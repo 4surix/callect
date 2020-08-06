@@ -9,6 +9,8 @@ class Call(Base):
     
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         args = self.args
         if args:
             args = [value(variables) for value in args]
@@ -41,6 +43,8 @@ class Call(Base):
 class Attachement(Base):
     
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         obj = self.objet(variables)
 

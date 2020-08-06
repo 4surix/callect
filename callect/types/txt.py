@@ -8,29 +8,26 @@ from .bool import True__, False__
 
 
 def mk_txt(obj, variables=None, *, return_str=False, ligne__=''):
-    
-    if getattr(obj, 'txt__', None):
-        try:
-            txt = obj['txt__']
-        except:
-            txt = obj.txt__
 
-        txt = txt(variables)
-        return str(txt) if return_str else txt
+    try: txt__ = obj['txt__']
+    except (KeyError, AttributeError, TypeError):
 
-    elif return_str:
-        return str(obj)
+        if return_str:
+            return str(obj)
+
+        else:
+            txt = Txt(str(obj))
+            txt.methodes__()
+
+            try: txt.ligne__ = obj.ligne__
+            except:
+                txt.ligne__ = ligne__
+
+            return txt
 
     else:
-        txt = Txt(str(obj))
-        txt.methodes__()
-
-        try:
-            txt.ligne__ = obj.ligne__
-        except:
-            txt.ligne__ = ligne__
-
-        return txt
+        txt = txt__(variables)
+        return str(txt) if return_str else txt
 
 
 class Txt(Base):
@@ -48,50 +45,42 @@ class Txt(Base):
 
     def upper(self):
 
-        txt = mk_txt(self.value.upper())
-        txt.ligne__ = self.ligne__
-        return txt
+        return mk_txt(self.value.upper(), ligne__=self.ligne__)
 
     def lower(self):
 
-        txt = mk_txt(self.value.lower())
-        txt.ligne__ = self.ligne__
-        return txt
 
     def join(self, obj):
 
-        txt = mk_txt(
+        return mk_txt(
             self.value.join(
                 mk_txt(v, return_str=True) 
                 for index, v in obj
-            )
+            ), 
+            ligne__=self.ligne__
         )
-        txt.ligne__ = obj.ligne__
-        return txt
 
     def split(self, obj):
 
-        table = mk_table(
+        return mk_table(
             _list=[
                 mk_txt(v) 
                 for v in self.value.split(
                     mk_txt(obj, return_str=True)
                 )
-            ]
+            ],
+            ligne__=self.split.variables.action_ligne__
         )
-        table.ligne__ = obj.ligne__
-        return table
 
     def replace(self, obj_1, obj_2):
 
-        txt = mk_txt(
+        return mk_txt(
             self.value.replace(
                 mk_txt(obj_1, return_str=True), 
                 mk_txt(obj_2, return_str=True)
-            )
+            ),
+            ligne__=self.replace.variables.action_ligne__
         )
-        txt.ligne__ = obj_1.ligne__
-        return txt
 
     def __call__(self, variables):
 
@@ -127,24 +116,19 @@ class Txt(Base):
         name_type = item.__class__.__name__
 
         if name_type == 'Pos':
-            txt = mk_txt(self.value[item.value-1])
-            txt.ligne__ = item.ligne__
-            return txt
+            return mk_txt(self.value[item.value-1], ligne__=self.ligne__)
 
         elif name_type == 'Neg':
-            txt = mk_txt(self.value[item.value])
-            txt.ligne__ = item.ligne__
-            return txt
+            return mk_txt(self.value[item.value], ligne__=self.ligne__)
 
         elif name_type == 'Intervalle':
-            txt = mk_txt(self.value[slice(item.debut, item.fin, item.step)])
-            txt.ligne__ = item.ligne__
-            return txt
+            return mk_txt(
+                self.value[slice(item.debut, item.fin, item.step)], 
+                ligne__=self.ligne__
+            )
 
         elif name_type == 'slice':
-            txt = mk_txt(self.value[item])
-            txt.ligne__ = self.ligne__
-            return txt
+            return mk_txt(self.value[item], ligne__=self.ligne__)
 
         try:
             return getattr(self, str(item))
@@ -173,7 +157,7 @@ class Txt(Base):
     @methode_py_to_cl
     def in__(variables, self, obj):
         if obj.__class__ != Txt:
-            raise NotCompatible(self, obj, self.ligne__)
+            raise NotCompatible(self, obj, variables.action_ligne__)
         return obj.value in self.value
 
 
@@ -185,13 +169,13 @@ class Txt(Base):
     @methode_py_to_cl
     def add__(variables, self, obj):
         if obj.__class__ != Txt:
-            raise NotCompatible(self, obj, self.ligne__)
+            raise NotCompatible(self, obj, variables.action_ligne__)
         return mk_txt(self.value + obj.value)
 
     @methode_py_to_cl
     def mul__(variables, self, obj):
         if obj.__class__.__name__ != 'Pos':
-            raise NotCompatible(self, obj, self.ligne__)
+            raise NotCompatible(self, obj, variables.action_ligne__)
         return mk_txt(self.value * obj.value)
 
 

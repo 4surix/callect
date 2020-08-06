@@ -9,50 +9,56 @@ from .nbr import Pos, Neg, Nul, mk_nbr
 from .bool import True__, False__
 
 
-def mk_table(obj=None, variables=None, *, _list=None, _dict=None):
+def mk_table(
+        obj=None, variables=None, 
+        *, 
+        _list=None, _dict=None,
+        ligne__=''
+    ):
 
-    if getattr(obj, 'tbl__', None):
-        table = obj['tbl__'](variables)
+    if obj:
 
-    elif isinstance(obj, Table):
-        table = obj(variables)
-
-    else:
-        table = Table()
-
-        table.list__ = _list if _list else []
-
-        table.dict__ = _dict if _dict else {}
-
-        if obj is not None:
-
-            if obj.__class__.__name__ not in (
-                    'Pos', 'Neg', 'Txt', 'Table', 'Intervalle'
-                ):
-                raise ConvertionImpossible(obj, Table, obj.ligne__)
-
-
-            nbr = 1
-            add = table.list__.append
-
-            for i, element in obj:
-                if nbr == i:
-                    add(element)
-                    nbr += 1
-
-                else:
-                    table.dict__[i] = element
-                    nbr = None
-
-            table.ligne__ = obj.ligne__
-
+        try: tbl__ = obj['tbl__']
+        except (KeyError, AttributeError, ValueError):
+            pass
         else:
-            table.ligne__ = ''
+            return tbl__(variables)
 
-        table.next_index_list = len(table.list__) + 1
+    table = Table()
 
-        table.methodes__()
+    table.list__ = _list if _list else []
+    table.dict__ = _dict if _dict else {}
 
+    if obj:
+
+        if obj.__class__.__name__ not in (
+                'Pos', 'Neg', 'Txt', 'Table', 'Intervalle'
+            ):
+            raise ConvertionImpossible(obj, Table, obj.ligne__)
+
+
+        nbr = 1
+        add = table.list__.append
+
+        for i, element in obj:
+            if nbr == i:
+                add(element)
+                nbr += 1
+
+            else:
+                table.dict__[i] = element
+                nbr = None
+
+    if ligne__:
+        table.ligne__ = ligne__
+    else:
+        try: table.ligne__ = obj.ligne__
+        except:
+            table.ligne__ = ligne__
+
+    table.next_index_list = len(table.list__) + 1
+
+    table.methodes__()
 
     return table
 
@@ -204,21 +210,28 @@ class Table(Base):
     @methode_py_to_cl
     def popin__(variables, self, obj):
 
+        self.pop.variables = variables
+
         try: self.__class__.pop(self, obj)
         except NotIndex:
             return False
         else:
             return True
+        finally:
+            self.pop.variables = None
 
     @methode_py_to_cl
     def remin__(variables, self, obj):
+
+        self.rem.variables = variables
 
         try: self.__class__.rem(self, obj)
         except NotValue:
             return False
         else:
             return True
-
+        finally:
+            self.rem.variables = None
 
     @methode_py_to_cl
     def ega__(variables, self, obj):
@@ -233,9 +246,13 @@ class Table(Base):
     def mul__(variables, self, obj):
 
         if obj.__class__.__name__ != 'Pos':
-            raise NotCompatible(self, obj, self.ligne__)
+            raise NotCompatible(self, obj, variables.action_ligne__)
 
-        return mk_table(_list=self.list__ * obj.value, _dict={**self.dict__})
+        return mk_table(
+            _list=self.list__ * obj.value, 
+            _dict={**self.dict__},
+            ligne__=variables.action_ligne__
+        )
 
 
     ### Methodes
@@ -301,7 +318,7 @@ class Table(Base):
 
         try: return self.dict__.pop(item)
         except:
-            raise NotIndex(self, item, item.ligne__)
+            raise NotIndex(self, item, self.pop.variables.action_ligne__)
 
     def rem(self, obj):
 
@@ -317,7 +334,7 @@ class Table(Base):
                     del self.dict__[index]
                     return self
 
-        raise NotValue(self, obj, obj.ligne__)
+        raise NotValue(self, obj, self.rem.variables.action_ligne__)
 
     def remall(self, value):
 
@@ -336,7 +353,7 @@ class Table(Base):
                 if obj == value:
                     return index
 
-        raise NotIndex(self, obj, obj.ligne__)
+        raise NotIndex(self, obj, self.index.variables.action_ligne__)
 
     def func__value(self, obj):
 
@@ -346,7 +363,7 @@ class Table(Base):
             except:
                 pass
 
-        raise NotValue(self, obj, obj.ligne__)
+        raise NotValue(self, obj, self.func__value.variables.action_ligne__)
 
     def indexs(self):
 
@@ -354,12 +371,16 @@ class Table(Base):
             _list=[
                 *[mk_nbr(v) for v in range(1, self.next_index_list)],
                 *self.dict__
-            ]
+            ],
+            ligne__=self.index.variables.action_ligne__
         )
 
     def values(self):
 
-        return mk_table(_list=[*self.list__, *self.dict__.values()])
+        return mk_table(
+            _list=[*self.list__, *self.dict__.values()],
+            ligne__=self.values.variables.action_ligne__
+        )
 
 
     ### Appel de table
@@ -367,7 +388,12 @@ class Table(Base):
     def call__(*args):
 
         if len(args) == 3:
-            return mk_table(args[1][0], args[0])
+            variables, args, kwargs = args
+
+            return mk_table(
+                args[0], variables, 
+                ligne__=variables.action_ligne__
+            )
 
         else:
             self, variables, args, kwargs = args

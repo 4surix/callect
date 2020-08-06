@@ -18,6 +18,8 @@ class Ega(Comparaison): # Egal
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         e1 = self.premier_objet(variables)
 
         for e2 in self.objets:
@@ -39,6 +41,8 @@ class Ega(Comparaison): # Egal
 class EgaObj(Comparaison): # Egal
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         e1 = self.premier_objet(variables)
 
@@ -62,6 +66,8 @@ class Sup(Comparaison): # Supérieur
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         e1 = self.premier_objet(variables)
 
         for e2 in self.objets:
@@ -83,6 +89,8 @@ class Sup(Comparaison): # Supérieur
 class Inf(Comparaison): # Inférieur
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         e1 = self.premier_objet(variables)
 
@@ -106,6 +114,8 @@ class SupOrEga(Comparaison): # Supérieur ou égal
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         e1 = self.premier_objet(variables)
 
         for e2 in self.objets:
@@ -127,6 +137,8 @@ class SupOrEga(Comparaison): # Supérieur ou égal
 class InfOrEga(Comparaison): # Inférieur ou égal
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         e1 = self.premier_objet(variables)
 
@@ -150,6 +162,8 @@ class In(Comparaison): # Contient
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         e1 = self.premier_objet(variables)
 
         for e2 in self.objets:
@@ -172,6 +186,8 @@ class RemIn(Comparaison): # Contient
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         e1 = self.premier_objet(variables)
 
         for e2 in self.objets:
@@ -193,6 +209,8 @@ class RemIn(Comparaison): # Contient
 class PopIn(Comparaison): # Contient
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         e1 = self.premier_objet(variables)
 
@@ -227,6 +245,8 @@ class Not(ComparaisonBooleenne): # Not
     
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         objet = self.objets[0](variables)
 
         try: bool__ = objet['bool__']
@@ -242,6 +262,8 @@ class Not(ComparaisonBooleenne): # Not
 class And(ComparaisonBooleenne): # ET
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         for e1 in self.objets:
 
@@ -261,6 +283,8 @@ class Or(ComparaisonBooleenne): # OU
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         for e1 in self.objets:
 
             e1 = e1(variables)
@@ -278,6 +302,8 @@ class Or(ComparaisonBooleenne): # OU
 class XAnd(ComparaisonBooleenne): # XET
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         last_bool = None
 
@@ -302,6 +328,8 @@ class XAnd(ComparaisonBooleenne): # XET
 class XOr(ComparaisonBooleenne): # XOU
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         déjà_true = False
 

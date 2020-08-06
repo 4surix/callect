@@ -17,6 +17,8 @@ class Add(Operation): # Addition
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         e1 = self.premier_objet(variables)
 
         for e2 in self.objets:
@@ -35,6 +37,8 @@ class Add(Operation): # Addition
 class Sub(Operation): # Soustraction
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         e1 = self.premier_objet(variables)
 
@@ -55,6 +59,8 @@ class Div(Operation): # Division
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         e1 = self.premier_objet(variables)
 
         for e2 in self.objets:
@@ -73,6 +79,8 @@ class Div(Operation): # Division
 class Mod(Operation): # Modulo
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         e1 = self.premier_objet(variables)
 
@@ -93,6 +101,8 @@ class Mul(Operation): # Multiplication
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         e1 = self.premier_objet(variables)
 
         for e2 in self.objets:
@@ -112,6 +122,8 @@ class Exp(Operation): # Exposant
 
     def __call__(self, variables):
 
+        variables.action_ligne__ = self.ligne__
+
         e1 = self.premier_objet(variables)
 
         for e2 in self.objets:
@@ -130,6 +142,8 @@ class Exp(Operation): # Exposant
 class Rac(Operation): # Racine
 
     def __call__(self, variables):
+
+        variables.action_ligne__ = self.ligne__
 
         e1 = self.premier_objet(variables)
 
