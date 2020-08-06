@@ -249,7 +249,7 @@ def end_objet(cont, objet):
         objet, cont = cont.action(None, Event, get_last=False)  
 
 
-    ### Autre
+    ### Variable
 
     else:
         cont.value.push__(objet)
@@ -796,9 +796,6 @@ def decode(data, path_file):
         ### Autre
 
         elif carac == ' ':
-
-            if objet is None:
-                continue
 
             cont, objet = end_objet(cont, objet)
 

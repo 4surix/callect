@@ -49,6 +49,7 @@ class Txt(Base):
 
     def lower(self):
 
+        return mk_txt(self.value.lower(), ligne__=self.ligne__)
 
     def join(self, obj):
 
@@ -130,8 +131,7 @@ class Txt(Base):
         elif name_type == 'slice':
             return mk_txt(self.value[item], ligne__=self.ligne__)
 
-        try:
-            return getattr(self, str(item))
+        try: return getattr(self, str(item))
         except:
             raise NotItem(self, item, item.ligne__)
 

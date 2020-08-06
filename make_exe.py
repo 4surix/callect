@@ -36,7 +36,9 @@ if len(args) == 1:
         infos = response.json()
 
         if infos[0]['tag_name'] != 'v' + callect.__version__:
-            derniere_version = f"\nDernière version publique: {infos[0]['tag_name']}"
+            derniere_version = (
+                f"\nDernière version publique: {infos[0]['tag_name']}"
+            )
 
 
     print(
@@ -50,8 +52,7 @@ if len(args) == 1:
     while True:
 
         if is_multiline:
-            try:
-                text = input('... ')
+            try: text = input('... ')
             except KeyboardInterrupt:
                 # CTRL + C
                 data = ""
@@ -65,8 +66,7 @@ if len(args) == 1:
                 is_multiline = False
                 pass
         else:
-            try:
-                text = input('>>> ')
+            try: text = input('>>> ')
             except KeyboardInterrupt:
                 # CTRL + C
                 print("KeyboardInterrupt")
@@ -85,8 +85,8 @@ if len(args) == 1:
             continue
 
         result = callect.run(data, args[0])
-        if result:
-            print('\n'.join(map(str, result)))
+        if result is not None:
+            print(result)
 
         data = ""
 
@@ -104,7 +104,4 @@ else:
     path_file = path_file.replace('\\', '/')
     path_exe = path_exe.replace('\\', '/')
 
-    result = callect.run(data, path_file, path_exe)
-
-    if result:
-        print('\n'.join(map(str, result)))
+    callect.run(data, path_file, path_exe)

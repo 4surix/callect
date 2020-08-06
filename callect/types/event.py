@@ -138,7 +138,7 @@ class Event(Base):
                     recolte(element.value)
 
                 elif type_element in types:
-                    recolte([element.first] + element.value)
+                    recolte(element.value)
 
                 elif type_element == Hidden:
                     elements[i] = element.objet
